@@ -1,6 +1,40 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { spawn } from "child_process";
+
+// Mantém referência do processo do bot na memória global do Node
+declare global {
+  var samucaBotProcess: any;
+}
+
+function startBotProcess() {
+  if (global.samucaBotProcess && !global.samucaBotProcess.killed) {
+    console.log("[Samuca Bot Manager] Bot já está em execução.");
+    return;
+  }
+
+  const isWindows = process.platform === "win32";
+  const cmd = isWindows ? "npx.cmd" : "npx";
+
+  console.log("[Samuca Bot Manager] Disparando inicialização do bot WhatsApp...");
+
+  try {
+    global.samucaBotProcess = spawn(cmd, ["tsx", "src/bot/whatsapp.ts"], {
+      cwd: process.cwd(),
+      env: { ...process.env },
+      stdio: "inherit",
+      detached: !isWindows,
+    });
+
+    global.samucaBotProcess.on("exit", (code: any) => {
+      console.log(`[Samuca Bot Manager] Processo finalizou com código ${code}`);
+      global.samucaBotProcess = null;
+    });
+  } catch (err) {
+    console.error("[Samuca Bot Manager] Erro ao iniciar processo:", err);
+  }
+}
 
 export async function GET() {
   try {
@@ -12,12 +46,27 @@ export async function GET() {
       return NextResponse.json(data);
     }
 
+    // Se o arquivo ainda não existe, tenta disparar o bot automaticamente
+    startBotProcess();
+
     return NextResponse.json({
-      status: "DISCONNECTED",
+      status: "STARTING",
       qr: null,
-      message: "Aguardando inicialização do serviço do WhatsApp...",
+      message: "Iniciando processo do WhatsApp...",
     });
   } catch (error: any) {
     return NextResponse.json({ status: "ERROR", error: error.message }, { status: 500 });
+  }
+}
+
+export async function POST() {
+  try {
+    startBotProcess();
+    return NextResponse.json({
+      success: true,
+      message: "Bot do Samuca iniciado com sucesso. O QR Code será gerado em instantes.",
+    });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

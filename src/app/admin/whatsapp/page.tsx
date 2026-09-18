@@ -49,6 +49,20 @@ export default function AdminWhatsAppPage() {
   const isConnected = statusData.status === "CONNECTED";
   const isQrReady = statusData.status === "QR_READY" && statusData.qr;
 
+  const [starting, setStarting] = useState(false);
+
+  const handleStartBot = async () => {
+    setStarting(true);
+    try {
+      await fetch("/api/whatsapp/status", { method: "POST" });
+      setTimeout(fetchStatus, 2000);
+    } catch (err) {
+      console.error("Erro ao iniciar bot:", err);
+    } finally {
+      setTimeout(() => setStarting(false), 2500);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-100">
       <Navbar />
@@ -139,21 +153,32 @@ export default function AdminWhatsAppPage() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <div className="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4">
-                <AlertCircle className="w-8 h-8" />
+              <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto mb-4">
+                <Bot className="w-8 h-8" />
               </div>
-              <h3 className="text-lg font-bold text-slate-800 mb-2">
-                Iniciando Serviço do WhatsApp...
+              <h3 className="text-xl font-black text-slate-900 mb-2">
+                Conectar WhatsApp do Samuca
               </h3>
-              <p className="text-slate-500 text-xs max-w-sm mx-auto mb-6">
-                Aguardando o serviço gerar o QR Code de conexão. Isso leva apenas alguns instantes.
+              <p className="text-slate-500 text-sm max-w-md mx-auto mb-6">
+                Clique no botão abaixo para inicializar o serviço e gerar o QR Code de conexão na tela.
               </p>
-              <button
-                onClick={fetchStatus}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-500 transition shadow-sm"
-              >
-                <RefreshCw className="w-3.5 h-3.5" /> Verificar Agora
-              </button>
+              <div className="flex items-center justify-center gap-3">
+                <button
+                  onClick={handleStartBot}
+                  disabled={starting}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-sm font-bold transition shadow-md shadow-emerald-600/25 disabled:opacity-50"
+                >
+                  <QrCode className="w-4 h-4" />
+                  {starting ? "Iniciando Serviço..." : "Gerar QR Code Agora"}
+                </button>
+                <button
+                  onClick={fetchStatus}
+                  className="inline-flex items-center gap-2 px-4 py-3 bg-white border border-slate-200 text-slate-700 rounded-xl text-sm font-bold hover:bg-slate-50 transition"
+                >
+                  <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+                  Verificar
+                </button>
+              </div>
             </div>
           )}
         </div>
