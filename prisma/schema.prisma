@@ -1,0 +1,92 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String          @id @default(cuid())
+  name         String
+  email        String          @unique
+  passwordHash String
+  role         String          @default("CLIENT") // "ADMIN" or "CLIENT"
+  cpf          String?
+  phone        String?
+  address      String?
+  cnh          String?
+  rg           String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  appeals      AppealRequest[]
+}
+
+model AppealRequest {
+  id                 String           @id @default(cuid())
+  protocol           String           @unique
+  userId             String
+  user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status             String           @default("PENDING") // PENDING, PROCESSING, READY, REJECTED
+  type               String           @default("DEFESA_PREVIA") // DEFESA_PREVIA, JARI, CETRAN
+  authority          String           // Ex: DETRAN/SP, PRF, DNIT, Órgão Municipal
+  aitNumber          String           // Número do Auto de Infração
+  plate              String           // Placa do veículo
+  renavam            String?
+  vehicleModel       String?
+  ctbArticle         String           // Artigo da infração
+  infractionDate     String           // Data da infração
+  infractionTime     String?          // Horário
+  infractionLocation String           // Local
+  speedLimit         String?          // Limite regulamentado (se radar)
+  speedMeasured      String?          // Velocidade medida (se radar)
+  speedConsidered    String?          // Velocidade considerada (se radar)
+  radarModel         String?          // Modelo / Número do Inmetro
+  lastVerification   String?          // Data da última aferição
+  notificationDate   String?          // Data de expedição/notificação
+  defenseDeadline    DateTime?        // Data Limite da Defesa (para ordenação por prazo mais curto)
+  isExpiredSubmission Boolean         @default(false) // Informa se o cliente enviou mesmo com prazo regular expirado
+  defenseArguments   String           // Relato do cliente
+  legalCategory      String           @default("OUTROS") // EXCESSO_VELOCIDADE, LEI_SECA, SEMAFORO, etc.
+  generatedDocument  String?          // Peça jurídica gerada
+  adminNotes         String?
+  readyAt            DateTime?
+  // Controle de Pagamento
+  paymentStatus      String           @default("PENDING") // PENDING (Aguardando Pagamento), PAID (Confirmado)
+  paymentAmount      Float            @default(20.00)
+  paymentMethod      String?          @default("PIX")
+  paymentProofUrl    String?
+  paymentConfirmedAt DateTime?
+  // Controle de Envio por E-mail
+  sentToEmail        Boolean          @default(false)
+  emailSentAt        DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  documents          AppealDocument[]
+}
+
+model AppealDocument {
+  id              String        @id @default(cuid())
+  appealRequestId String
+  appealRequest   AppealRequest @relation(fields: [appealRequestId], references: [id], onDelete: Cascade)
+  title           String
+  fileName        String
+  fileUrl         String
+  fileType        String
+  fileSize        Int
+  createdAt       DateTime      @default(now())
+}
+
+model LegalTemplate {
+  id                   String   @id @default(cuid())
+  title                String
+  category             String   @unique
+  ctbArticle           String
+  description          String
+  defaultPreliminaries String
+  defaultMerit         String
+  defaultRequests      String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}

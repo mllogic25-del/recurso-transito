@@ -1,0 +1,8 @@
+node_modules
+.next
+out
+dist
+auth_whatsapp_samuca
+*.log
+.env*.local
+.env
