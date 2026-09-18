@@ -355,20 +355,30 @@ export default function VisualizarRecursoPage() {
                 </div>
               </div>
 
-              {/* Botão de confirmação direta */}
-              <div className="bg-white p-5 rounded-2xl border border-amber-200 shadow-sm text-center flex-shrink-0 w-full md:w-64">
-                <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <QrCode className="w-6 h-6" />
+              {/* Botão de confirmação direta e Link Kiwify */}
+              <div className="bg-white p-5 rounded-2xl border border-amber-200 shadow-sm text-center flex-shrink-0 w-full md:w-64 flex flex-col justify-between">
+                <div>
+                  <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <QrCode className="w-6 h-6" />
+                  </div>
+                  <p className="text-xs text-slate-600 mb-3">
+                    Pagamento 100% seguro via Pix ou Cartão:
+                  </p>
+                  <a
+                    href="https://pay.kiwify.com.br/AOM7Bs9"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full mb-3 inline-flex items-center justify-center gap-1.5 py-3 px-4 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl shadow-md transition"
+                  >
+                    Pagar na Kiwify (R$ 20,00)
+                  </a>
                 </div>
-                <p className="text-xs text-slate-600 mb-4">
-                  Já realizou a transferência Pix de R$ {appeal.paymentAmount.toFixed(2)}?
-                </p>
                 <button
                   onClick={handleConfirmPayment}
                   disabled={paymentSubmitting}
-                  className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-md transition disabled:opacity-50"
+                  className="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold rounded-xl shadow-xs transition disabled:opacity-50"
                 >
-                  {paymentSubmitting ? "Confirmando..." : "Já Realizei o Pagamento"}
+                  {paymentSubmitting ? "Confirmando..." : "Já Paguei na Kiwify / Pix"}
                 </button>
               </div>
             </div>
