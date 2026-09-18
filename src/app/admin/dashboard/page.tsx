@@ -20,6 +20,7 @@ import {
   Flame,
   ArrowUpRight,
   TrendingUp,
+  Bot,
 } from "lucide-react";
 import { calculateDeadlineInfo } from "@/lib/deadlineUtils";
 
@@ -134,6 +135,13 @@ export default function AdminDashboard() {
           </div>
 
           <div className="flex items-center gap-3">
+            <Link
+              href="/admin/whatsapp"
+              className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-xs transition"
+            >
+              <Bot className="w-4 h-4 text-white" />
+              WhatsApp Samuca
+            </Link>
             <Link
               href="/admin/modelos"
               className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 text-xs font-bold px-4 py-2.5 rounded-xl shadow-xs transition"

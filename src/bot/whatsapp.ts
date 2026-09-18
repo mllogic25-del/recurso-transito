@@ -50,12 +50,35 @@ async function startBot() {
       console.log("3. Toque em 'Conectar um aparelho' e aponte para a tela:");
       console.log("=======================================================\n");
       qrcode.generate(qr, { small: true });
+
+      try {
+        const fs = await import("fs");
+        const QRCode = (await import("qrcode")).default;
+        const dataUrl = await QRCode.toDataURL(qr, { margin: 2, scale: 8 });
+        const publicDir = path.resolve(process.cwd(), "public");
+        if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
+        fs.writeFileSync(
+          path.join(publicDir, "whatsapp-status.json"),
+          JSON.stringify({ status: "QR_READY", qr: dataUrl, updatedAt: new Date().toISOString() })
+        );
+      } catch (qrErr) {
+        console.error("Erro ao salvar status QR:", qrErr);
+      }
     }
 
     if (connection === "close") {
       const statusCode = (lastDisconnect?.error as Boom)?.output?.statusCode;
       const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
       console.log(`[Samuca WhatsApp] Conexão encerrada. Motivo: ${statusCode}.`);
+
+      try {
+        const fs = await import("fs");
+        const publicDir = path.resolve(process.cwd(), "public");
+        fs.writeFileSync(
+          path.join(publicDir, "whatsapp-status.json"),
+          JSON.stringify({ status: "DISCONNECTED", qr: null, updatedAt: new Date().toISOString() })
+        );
+      } catch (_) {}
 
       if (shouldReconnect) {
         console.log("[Samuca WhatsApp] Reconectando em 3 segundos...");
@@ -73,6 +96,15 @@ async function startBot() {
       console.log("✅ SAMUCA ESTÁ ONLINE E PRONTO PARA ATENDER NO WHATSAPP!");
       console.log("Envie uma mensagem do seu celular pessoal para testar!");
       console.log("=======================================================\n");
+
+      try {
+        const fs = await import("fs");
+        const publicDir = path.resolve(process.cwd(), "public");
+        fs.writeFileSync(
+          path.join(publicDir, "whatsapp-status.json"),
+          JSON.stringify({ status: "CONNECTED", qr: null, updatedAt: new Date().toISOString() })
+        );
+      } catch (_) {}
     }
   });
 
