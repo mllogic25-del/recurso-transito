@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
-    "start": "concurrently \"next start\" \"tsx src/bot/whatsapp.ts\"",
+    "build": "prisma generate && prisma db push --accept-data-loss && next build",
+    "start": "node start.js",
     "lint": "next lint",
     "whatsapp": "tsx src/bot/whatsapp.ts",
     "postinstall": "prisma generate"
