@@ -30,10 +30,10 @@ CONSULTA DE PROTOCOLO E STATUS DO RECURSO (MUITO IMPORTANTE):
 
 COMO CONDUZIR A CONVERSA NO WHATSAPP:
 10. Conduza passo a passo: Não mande tudo de uma vez só em um bloco gigante! Faça perguntas naturais e divididas (no máximo 2 a 3 frases por mensagem).
-11. Se o cliente enviar foto ou PDF da notificação/multa:
-   - Avise que abriu e conseguiu ver com clareza.
-   - Mencione algum detalhe identificado (ex: artigo do CTB ou local).
-   - Peça os demais documentos (CRLV, CNH) e o e-mail dele.
+11. Se o cliente enviar foto ou documento (Notificação/AIT, CRLV, CNH, Comprovante):
+   - Identifique especificamente o documento que você abriu e mencione algum dado real que você leu na imagem (ex: "Perfeito, acabei de ver a notificação da multa!", "Ótimo, recebi o CRLV do veículo!", "Show de bola, CNH recebida com sucesso!").
+   - NUNCA repita o mesmo pedido de documento se ele já te enviou. Preste atenção no que já foi mandado. Se ele já mandou os documentos principais, passe para o próximo passo: pergunte o e-mail dele para cadastro e envio da defesa pronta, e se ele quer acrescentar algum detalhe sobre o que aconteceu no dia.
+   - Seja sempre fluido, acolhedor e dinâmico. Jamais envie mensagens repetitivas ou em looping!
 12. Se o cliente enviar áudio:
    - Responda normalmente e com simpatia ao que ele falou.
 13. Valores e Pagamento:
@@ -112,7 +112,7 @@ export async function generateSamucaResponse(
       userMessage && userMessage.trim()
         ? userMessage
         : mediaData
-        ? "Analise este documento ou foto de multa de trânsito que acabei de enviar e me diga o que encontrou."
+        ? "Analise esta foto ou documento que acabei de enviar. Identifique exatamente o que é (CNH, CRLV, Notificação de Multa ou outro), cite os dados relevantes que conseguir ler e continue a conversa com naturalidade."
         : "Olá";
 
     if (systemContextExtra) {
@@ -129,11 +129,10 @@ export async function generateSamucaResponse(
       },
     ];
 
-    // Modelos modernos ordenados por velocidade e maior disponibilidade
+    // Modelos oficiais validados e ativos na API do Google
     const candidateModels = [
-      "gemini-2.0-flash",
-      "gemini-1.5-flash",
-      "gemini-1.5-pro",
+      "gemini-2.5-flash",
+      "gemini-flash-latest",
     ];
 
     for (const modelName of candidateModels) {
@@ -163,10 +162,16 @@ export async function generateSamucaResponse(
         if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
           const responseText = data.candidates[0].content.parts[0].text.trim();
 
-          // Salva no histórico (apenas texto para manter o histórico leve)
+          // Salva no histórico mantendo o contexto rico
+          const userSummary = userMessage
+            ? userMessage
+            : mediaData
+            ? "[Enviou foto / documento de trânsito]"
+            : "Olá";
+
           history.push({
             role: "user",
-            parts: [{ text: userMessage || "[Enviou arquivo/foto de multa]" }],
+            parts: [{ text: userSummary }],
           });
           history.push({ role: "model", parts: [{ text: responseText }] });
           chatHistories.set(userPhone, history);
