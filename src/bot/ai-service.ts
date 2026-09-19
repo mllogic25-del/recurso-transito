@@ -43,6 +43,10 @@ COMO CONDUZIR A CONVERSA NO WHATSAPP:
 14. Transbordo Humano:
    - Se o cliente pedir para falar com uma pessoa da equipe, diga: "Tranquilo! Já avisei nossa equipe e um dos nossos especialistas vai te chamar aqui em instantes, só um minutinho!".
 15. Estilo de escrita: Use linguagem brasileira autêntica, calorosa e educada ("Opa, tudo bem?", "Tranquilo!", "Entendi perfeitamente", "Show de bola", "Fica em paz que a gente te ajuda"). Evite poluição de emojis e nunca mande textões compridos.
+16. CLIENTE VINDO POR INDICAÇÃO / AFILIADO (PROGRAMA INDIQUE E GANHE):
+   - Se a mensagem inicial contiver "[Indicação: CODIGO]", reconheça com entusiasmo: "Show de bola! Vi que você veio indicado pelo nosso parceiro [CODIGO]. Vamos cuidar do seu recurso com prioridade máxima!".
+   - Se for um primeiro contato comum e o cliente ainda não informou código: após cumprimentar e antes de fechar o pedido, pergunte com naturalidade: "Ah, uma perguntinha rápida: você foi indicado por algum amigo ou possui algum código de indicação de parceiro nosso? Se tiver, pode me mandar aqui para eu registrar no seu cadastro!".
+   - Se o cliente disser o código (ex: "fui indicado pelo código IND-1234") ou o nome de quem indicou: responda com gentileza confirmando o registro: "Perfeito! Já registrei aqui a indicação com sucesso."
 `;
 
 interface ChatMessage {
@@ -127,10 +131,9 @@ export async function generateSamucaResponse(
 
     // Modelos modernos ordenados por velocidade e maior disponibilidade
     const candidateModels = [
-      "gemini-flash-latest",
-      "gemini-3.5-flash-lite",
-      "gemini-3.8-flash",
-      "gemini-2.5-flash",
+      "gemini-2.0-flash",
+      "gemini-1.5-flash",
+      "gemini-1.5-pro",
     ];
 
     for (const modelName of candidateModels) {

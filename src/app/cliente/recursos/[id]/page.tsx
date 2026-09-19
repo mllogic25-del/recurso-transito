@@ -106,7 +106,7 @@ export default function VisualizarRecursoPage() {
       });
       const data = await res.json();
       if (res.ok) {
-        setPaymentMsg("Pagamento registrado! Nossa equipe iniciará a elaboração da sua defesa.");
+        setPaymentMsg("Após o pagamento, o administrador confirmará e liberará seu recurso.");
         loadData();
       }
     } catch {
@@ -154,7 +154,7 @@ export default function VisualizarRecursoPage() {
       <Navbar />
 
       {/* Barra superior de identificação */}
-      <div className="bg-white border-b border-slate-200 py-4 px-4 sm:px-8 sticky top-16 z-40 no-print shadow-sm">
+      <div className="bg-white border-b border-slate-200 py-4 px-4 sm:px-8 sticky top-20 z-40 no-print shadow-sm">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link
@@ -316,42 +316,15 @@ export default function VisualizarRecursoPage() {
                 </p>
 
                 <div className="pt-2">
-                  <p className="text-xs font-bold text-slate-700 mb-1">Chave Pix (E-mail):</p>
-                  <div className="flex items-center gap-2">
-                    <code className="bg-white px-3 py-2 rounded-lg border border-amber-200 font-mono text-xs font-bold text-slate-800">
-                      {pixKey}
-                    </code>
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(pixKey);
-                        setCopied(true);
-                        setTimeout(() => setCopied(false), 2000);
-                      }}
-                      className="px-3 py-2 bg-white hover:bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 flex items-center gap-1"
-                    >
-                      {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                      Copiar Chave
-                    </button>
-                  </div>
-                </div>
-
-                <div className="pt-2">
-                  <p className="text-xs font-bold text-slate-700 mb-1">Pix Copia e Cola:</p>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      readOnly
-                      value={pixCopiaCola}
-                      className="bg-white px-3 py-2 rounded-lg border border-amber-200 font-mono text-xs text-slate-600 w-full max-w-sm select-all"
-                    />
-                    <button
-                      onClick={copyPix}
-                      className="px-3.5 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm"
-                    >
-                      {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                      Copiar
-                    </button>
-                  </div>
+                  <p className="text-xs font-bold text-slate-700 mb-1">Pague de forma segura:</p>
+                  <a
+                    href="https://pay.kiwify.com.br/AOM7Bs9"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 py-3 px-4 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl shadow-md transition"
+                  >
+                    Acessar Link de Pagamento (Kiwify)
+                  </a>
                 </div>
               </div>
 
@@ -378,7 +351,7 @@ export default function VisualizarRecursoPage() {
                   disabled={paymentSubmitting}
                   className="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold rounded-xl shadow-xs transition disabled:opacity-50"
                 >
-                  {paymentSubmitting ? "Confirmando..." : "Já Paguei na Kiwify / Pix"}
+                  {paymentSubmitting ? "Avisando..." : "Já Paguei na Kiwify (Avisar Admin)"}
                 </button>
               </div>
             </div>

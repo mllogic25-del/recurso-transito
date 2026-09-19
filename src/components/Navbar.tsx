@@ -86,7 +86,7 @@ export default function Navbar() {
               href="/#como-funciona"
               className="text-sm font-semibold text-slate-600 hover:text-blue-600 transition"
             >
-              Quem somos
+              Como Funciona
             </Link>
             <Link
               href="/#pacotes"
@@ -114,14 +114,32 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-4">
             {user ? (
               <div className="flex items-center gap-3">
+                <Link
+                  href="/afiliados"
+                  className={`text-xs font-black transition flex items-center gap-1.5 px-3 py-1.5 rounded-xl border ${
+                    pathname.startsWith("/afiliados")
+                      ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
+                      : "bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100"
+                  }`}
+                >
+                  💰 Indique & Ganhe R$ 10
+                </Link>
                 {isAdmin ? (
-                  <Link
-                    href="/admin/dashboard"
-                    className="flex items-center gap-1.5 text-xs font-bold bg-slate-900 text-white px-4 py-2 rounded-xl hover:bg-slate-800 transition shadow-xs"
-                  >
-                    <LayoutDashboard className="w-3.5 h-3.5 text-blue-400" />
-                    Painel Admin
-                  </Link>
+                  <>
+                    <Link
+                      href="/admin/comissoes"
+                      className="flex items-center gap-1.5 text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200 px-3 py-2 rounded-xl hover:bg-amber-100 transition shadow-xs"
+                    >
+                      💰 Comissões Pix
+                    </Link>
+                    <Link
+                      href="/admin/dashboard"
+                      className="flex items-center gap-1.5 text-xs font-bold bg-slate-900 text-white px-4 py-2 rounded-xl hover:bg-slate-800 transition shadow-xs"
+                    >
+                      <LayoutDashboard className="w-3.5 h-3.5 text-blue-400" />
+                      Painel Admin
+                    </Link>
+                  </>
                 ) : (
                   <>
                     <Link
@@ -199,7 +217,7 @@ export default function Navbar() {
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-sm font-semibold text-slate-700"
           >
-            Quem somos
+            Como Funciona
           </Link>
           <Link
             href="/#pacotes"
@@ -220,20 +238,36 @@ export default function Navbar() {
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-sm font-bold text-blue-600"
           >
-            Fale conosco (Como funciona)
+            Fale conosco
           </Link>
           <div className="pt-3 border-t border-slate-200">
             {user ? (
               <div className="space-y-2">
                 <p className="text-xs font-bold text-slate-500">{user.name}</p>
+                <Link
+                  href="/afiliados"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block py-2 text-sm font-bold text-emerald-700 bg-emerald-50 px-3 rounded-lg border border-emerald-200"
+                >
+                  💰 Indique & Ganhe R$ 10 no Pix
+                </Link>
                 {isAdmin ? (
-                  <Link
-                    href="/admin/dashboard"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block py-2 text-sm font-bold text-blue-600"
-                  >
-                    Painel do Administrador
-                  </Link>
+                  <>
+                    <Link
+                      href="/admin/comissoes"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 text-sm font-bold text-amber-700"
+                    >
+                      💰 Comissões Pix
+                    </Link>
+                    <Link
+                      href="/admin/dashboard"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 text-sm font-bold text-blue-600"
+                    >
+                      Painel do Administrador
+                    </Link>
+                  </>
                 ) : (
                   <>
                     <Link

@@ -10,15 +10,7 @@ import {
 } from "lucide-react";
 
 export default function FaleConoscoPage() {
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [mensagem, setMensagem] = useState("");
-  const [enviado, setEnviado] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setEnviado(true);
-  };
+  // Formulário removido em favor do WhatsApp direto
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800">
@@ -118,82 +110,24 @@ export default function FaleConoscoPage() {
           </div>
         </div>
 
-        {/* Formulário de Contato */}
-        <div className="max-w-2xl mx-auto w-full bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/80 executive-shadow">
-            <h3 className="text-xl font-black text-slate-900 mb-1">
-              Envie uma mensagem
+        {/* Contato via WhatsApp */}
+        <div className="max-w-2xl mx-auto w-full bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/80 executive-shadow text-center">
+            <h3 className="text-xl font-black text-slate-900 mb-2">
+              Ficou com alguma dúvida?
             </h3>
-            <p className="text-xs text-slate-500 mb-6">
-              Responderemos sua dúvida sobre a elaboração do recurso o mais breve possível.
+            <p className="text-sm text-slate-500 mb-8 max-w-lg mx-auto">
+              Nossa equipe de atendimento está disponível para tirar todas as suas dúvidas sobre o serviço. Chame-nos no WhatsApp!
             </p>
 
-            {enviado ? (
-              <div className="p-6 bg-emerald-50 border border-emerald-300 rounded-2xl text-emerald-900 text-center space-y-2">
-                <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
-                <h4 className="font-bold text-base">Mensagem enviada com sucesso!</h4>
-                <p className="text-xs text-emerald-800">
-                  Recebemos seu contato e nossa equipe responderá em seu e-mail em até 24 horas úteis.
-                </p>
-                <button
-                  onClick={() => setEnviado(false)}
-                  className="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold"
-                >
-                  Enviar outra mensagem
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Seu Nome *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
-                    placeholder="Nome completo"
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Seu E-mail *
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="seu.email@exemplo.com"
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Mensagem ou Dúvida *
-                  </label>
-                  <textarea
-                    required
-                    rows={4}
-                    value={mensagem}
-                    onChange={(e) => setMensagem(e.target.value)}
-                    placeholder="Descreva sua dúvida sobre o serviço ou sobre sua multa..."
-                    className="w-full p-4 rounded-xl border border-slate-300 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition leading-relaxed"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition shadow-md shadow-blue-600/20 flex items-center justify-center gap-2"
-                >
-                  <Send className="w-4 h-4" />
-                  Enviar Mensagem
-                </button>
-              </form>
-            )}
+            <a
+              href="https://wa.me/5579998340176"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 py-4 px-8 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl text-base transition shadow-lg shadow-emerald-500/25"
+            >
+              <Send className="w-5 h-5" />
+              Falar no WhatsApp
+            </a>
           </div>
       </main>
     </div>

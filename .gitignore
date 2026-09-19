@@ -6,3 +6,9 @@ auth_whatsapp_samuca
 *.log
 .env*.local
 .env
+prisma/dev.db
+prisma/dev.db-journal
+public/uploads
+public/whatsapp-status.json
+tsconfig.tsbuildinfo
+*.lnk

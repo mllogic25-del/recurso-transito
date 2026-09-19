@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import { spawn } from "child_process";
+import { getCurrentUser } from "@/lib/auth";
 
 // Mantém referência do processo do bot na memória global do Node
 declare global {
@@ -61,6 +62,11 @@ export async function GET() {
 
 export async function POST() {
   try {
+    const user = await getCurrentUser();
+    if (!user || user.role !== "ADMIN") {
+      return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
+    }
+
     startBotProcess();
     return NextResponse.json({
       success: true,

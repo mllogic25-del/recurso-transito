@@ -147,7 +147,7 @@ export default function AdminEditarRecursoPage() {
 
       if (targetStatus === "READY") {
         setSuccessMsg(
-          `✅ Recurso Aprovado e Liberado! A defesa foi enviada para o e-mail do cliente (${appeal?.user.email}) e liberada no sistema.`
+          `✅ Recurso Aprovado e Liberado! Recurso liberado para download no painel do cliente.`
         );
       } else {
         setSuccessMsg("💾 Alterações salvas com sucesso!");
@@ -207,7 +207,7 @@ export default function AdminEditarRecursoPage() {
       <Navbar />
 
       {/* Barra superior de ações */}
-      <div className="bg-white border-b border-slate-200 py-3.5 px-4 sm:px-8 sticky top-16 z-40 no-print shadow-sm">
+      <div className="bg-white border-b border-slate-200 py-3.5 px-4 sm:px-8 sticky top-20 z-40 no-print shadow-sm">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link
@@ -265,7 +265,7 @@ export default function AdminEditarRecursoPage() {
               className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg shadow-sm transition disabled:opacity-50"
             >
               <Send className="w-3.5 h-3.5" />
-              {saving ? "Salvando..." : isReleased ? "Atualizar & Manter Liberado" : "Liberar Defesa (E-mail & Sistema)"}
+              {saving ? "Salvando..." : isReleased ? "Atualizar & Manter Liberado" : "Liberar Defesa"}
             </button>
 
             <a
@@ -331,7 +331,7 @@ export default function AdminEditarRecursoPage() {
                 <p><strong>E-mail de Notificação:</strong> {appeal.user.email}</p>
                 {appeal.sentToEmail && (
                   <p className="text-emerald-700 font-semibold flex items-center gap-1">
-                    <Mail className="w-3.5 h-3.5" /> Enviado por e-mail para o cliente
+                    <Mail className="w-3.5 h-3.5" /> Recurso liberado para download no painel do cliente
                   </p>
                 )}
               </div>
@@ -459,7 +459,7 @@ export default function AdminEditarRecursoPage() {
                     Elaboração da Peça Recursal
                   </h2>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    Redija ou revise a petição. Ao clicar em <strong>"Liberar Defesa"</strong>, ela será enviada ao e-mail do cliente e liberada no sistema.
+                    Redija ou revise a petição. Ao clicar em <strong>"Liberar Defesa"</strong>, ela será liberada para download no painel do cliente.
                   </p>
                 </div>
 
@@ -485,7 +485,7 @@ export default function AdminEditarRecursoPage() {
               <textarea
                 value={documentContent}
                 onChange={(e) => setDocumentContent(e.target.value)}
-                rows={34}
+                rows={20}
                 className="w-full p-4 font-mono text-xs sm:text-sm text-slate-900 bg-slate-50/50 rounded-xl border border-slate-300 focus:bg-white focus:ring-2 focus:ring-blue-200 outline-none leading-relaxed transition resize-y"
               />
             </div>

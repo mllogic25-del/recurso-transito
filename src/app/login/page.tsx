@@ -1,17 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { LogIn, AlertCircle, Shield, UserCheck, ArrowRight } from "lucide-react";
 
-export default function LoginPage() {
+function LoginForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const placaParam = searchParams.get("placa") || "";
+  const categoriaParam = searchParams.get("categoria") || "";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,6 +39,12 @@ export default function LoginPage() {
 
       if (data.user.role === "ADMIN") {
         router.push("/admin/dashboard");
+      } else if (placaParam) {
+        router.push(
+          `/cliente/novo?placa=${encodeURIComponent(placaParam)}&categoria=${encodeURIComponent(
+            categoriaParam
+          )}`
+        );
       } else {
         router.push("/cliente/dashboard");
       }
@@ -44,15 +54,7 @@ export default function LoginPage() {
     }
   };
 
-  const fillQuickLogin = (role: "ADMIN" | "CLIENT") => {
-    if (role === "ADMIN") {
-      setEmail("admin@autorecurso.com.br");
-      setPassword("admin123");
-    } else {
-      setEmail("cliente@exemplo.com.br");
-      setPassword("cliente123");
-    }
-  };
+
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
@@ -116,34 +118,14 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Atalhos para teste rápido */}
-          <div className="mt-8 pt-6 border-t border-slate-100">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider text-center mb-3">
-              Acesso Rápido de Teste
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => fillQuickLogin("ADMIN")}
-                className="text-xs flex items-center justify-center gap-1.5 py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium transition"
-              >
-                <Shield className="w-3.5 h-3.5 text-blue-600" />
-                Admin
-              </button>
-              <button
-                type="button"
-                onClick={() => fillQuickLogin("CLIENT")}
-                className="text-xs flex items-center justify-center gap-1.5 py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium transition"
-              >
-                <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
-                Cliente
-              </button>
-            </div>
-          </div>
+
 
           <div className="mt-6 text-center text-sm text-slate-600">
             Ainda não tem conta?{" "}
-            <Link href="/cadastro" className="text-blue-600 font-semibold hover:underline">
+            <Link
+              href={placaParam ? `/cadastro?placa=${encodeURIComponent(placaParam)}&categoria=${encodeURIComponent(categoriaParam)}` : "/cadastro"}
+              className="text-blue-600 font-semibold hover:underline"
+            >
               Cadastre-se gratuitamente
             </Link>
           </div>
@@ -152,3 +134,12 @@ export default function LoginPage() {
     </div>
   );
 }
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-500 font-bold">Carregando...</div>}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+

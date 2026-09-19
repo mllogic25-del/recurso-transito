@@ -63,7 +63,7 @@ function NovoRecursoForm() {
   const [confirmExpiredSubmission, setConfirmExpiredSubmission] = useState(false);
 
   // Categoria Jurídica e Campos Específicos
-  const [legalCategory, setLegalCategory] = useState("EXCESSO_VELOCIDADE");
+  const [legalCategory, setLegalCategory] = useState(searchParams.get("categoria") || "EXCESSO_VELOCIDADE");
   const [speedLimit, setSpeedLimit] = useState("");
   const [speedMeasured, setSpeedMeasured] = useState("");
   const [speedConsidered, setSpeedConsidered] = useState("");

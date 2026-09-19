@@ -21,16 +21,16 @@ export async function POST(request: Request) {
 
     if (existing) {
       return NextResponse.json(
-        { error: "Este e-mail já está cadastrado no sistema." },
+        { error: "Este e-mail já está cadastrado no sistema. Usuários com cadastro prévio não são elegíveis para novas indicações." },
         { status: 409 }
       );
     }
 
     const passwordHash = await hashPassword(password);
 
-    // Permite definir ADMIN se não houver usuários ainda no sistema ou se solicitado
+    // Permite definir ADMIN apenas se não houver usuários ainda no sistema
     const totalUsers = await prisma.user.count();
-    const userRole = totalUsers === 0 ? "ADMIN" : role === "ADMIN" ? "ADMIN" : "CLIENT";
+    const userRole = totalUsers === 0 ? "ADMIN" : "CLIENT";
 
     const user = await prisma.user.create({
       data: {
@@ -42,6 +42,33 @@ export async function POST(request: Request) {
         role: userRole,
       },
     });
+
+    // Processa indicação caso código esteja presente no body ou cookie
+    const rawRefCode =
+      body.referralCode ||
+      request.headers.get("cookie")?.match(/referral_code=([^;]+)/)?.[1];
+
+    if (rawRefCode) {
+      try {
+        const cleanRef = decodeURIComponent(rawRefCode).toUpperCase().trim();
+        const affiliate = await prisma.affiliate.findUnique({
+          where: { referralCode: cleanRef },
+        });
+
+        if (affiliate && affiliate.userId !== user.id) {
+          // Garante que o usuário indicado só receba um único indicador
+          await prisma.referral.create({
+            data: {
+              affiliateId: affiliate.id,
+              referredUserId: user.id,
+              status: "REGISTERED",
+            },
+          });
+        }
+      } catch (refErr) {
+        console.error("Erro ao vincular indicação:", refErr);
+      }
+    }
 
     const token = signToken({
       id: user.id,

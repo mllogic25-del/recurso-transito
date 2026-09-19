@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ReferralTracker from "@/components/ReferralTracker";
 
 export const metadata: Metadata = {
   title: "AutoRecurso - Sistema de Recursos de Trânsito",
@@ -14,6 +15,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className="min-h-screen flex flex-col antialiased text-slate-800">
+        <ReferralTracker />
         {children}
       </body>
     </html>

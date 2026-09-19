@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { processReferralCommission } from "@/lib/commissionUtils";
 
 export async function POST(
   request: Request,
@@ -37,25 +38,22 @@ export async function POST(
         },
       });
 
+      // Dispara a comissão de R$ 10,00 se o usuário tiver sido indicado
+      await processReferralCommission(appeal.userId, appeal.id);
+
       return NextResponse.json({ success: true, appeal: updated });
     }
 
-    // Ação do Cliente informando pagamento / enviando comprovante
-    const updated = await prisma.appealRequest.update({
-      where: { id: params.id },
-      data: {
-        paymentStatus: "PAID", // Marca como pago após cliente confirmar/enviar comprovante
-        paymentProofUrl: paymentProofUrl || appeal.paymentProofUrl,
-        paymentConfirmedAt: new Date(),
-        paymentAmount: paymentAmount ? Number(paymentAmount) : appeal.paymentAmount,
-      },
-    });
+    // Cliente avisa que pagou, mas apenas o Admin pode confirmar
+    if (action === "CLIENT_PAID") {
+      return NextResponse.json({
+        success: true,
+        message: "Após o pagamento, o administrador confirmará e liberará seu recurso.",
+        appeal: appeal,
+      });
+    }
 
-    return NextResponse.json({
-      success: true,
-      message: "Pagamento registrado com sucesso! Sua defesa entrará em elaboração.",
-      appeal: updated,
-    });
+    return NextResponse.json({ error: "Ação inválida." }, { status: 400 });
   } catch (error: any) {
     console.error("Payment error:", error);
     return NextResponse.json(

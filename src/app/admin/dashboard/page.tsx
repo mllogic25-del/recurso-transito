@@ -136,6 +136,12 @@ export default function AdminDashboard() {
 
           <div className="flex items-center gap-3">
             <Link
+              href="/admin/comissoes"
+              className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-xs transition"
+            >
+              💰 Comissões Pix
+            </Link>
+            <Link
               href="/admin/whatsapp"
               className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-xs transition"
             >

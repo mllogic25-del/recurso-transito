@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { UserPlus, AlertCircle, ArrowRight, ShieldCheck, User } from "lucide-react";
 
-export default function CadastroPage() {
+function CadastroForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const placaParam = searchParams.get("placa") || "";
+  const categoriaParam = searchParams.get("categoria") || "";
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,7 +22,6 @@ export default function CadastroPage() {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,6 +45,12 @@ export default function CadastroPage() {
 
       if (data.user.role === "ADMIN") {
         router.push("/admin/dashboard");
+      } else if (placaParam) {
+        router.push(
+          `/cliente/novo?placa=${encodeURIComponent(placaParam)}&categoria=${encodeURIComponent(
+            categoriaParam
+          )}`
+        );
       } else {
         router.push("/cliente/dashboard");
       }
@@ -140,44 +150,13 @@ export default function CadastroPage() {
                   type="text"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="(11) 99999-9999"
+                  placeholder="(DDD) 99999-9999"
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-sm transition"
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
-                Tipo de Acesso
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, role: "CLIENT" })}
-                  className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition ${
-                    formData.role === "CLIENT"
-                      ? "border-blue-600 bg-blue-50 text-blue-900 font-semibold"
-                      : "border-slate-200 hover:bg-slate-50 text-slate-600"
-                  }`}
-                >
-                  <User className="w-4 h-4 text-blue-600" />
-                  <span className="text-xs">Sou Cliente (Condutor)</span>
-                </button>
 
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, role: "ADMIN" })}
-                  className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition ${
-                    formData.role === "ADMIN"
-                      ? "border-purple-600 bg-purple-50 text-purple-900 font-semibold"
-                      : "border-slate-200 hover:bg-slate-50 text-slate-600"
-                  }`}
-                >
-                  <ShieldCheck className="w-4 h-4 text-purple-600" />
-                  <span className="text-xs">Administrador (Gestor)</span>
-                </button>
-              </div>
-            </div>
 
             <button
               type="submit"
@@ -191,7 +170,10 @@ export default function CadastroPage() {
 
           <div className="mt-6 text-center text-sm text-slate-600">
             Já possui uma conta?{" "}
-            <Link href="/login" className="text-blue-600 font-semibold hover:underline">
+            <Link
+              href={placaParam ? `/login?placa=${encodeURIComponent(placaParam)}&categoria=${encodeURIComponent(categoriaParam)}` : "/login"}
+              className="text-blue-600 font-semibold hover:underline"
+            >
               Fazer login
             </Link>
           </div>
@@ -200,3 +182,12 @@ export default function CadastroPage() {
     </div>
   );
 }
+
+export default function CadastroPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-500 font-bold">Carregando...</div>}>
+      <CadastroForm />
+    </Suspense>
+  );
+}
+

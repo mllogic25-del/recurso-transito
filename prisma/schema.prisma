@@ -1,5 +1,5 @@
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -21,6 +21,8 @@ model User {
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
   appeals      AppealRequest[]
+  affiliateProfile Affiliate?
+  referralAsReferred Referral? @relation("ReferredUser")
 }
 
 model AppealRequest {
@@ -64,6 +66,7 @@ model AppealRequest {
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
   documents          AppealDocument[]
+  commissions        Commission[]
 }
 
 model AppealDocument {
@@ -89,4 +92,50 @@ model LegalTemplate {
   defaultRequests      String
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
+}
+
+// Modelo do Afiliado / Indicador
+model Affiliate {
+  id           String       @id @default(cuid())
+  userId       String       @unique
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  referralCode String       @unique
+  pixKeyType   String       @default("CPF") // CPF, EMAIL, TELEFONE, ALEATORIA
+  pixKey       String
+  totalEarnings Float       @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  referrals    Referral[]
+  commissions  Commission[]
+}
+
+// Vínculo de Indicação (1 cliente só pode ser indicado uma única vez)
+model Referral {
+  id             String    @id @default(cuid())
+  affiliateId    String
+  affiliate      Affiliate @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
+  referredUserId String    @unique
+  referredUser   User      @relation("ReferredUser", fields: [referredUserId], references: [id], onDelete: Cascade)
+  status         String    @default("REGISTERED") // REGISTERED, PAID_CONVERTED
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+// Registro de Comissão de R$ 10,00 (apenas 1 vez por indicado)
+model Commission {
+  id              String         @id @default(cuid())
+  affiliateId     String
+  affiliate       Affiliate      @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
+  referredUserId  String
+  appealRequestId String?
+  appealRequest   AppealRequest? @relation(fields: [appealRequestId], references: [id], onDelete: SetNull)
+  amount          Float          @default(10.00) // R$ 10,00 fixo
+  status          String         @default("PENDING") // PENDING (aguardando repasse Pix), PAID (pago)
+  paidAt          DateTime?
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  // Garante que o indicador recebe no máximo uma comissão por cliente indicado
+  @@unique([affiliateId, referredUserId])
 }
