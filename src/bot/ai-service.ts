@@ -174,15 +174,26 @@ export async function generateSamucaResponse(
           return responseText;
         }
 
-        console.warn(`[Samuca AI] Modelo ${modelName} indisponível:`, data.error?.message || "sem candidato");
+        console.warn(`[Samuca AI] Modelo ${modelName} indisponível:`, JSON.stringify(data.error || data).substring(0, 300));
       } catch (callErr) {
         console.warn(`[Samuca AI] Falha de rede no modelo ${modelName}:`, callErr);
       }
     }
 
-    // Se todos os modelos da IA oscilarem no momento, responde adequadamente ao tipo de mensagem
+    // Se todos os modelos da IA oscilarem, responde de forma variada baseado no histórico
+    console.error("[Samuca AI] TODOS os modelos falharam. Usando fallback estático.");
+
+    const totalMsgs = history.length;
+
     if (mediaData) {
-      return "Show de bola, recebi seu arquivo aqui! Já estou abrindo. Além da notificação, você teria o CRLV do veículo e sua CNH para anexarmos na defesa?";
+      // Varia a resposta para não repetir em loop
+      if (totalMsgs <= 2) {
+        return "Show de bola, recebi seu arquivo aqui! Já estou abrindo. Além da notificação, você teria o CRLV do veículo e sua CNH para anexarmos na defesa?";
+      } else if (totalMsgs <= 6) {
+        return "Recebi mais esse documento! Obrigado por enviar. Se tiver mais algum, pode mandar que vou organizando tudo aqui. Quando tiver todos os documentos, seguimos para o recurso!";
+      } else {
+        return "Ótimo, recebi! Pode ficar tranquilo que seus documentos estão salvos aqui comigo. Precisa de mais alguma coisa?";
+      }
     }
 
     if (lowerMsg.includes("status") || lowerMsg.includes("protocolo")) {
