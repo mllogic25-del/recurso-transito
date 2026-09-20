@@ -281,17 +281,17 @@ export default function HomePage() {
 
             <div className="relative z-10">
               <div className="flex items-center justify-between gap-4 mb-6">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3.5">
                   <img
                     src="/samuca.png"
                     alt="AutoRecurso - Samuca"
-                    className="w-12 h-12 rounded-full border-2 border-emerald-400 shadow-lg object-cover bg-white flex-shrink-0"
+                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 sm:border-3 border-emerald-400 shadow-xl object-cover bg-white flex-shrink-0"
                   />
                   <div className="flex flex-col">
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 leading-none">
+                    <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-zinc-400 leading-none">
                       Recursos de Trânsito
                     </span>
-                    <span className="text-xl font-black tracking-tight text-white leading-none mt-1">
+                    <span className="text-2xl sm:text-3xl font-black tracking-tight text-white leading-none mt-1">
                       auto<span className="text-blue-400">recurso</span>
                     </span>
                   </div>
@@ -318,7 +318,7 @@ export default function HomePage() {
               <img
                 src="/samuca.png"
                 alt="Samuca - Defesa de Autuações de Trânsito"
-                className="w-16 h-16 rounded-2xl border-2 border-emerald-400/80 shadow-lg object-cover bg-zinc-900 flex-shrink-0"
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-3 border-emerald-400 shadow-2xl object-cover bg-white flex-shrink-0"
               />
               <div className="text-xs text-zinc-300">
                 <div className="flex items-center gap-2 mb-1">
@@ -967,15 +967,15 @@ export default function HomePage() {
           type="button"
           onClick={() => openWhatsapp()}
           aria-label="Atendimento com Samuca no WhatsApp"
-          className="w-16 h-16 rounded-full flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer relative group"
+          className="w-18 h-18 sm:w-20 sm:h-20 rounded-full flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer relative group"
         >
           <img
             src="/samuca.png"
             alt="Samuca"
-            className="w-16 h-16 rounded-full border-2 border-emerald-500 shadow-xl object-cover bg-white"
+            className="w-18 h-18 sm:w-20 sm:h-20 rounded-full border-3 border-emerald-500 shadow-xl object-cover bg-white"
           />
-          <span className="absolute bottom-0 right-0 w-5 h-5 bg-emerald-500 border-2 border-white rounded-full flex items-center justify-center shadow-sm">
-            <WhatsAppIcon className="w-3 h-3 text-white" />
+          <span className="absolute bottom-0 right-0 w-6 h-6 bg-emerald-500 border-2 border-white rounded-full flex items-center justify-center shadow-sm">
+            <WhatsAppIcon className="w-3.5 h-3.5 text-white" />
           </span>
         </button>
       </div>
@@ -983,17 +983,17 @@ export default function HomePage() {
       {/* Footer Elegante Bold & Big */}
       <footer id="contato" className="mt-auto bg-zinc-950 text-zinc-400 py-12 px-4 sm:px-8 border-t border-zinc-800">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3.5">
             <img
               src="/samuca.png"
               alt="AutoRecurso - Samuca"
-              className="w-10 h-10 rounded-full border border-emerald-400 shadow-md object-cover bg-white flex-shrink-0"
+              className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-emerald-400 shadow-md object-cover bg-white flex-shrink-0"
             />
             <div className="flex flex-col">
-              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 leading-none">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 leading-none">
                 Recursos de Trânsito
               </span>
-              <span className="text-xl font-black text-white tracking-tight leading-none mt-1">
+              <span className="text-2xl font-black text-white tracking-tight leading-none mt-1">
                 auto<span className="text-blue-500">recurso</span>
               </span>
             </div>

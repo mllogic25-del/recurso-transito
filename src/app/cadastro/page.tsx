@@ -71,17 +71,17 @@ function CadastroForm() {
             <div className="absolute top-0 right-0 w-60 h-60 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative z-10">
-              <div className="flex items-center gap-3.5 mb-6">
+              <div className="flex items-center gap-4 mb-6">
                 <img
                   src="/samuca.png"
                   alt="Samuca"
-                  className="w-16 h-16 rounded-2xl border-2 border-emerald-400 shadow-xl object-cover bg-zinc-900"
+                  className="w-20 h-20 rounded-full border-3 border-emerald-400 shadow-2xl object-cover bg-white flex-shrink-0"
                 />
                 <div>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-800">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-md border border-emerald-800">
                     Samuca Assistente
                   </span>
-                  <h2 className="text-xl font-black text-white mt-1">
+                  <h2 className="text-2xl font-black text-white mt-1">
                     auto<span className="text-blue-400">recurso</span>
                   </h2>
                 </div>
@@ -126,17 +126,17 @@ function CadastroForm() {
           <div className="lg:col-span-7 bg-white rounded-3xl shadow-xl border border-zinc-200/90 p-8 sm:p-10 flex flex-col justify-center">
             <div className="mb-6">
               <div className="flex items-center justify-between gap-3 mb-4">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3.5">
                   <img
                     src="/samuca.png"
                     alt="AutoRecurso - Samuca"
-                    className="w-10 h-10 rounded-full border border-emerald-400 shadow-md object-cover bg-white flex-shrink-0"
+                    className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-emerald-400 shadow-md object-cover bg-white flex-shrink-0"
                   />
                   <div className="flex flex-col">
-                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 leading-none">
+                    <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-zinc-400 leading-none">
                       Recursos de Trânsito
                     </span>
-                    <span className="text-lg font-black tracking-tight text-zinc-950 leading-none mt-1">
+                    <span className="text-xl sm:text-2xl font-black tracking-tight text-zinc-950 leading-none mt-1">
                       auto<span className="text-blue-600">recurso</span>
                     </span>
                   </div>
