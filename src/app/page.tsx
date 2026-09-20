@@ -3,6 +3,21 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {
+  Sparkles,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
+  Coins,
+  Share2,
+  QrCode,
+  DollarSign,
+  TrendingUp,
+  FileText,
+  AlertTriangle,
+  Flame,
+  Zap,
+} from "lucide-react";
 
 export default function AutoRecursoLandingPage() {
   const router = useRouter();
@@ -63,86 +78,121 @@ export default function AutoRecursoLandingPage() {
     {
       titulo: "Excesso de Velocidade",
       artigo: "Art. 218 do CTB",
-      desc: "Verificação da aferição periódica do radar pelo Inmetro (máx. 12 meses), margem de tolerância obrigatória e prazo de expedição.",
+      badgeColor: "bg-amber-500/20 text-amber-300 border-amber-500/30",
+      cardBorder: "hover:border-amber-400/50 hover:shadow-amber-500/10",
+      accentDot: "bg-amber-400",
+      desc: "Aferição periódica do radar pelo Inmetro (validade de 12 meses), margem de tolerância obrigatória e prazo legal de 30 dias para notificação.",
     },
     {
       titulo: "Lei Seca / Bafômetro",
       artigo: "Art. 165 e 165-A do CTB",
-      desc: "Nulidades em autos sem descrição de sinais psicomotores, irregularidades no termo de constatação e calibração do etilômetro.",
+      badgeColor: "bg-rose-500/20 text-rose-300 border-rose-500/30",
+      cardBorder: "hover:border-rose-400/50 hover:shadow-rose-500/10",
+      accentDot: "bg-rose-400",
+      desc: "Nulidades em autos sem descrição objetiva de sinais psicomotores, irregularidades formais no termo de constatação e calibração anual do etilômetro.",
     },
     {
       titulo: "Sinal Vermelho / Radar",
       artigo: "Art. 208 do CTB",
-      desc: "Falta de registro fotográfico panorâmico sequencial, ausência da linha de retenção e problemas de temporização semafórica.",
+      badgeColor: "bg-red-500/20 text-red-300 border-red-500/30",
+      cardBorder: "hover:border-red-400/50 hover:shadow-red-500/10",
+      accentDot: "bg-red-400",
+      desc: "Falta de sequência de fotos nítidas do veículo cruzando a linha de retenção, ausência de homologação e problemas de tempo no amarelo.",
     },
     {
       titulo: "Uso de Celular ao Volante",
       artigo: "Art. 252 do CTB",
-      desc: "Inviabilidade visual do agente em movimento, ausência de abordagem justificada e carência de detalhes essenciais no AIT.",
+      badgeColor: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
+      cardBorder: "hover:border-cyan-400/50 hover:shadow-cyan-500/10",
+      accentDot: "bg-cyan-400",
+      desc: "Inviabilidade visual evidente do agente em patrulhamento, ausência de abordagem justificada e ausência de elementos fáticos no auto.",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-[#0B132B] text-slate-100 font-sans antialiased selection:bg-[#C5A059] selection:text-[#0B132B]">
-      {/* 1. TOPO INSTITUCIONAL / BANNER INFORMATIVO */}
-      <aside className="bg-[#070D1F] border-b border-slate-800/80 px-6 py-2.5 text-center text-xs text-slate-400">
-        <p>
-          <strong className="text-slate-200">Aviso Legal:</strong> Elaboramos peças técnicas fundamentadas. O protocolo
-          administrativo é efetuado pelo condutor perante o órgão autuador.
+    <div className="min-h-screen bg-[#070D1F] text-slate-100 font-sans antialiased selection:bg-[#E0B253] selection:text-[#0B132B] relative overflow-x-hidden">
+      {/* Luzes Ambientais de Fundo (Glow Multicolorido) */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-600/15 rounded-full blur-[140px] pointer-events-none"></div>
+      <div className="absolute top-40 right-10 w-[450px] h-[450px] bg-emerald-500/15 rounded-full blur-[130px] pointer-events-none"></div>
+      <div className="absolute top-[800px] left-10 w-[550px] h-[550px] bg-amber-500/10 rounded-full blur-[150px] pointer-events-none"></div>
+      <div className="absolute top-[1400px] right-1/4 w-[500px] h-[500px] bg-purple-600/15 rounded-full blur-[140px] pointer-events-none"></div>
+
+      {/* 1. TOPO INSTITUCIONAL COM DEGRADÊ REFINADO */}
+      <aside className="bg-gradient-to-r from-[#060B18] via-[#0D1B3E] to-[#060B18] border-b border-blue-900/40 px-6 py-2.5 text-center text-xs text-slate-300 shadow-sm relative z-10">
+        <p className="flex items-center justify-center gap-2 flex-wrap">
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-[11px]">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            Plataforma 100% Online
+          </span>
+          <span>
+            <strong className="text-amber-300">Aviso Legal:</strong> Elaboramos peças técnicas fundamentadas. O
+            protocolo administrativo é efetuado pelo condutor perante o órgão autuador.
+          </span>
         </p>
       </aside>
 
-      {/* 2. CABEÇALHO (NAVBAR) */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0B132B]/90 border-b border-[#C5A059]/20 px-6 py-4">
+      {/* 2. CABEÇALHO (NAVBAR) VIBRANTE */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#070D1F]/90 border-b border-slate-800/80 px-6 py-3.5 transition-all shadow-lg shadow-black/40">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 group">
-            {/* Brasão Oficial Dourado */}
-            <img
-              src="/logo-icon.png"
-              alt="AutoRecurso"
-              className="w-10 h-10 rounded-lg border border-[#C5A059]/50 shadow-inner object-cover bg-[#1C2541] group-hover:scale-105 transition duration-200"
-            />
+          <Link href="/" className="flex items-center gap-3.5 group">
+            {/* Brasão Dourado com Brilho */}
+            <div className="relative">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-400 to-emerald-400 rounded-xl blur-xs opacity-60 group-hover:opacity-100 transition duration-300"></div>
+              <img
+                src="/logo-icon.png"
+                alt="AutoRecurso"
+                className="relative w-11 h-11 rounded-lg border border-amber-400/50 shadow-md object-cover bg-[#0F172A] group-hover:scale-105 transition duration-200"
+              />
+            </div>
             <div>
-              <span className="text-lg font-bold tracking-wider text-white uppercase block leading-tight">
-                Auto<span className="text-[#E0B253]">Recurso</span>
+              <span className="text-xl font-black tracking-tight text-white uppercase block leading-tight">
+                Auto<span className="bg-gradient-to-r from-amber-300 to-yellow-400 bg-clip-text text-transparent">Recurso</span>
               </span>
-              <span className="text-[9px] tracking-[0.22em] text-[#94A3B8] uppercase block font-medium">
+              <span className="text-[10px] tracking-[0.2em] text-emerald-400 uppercase block font-bold">
                 Defesas &amp; Recursos de Trânsito
               </span>
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-7 text-xs font-semibold uppercase tracking-wider text-slate-300">
-            <a href="#como-funciona" className="hover:text-[#E0B253] transition-colors">
+          <nav className="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider text-slate-300">
+            <a href="#como-funciona" className="hover:text-amber-300 transition-colors">
               Como Funciona
             </a>
-            <a href="#servicos" className="hover:text-[#E0B253] transition-colors">
+            <a href="#indique-ganhe" className="text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1.5 font-extrabold">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-spin" />
+              Indique &amp; Ganhe R$ 10
+            </a>
+            <a href="#servicos" className="hover:text-amber-300 transition-colors">
               Infrações
             </a>
-            <a href="#incluso" className="hover:text-[#E0B253] transition-colors">
+            <a href="#incluso" className="hover:text-amber-300 transition-colors">
               O Que Inclui
             </a>
-            <a href="#faq" className="hover:text-[#E0B253] transition-colors">
+            <a href="#faq" className="hover:text-amber-300 transition-colors">
               Dúvidas
             </a>
-            <Link
-              href="/afiliados"
-              className="text-[#E0B253] hover:brightness-125 transition-colors font-bold flex items-center gap-1"
-            >
-              💰 Indique &amp; Ganhe R$ 10
-            </Link>
           </nav>
 
           <div className="flex items-center gap-3">
+            {/* Botão Super Chamativo Indique e Ganhe no Topo */}
+            <Link
+              href="/afiliados"
+              className="text-xs font-black text-slate-950 bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-300 hover:from-emerald-300 hover:to-amber-200 px-4 py-2.5 rounded-xl shadow-lg shadow-emerald-500/25 border border-emerald-300 flex items-center gap-1.5 transition-all transform hover:scale-105 cursor-pointer"
+            >
+              <Coins className="w-4 h-4 text-slate-950" />
+              <span className="hidden sm:inline">Indique &amp; Ganhe</span> R$ 10 no Pix
+            </Link>
+
             <Link
               href="/login"
               className="hidden sm:inline-block text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-white px-3 py-2 transition"
             >
               Entrar
             </Link>
+
             <a
               href="#iniciar"
-              className="px-5 py-2.5 rounded text-xs font-bold uppercase tracking-widest bg-gradient-to-r from-[#E0B253] to-[#C5A059] text-[#0B132B] hover:brightness-110 shadow-lg shadow-[#E0B253]/15 transition duration-200"
+              className="px-4.5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 hover:brightness-110 shadow-lg shadow-amber-400/20 transition duration-200"
             >
               Gerar Defesa
             </a>
@@ -150,59 +200,71 @@ export default function AutoRecursoLandingPage() {
         </div>
       </header>
 
-      {/* 3. SECÇÃO HERO */}
-      <section className="relative px-6 pt-16 pb-20 max-w-6xl mx-auto grid md:grid-cols-12 gap-12 items-center">
+      {/* 3. SECÇÃO HERO MULTICOLORIDA & IMPACTANTE */}
+      <section className="relative px-6 pt-12 pb-16 max-w-6xl mx-auto grid md:grid-cols-12 gap-10 items-center z-10">
         <div className="md:col-span-7 space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C5A059]/30 bg-[#1C2541]/70 text-[#E0B253] text-xs font-semibold tracking-wide">
-            <span className="w-2 h-2 rounded-full bg-[#E0B253] animate-pulse"></span>
+          {/* Badge Chamativo */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-400/40 bg-gradient-to-r from-emerald-950/80 via-slate-900 to-blue-950/80 text-emerald-300 text-xs font-bold tracking-wide shadow-md shadow-emerald-900/30">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
             Conformidade Integral com o CTB &amp; CONTRAN
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-white">
-            Defenda os seus direitos com fundamentação jurídica de <span className="text-[#E0B253]">alto nível</span>.
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tight leading-[1.15] text-white">
+            Defenda os seus direitos com fundamentação jurídica de{" "}
+            <span className="bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 bg-clip-text text-transparent drop-shadow-sm">
+              alto nível
+            </span>
+            .
           </h1>
 
-          <p className="text-slate-300 text-base leading-relaxed max-w-xl">
-            Crie defesas prévias e recursos administrativos personalizados contra multas do DETRAN, PRF, DNIT e
-            municípios. Peça técnica completa em PDF e Word pronta para submissão.
+          <p className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-xl">
+            Crie defesas prévias e recursos administrativos personalizados contra multas do{" "}
+            <strong className="text-white">DETRAN, PRF, DNIT e prefeituras</strong>. Peça técnica pronta em PDF e Word
+            feita sob medida para o seu caso.
           </p>
 
-          <div className="pt-2 flex flex-wrap items-center gap-5 text-xs text-slate-400 font-medium">
-            <span className="flex items-center gap-1.5">
-              <span className="text-[#E0B253]">✓</span> Sem necessidade de advogado
+          {/* Destaques Coloridos com Checkmarks */}
+          <div className="pt-2 flex flex-wrap items-center gap-3 text-xs font-bold">
+            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-950/60 border border-emerald-500/30 text-emerald-300">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Sem advogado necessário
             </span>
-            <span className="flex items-center gap-1.5">
-              <span className="text-[#E0B253]">✓</span> Formatos PDF e Word (.docx)
+            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-950/60 border border-blue-500/30 text-blue-300">
+              <CheckCircle2 className="w-4 h-4 text-blue-400" /> Formatos PDF e Word (.docx)
             </span>
-            <span className="flex items-center gap-1.5">
-              <span className="text-[#E0B253]">✓</span> Elaboração rápida e segura
+            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-950/60 border border-amber-500/30 text-amber-300">
+              <CheckCircle2 className="w-4 h-4 text-amber-400" /> Elaboração em minutos
             </span>
           </div>
         </div>
 
-        {/* FORMULÁRIO DE ENTRADA */}
+        {/* FORMULÁRIO DE ENTRADA COM BORDA E BRILHO DOURADO */}
         <div
           id="iniciar"
-          className="md:col-span-5 bg-[#1C2541]/90 backdrop-blur-md border border-[#C5A059]/30 rounded-xl p-7 shadow-2xl shadow-black/60 scroll-mt-28"
+          className="md:col-span-5 relative group bg-gradient-to-b from-[#111C38] to-[#0A1128] border-2 border-amber-400/40 rounded-3xl p-7 sm:p-8 shadow-2xl shadow-black/80 scroll-mt-28"
         >
+          {/* Brilho de fundo no card */}
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
           <div className="mb-6 pb-4 border-b border-slate-700/60 flex justify-between items-end">
             <div>
-              <span className="text-[#E0B253] text-[10px] uppercase tracking-widest font-bold block mb-1">
-                Elaboração Completa
+              <span className="text-amber-400 text-[10px] uppercase tracking-widest font-black block mb-1">
+                Elaboração Completa &amp; Técnica
               </span>
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-extrabold text-white">R$ 30,00</span>
-                <span className="text-xs text-slate-400">/ taxa única</span>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-amber-300 via-yellow-200 to-emerald-300 bg-clip-text text-transparent">
+                  R$ 30,00
+                </span>
+                <span className="text-xs font-semibold text-slate-400">/ taxa única</span>
               </div>
             </div>
-            <span className="text-[11px] px-2.5 py-1 rounded bg-[#0B132B] border border-slate-700 text-slate-300 font-semibold">
-              Entrega Digital
+            <span className="text-[11px] px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-extrabold flex items-center gap-1 shadow-sm">
+              <Zap className="w-3 h-3 text-emerald-400" /> Entrega Digital
             </span>
           </div>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1.5 uppercase tracking-wide">
+              <label className="text-xs font-bold text-slate-200 block mb-1.5 uppercase tracking-wide">
                 Placa do Veículo
               </label>
               <input
@@ -213,12 +275,12 @@ export default function AutoRecursoLandingPage() {
                 value={placa}
                 onChange={(e) => setPlaca(e.target.value.toUpperCase())}
                 required
-                className="w-full bg-[#0B132B] border border-slate-700 rounded-md px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#E0B253] text-sm uppercase tracking-wider transition"
+                className="w-full bg-[#060B18] border border-slate-700 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none text-sm uppercase tracking-wider transition font-medium"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1.5 uppercase tracking-wide">
+              <label className="text-xs font-bold text-slate-200 block mb-1.5 uppercase tracking-wide">
                 Número do Auto de Infração (AIT)
               </label>
               <input
@@ -226,18 +288,18 @@ export default function AutoRecursoLandingPage() {
                 placeholder="Código impresso na notificação"
                 value={numeroAIT}
                 onChange={(e) => setNumeroAIT(e.target.value.toUpperCase())}
-                className="w-full bg-[#0B132B] border border-slate-700 rounded-md px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#E0B253] text-sm uppercase tracking-wider transition"
+                className="w-full bg-[#060B18] border border-slate-700 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none text-sm uppercase tracking-wider transition font-medium"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1.5 uppercase tracking-wide">
+              <label className="text-xs font-bold text-slate-200 block mb-1.5 uppercase tracking-wide">
                 Órgão Autuador
               </label>
               <select
                 value={orgao}
                 onChange={(e) => setOrgao(e.target.value)}
-                className="w-full bg-[#0B132B] border border-slate-700 rounded-md px-4 py-3 text-white text-sm focus:outline-none focus:border-[#E0B253] transition"
+                className="w-full bg-[#060B18] border border-slate-700 focus:border-amber-400 rounded-xl px-4 py-3 text-white text-sm focus:outline-none transition font-medium cursor-pointer"
               >
                 <option value="DETRAN">DETRAN (Estadual)</option>
                 <option value="PRF">PRF (Polícia Rodoviária Federal)</option>
@@ -248,123 +310,230 @@ export default function AutoRecursoLandingPage() {
 
             <button
               type="submit"
-              className="w-full mt-2 py-3.5 rounded-md font-bold text-xs uppercase tracking-widest bg-gradient-to-r from-[#E0B253] to-[#C5A059] text-[#0B132B] hover:brightness-110 shadow-lg shadow-[#E0B253]/15 transition cursor-pointer"
+              className="w-full mt-2 py-4 rounded-xl font-black text-xs uppercase tracking-widest bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 hover:from-amber-300 hover:to-yellow-300 shadow-xl shadow-amber-500/25 transition duration-200 cursor-pointer flex items-center justify-center gap-2 transform hover:scale-[1.02]"
             >
-              Confeccionar Minha Defesa
+              <span>Confeccionar Minha Defesa</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
           </form>
         </div>
       </section>
 
-      {/* 4. METODOLOGIA / COMO FUNCIONA */}
-      <section id="como-funciona" className="py-20 border-t border-slate-800 bg-[#070D1F]/50 px-6 scroll-mt-20">
+      {/* 4. MEGA PAINEL CHAMATIVO: INDIQUE & GANHE R$ 10,00 NO PIX (SHOWSTOPPER) */}
+      <section id="indique-ganhe" className="py-12 px-6 max-w-6xl mx-auto scroll-mt-24 relative z-20">
+        <div className="relative rounded-3xl p-8 sm:p-12 overflow-hidden border-2 border-emerald-400/50 bg-gradient-to-br from-emerald-950 via-slate-900 to-indigo-950 shadow-[0_0_50px_-10px_rgba(16,185,129,0.35)]">
+          {/* Efeitos de iluminação interna */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-purple-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div className="relative z-10">
+            {/* Header do Painel */}
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-8 border-b border-emerald-500/30">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-emerald-500/20 border border-amber-400/40 text-amber-300 text-xs font-black tracking-wider mb-3 shadow-xs">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-spin" />
+                  PROGRAMA DE AFILIADOS EXCLUSIVO
+                </div>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight">
+                  Indique e Ganhe{" "}
+                  <span className="bg-gradient-to-r from-emerald-300 via-teal-200 to-amber-300 bg-clip-text text-transparent underline decoration-emerald-400/60 decoration-wavy">
+                    R$ 10,00 no PIX
+                  </span>{" "}
+                  por indicação!
+                </h2>
+                <p className="text-slate-200 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
+                  Conhece amigos, familiares ou motoristas de aplicativo com multas? Compartilhe seu link exclusivo. A
+                  cada defesa gerada (R$ 30), <strong className="text-emerald-300">você recebe R$ 10,00 no Pix</strong>.
+                  Sem limite de indicações!
+                </p>
+              </div>
+
+              {/* Card de Simulação Rápida */}
+              <div className="bg-[#070D1F]/80 backdrop-blur-md border border-emerald-400/30 rounded-2xl p-5 shrink-0 w-full lg:w-auto shadow-lg text-center">
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+                  Exemplo de Lucro
+                </span>
+                <div className="flex items-center justify-center gap-3 text-emerald-300 font-black">
+                  <div className="bg-emerald-950/80 px-3.5 py-2 rounded-xl border border-emerald-500/40">
+                    <span className="text-xs block text-slate-400">10 Amigos</span>
+                    <span className="text-lg text-amber-300">R$ 100 Pix</span>
+                  </div>
+                  <div className="bg-emerald-950/80 px-3.5 py-2 rounded-xl border border-emerald-500/40">
+                    <span className="text-xs block text-slate-400">50 Amigos</span>
+                    <span className="text-lg text-emerald-300">R$ 500 Pix</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 3 Passos Rápidos com Cores Vivas */}
+            <div className="grid md:grid-cols-3 gap-6 my-8">
+              <div className="bg-[#070D1F]/70 border border-blue-500/30 hover:border-blue-400/60 rounded-2xl p-6 transition-all duration-300 group">
+                <div className="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-300 flex items-center justify-center font-black text-xl mb-4 border border-blue-500/30 group-hover:scale-110 transition">
+                  <Share2 className="w-6 h-6" />
+                </div>
+                <span className="text-xs font-bold text-blue-400 uppercase tracking-wider block mb-1">Passo 1</span>
+                <h3 className="text-base font-bold text-white mb-2">Pegue seu Link Único</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Cadastre sua chave Pix em 30 segundos no painel de afiliados e receba seu link exclusivo.
+                </p>
+              </div>
+
+              <div className="bg-[#070D1F]/70 border border-purple-500/30 hover:border-purple-400/60 rounded-2xl p-6 transition-all duration-300 group">
+                <div className="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center font-black text-xl mb-4 border border-purple-500/30 group-hover:scale-110 transition">
+                  <QrCode className="w-6 h-6" />
+                </div>
+                <span className="text-xs font-bold text-purple-400 uppercase tracking-wider block mb-1">Passo 2</span>
+                <h3 className="text-base font-bold text-white mb-2">Compartilhe no WhatsApp</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Envie para amigos, grupos de motoristas, táxi, Uber ou redes sociais com um toque.
+                </p>
+              </div>
+
+              <div className="bg-[#070D1F]/70 border border-emerald-500/40 hover:border-emerald-400/70 rounded-2xl p-6 transition-all duration-300 group shadow-md shadow-emerald-950">
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-black text-xl mb-4 border border-emerald-500/40 group-hover:scale-110 transition">
+                  <DollarSign className="w-6 h-6" />
+                </div>
+                <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider block mb-1">Passo 3</span>
+                <h3 className="text-base font-bold text-white mb-2">Receba R$ 10 no Pix</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  A cada cliente que contratar o recurso, R$ 10,00 caem diretamente na sua chave Pix!
+                </p>
+              </div>
+            </div>
+
+            {/* Chamada para Ação Vibrante */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-300">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Sem taxa de adesão • 100% gratuito • Acesso instantâneo</span>
+              </div>
+
+              <Link
+                href="/afiliados"
+                className="w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-300 text-slate-950 hover:from-emerald-300 hover:to-amber-200 shadow-xl shadow-emerald-500/30 hover:shadow-emerald-400/50 hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Quero Começar a Indicar e Lucrar Agora</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. METODOLOGIA / COMO FUNCIONA */}
+      <section id="como-funciona" className="py-20 border-t border-slate-800/80 bg-[#070D1F]/70 px-6 scroll-mt-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center max-w-xl mx-auto mb-16">
-            <span className="text-[#E0B253] text-xs font-bold uppercase tracking-widest">Passo a Passo</span>
-            <h2 className="text-3xl font-bold text-white mt-2">Como confeccionamos o seu recurso</h2>
+            <span className="text-amber-400 text-xs font-black uppercase tracking-widest">Passo a Passo</span>
+            <h2 className="text-3xl font-black text-white mt-2">Como confeccionamos o seu recurso</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-[#1C2541]/40 border border-slate-800/80 rounded-lg p-7 hover:border-[#C5A059]/40 transition">
-              <span className="text-2xl font-bold text-[#E0B253] font-serif">01</span>
+            <div className="bg-gradient-to-b from-[#111B35] to-[#0A1128] border border-blue-500/30 hover:border-blue-400/60 rounded-2xl p-7 transition shadow-lg">
+              <span className="text-3xl font-black text-blue-400 font-mono">01</span>
               <h3 className="text-lg font-bold text-white mt-4 mb-2">Análise das Nulidades</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
-                Identificação de vícios formais do Auto de Infração de Trânsito (AIT), prazos decadenciais e incongruências
-                de preenchimento.
+              <p className="text-sm text-slate-300 leading-relaxed">
+                Identificação de vícios formais do Auto de Infração de Trânsito (AIT), prazos decadenciais e
+                incongruências de preenchimento.
               </p>
             </div>
 
-            <div className="bg-[#1C2541]/40 border border-slate-800/80 rounded-lg p-7 hover:border-[#C5A059]/40 transition">
-              <span className="text-2xl font-bold text-[#E0B253] font-serif">02</span>
+            <div className="bg-gradient-to-b from-[#111B35] to-[#0A1128] border border-purple-500/30 hover:border-purple-400/60 rounded-2xl p-7 transition shadow-lg">
+              <span className="text-3xl font-black text-purple-400 font-mono">02</span>
               <h3 className="text-lg font-bold text-white mt-4 mb-2">Fundamentação Legal</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
+              <p className="text-sm text-slate-300 leading-relaxed">
                 Estruturação de argumentos com base estrita no Código de Trânsito Brasileiro, deliberações do CONTRAN e
                 jurisprudência dos tribunais.
               </p>
             </div>
 
-            <div className="bg-[#1C2541]/40 border border-slate-800/80 rounded-lg p-7 hover:border-[#C5A059]/40 transition">
-              <span className="text-2xl font-bold text-[#E0B253] font-serif">03</span>
+            <div className="bg-gradient-to-b from-[#111B35] to-[#0A1128] border border-emerald-500/30 hover:border-emerald-400/60 rounded-2xl p-7 transition shadow-lg">
+              <span className="text-3xl font-black text-emerald-400 font-mono">03</span>
               <h3 className="text-lg font-bold text-white mt-4 mb-2">Emissão e Assinatura</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
-                Receba a minuta completa formatada nos padrões das câmaras recursais, pronta para ser assinada e protocolada
-                pelo condutor.
+              <p className="text-sm text-slate-300 leading-relaxed">
+                Receba a minuta completa formatada nos padrões das câmaras recursais, pronta para ser assinada e
+                protocolada pelo condutor.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. INFRAÇÕES MAIS RECORRIDAS */}
+      {/* 6. INFRAÇÕES MAIS RECORRIDAS */}
       <section id="servicos" className="py-20 px-6 max-w-6xl mx-auto scroll-mt-20">
         <div className="text-center max-w-xl mx-auto mb-16">
-          <span className="text-[#E0B253] text-xs font-bold uppercase tracking-widest">Ampla Cobertura</span>
-          <h2 className="text-3xl font-bold text-white mt-2">Principais Infrações Defendidas</h2>
+          <span className="text-emerald-400 text-xs font-black uppercase tracking-widest">Ampla Cobertura</span>
+          <h2 className="text-3xl font-black text-white mt-2">Principais Infrações Defendidas</h2>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {infracoes.map((item, idx) => (
             <div
               key={idx}
-              className="bg-[#1C2541]/30 border border-slate-800 hover:border-[#C5A059]/40 p-6 rounded-lg transition"
+              className={`bg-gradient-to-b from-[#101932] to-[#080E20] border border-slate-800 ${item.cardBorder} p-6 rounded-2xl transition-all duration-200 shadow-md`}
             >
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#E0B253] block mb-1">
+              <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md border inline-block mb-3 ${item.badgeColor}`}>
                 {item.artigo}
               </span>
-              <h3 className="text-base font-bold text-white mb-2">{item.titulo}</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
+              <h3 className="text-base font-bold text-white mb-2 flex items-center gap-2">
+                <span className={`w-2 h-2 rounded-full ${item.accentDot}`}></span>
+                {item.titulo}
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* 6. O QUE ESTÁ INCLUÍDO */}
-      <section id="incluso" className="py-20 px-6 max-w-6xl mx-auto border-t border-slate-800 scroll-mt-20">
+      {/* 7. O QUE ESTÁ INCLUÍDO */}
+      <section id="incluso" className="py-20 px-6 max-w-6xl mx-auto border-t border-slate-800/80 scroll-mt-20">
         <div className="text-center max-w-xl mx-auto mb-16">
-          <span className="text-[#E0B253] text-xs font-bold uppercase tracking-widest">Garantia Técnica</span>
-          <h2 className="text-3xl font-bold text-white mt-2">O que recebe na sua defesa</h2>
+          <span className="text-amber-400 text-xs font-black uppercase tracking-widest">Garantia Técnica</span>
+          <h2 className="text-3xl font-black text-white mt-2">O que você recebe na sua defesa</h2>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="p-6 rounded-lg bg-[#1C2541]/30 border border-slate-800">
-            <h4 className="text-base font-bold text-white mb-2 text-[#E0B253]">Tese Personalizada</h4>
-            <p className="text-xs text-slate-400 leading-relaxed">
+          <div className="p-7 rounded-2xl bg-gradient-to-b from-[#101932] to-[#080E20] border border-amber-500/30 shadow-lg">
+            <h4 className="text-base font-bold text-amber-300 mb-2">Tese Personalizada</h4>
+            <p className="text-xs text-slate-300 leading-relaxed">
               Peça elaborada especificamente para as particularidades do seu auto, sem modelos genéricos.
             </p>
           </div>
-          <div className="p-6 rounded-lg bg-[#1C2541]/30 border border-slate-800">
-            <h4 className="text-base font-bold text-white mb-2 text-[#E0B253]">Ficheiros PDF &amp; Word</h4>
-            <p className="text-xs text-slate-400 leading-relaxed">
+          <div className="p-7 rounded-2xl bg-gradient-to-b from-[#101932] to-[#080E20] border border-blue-500/30 shadow-lg">
+            <h4 className="text-base font-bold text-blue-300 mb-2">Ficheiros PDF &amp; Word</h4>
+            <p className="text-xs text-slate-300 leading-relaxed">
               Liberdade para imprimir a versão definitiva em PDF ou efetuar edições adicionais no Word (.docx).
             </p>
           </div>
-          <div className="p-6 rounded-lg bg-[#1C2541]/30 border border-slate-800">
-            <h4 className="text-base font-bold text-white mb-2 text-[#E0B253]">Manual de Protocolo</h4>
-            <p className="text-xs text-slate-400 leading-relaxed">
+          <div className="p-7 rounded-2xl bg-gradient-to-b from-[#101932] to-[#080E20] border border-emerald-500/30 shadow-lg">
+            <h4 className="text-base font-bold text-emerald-300 mb-2">Manual de Protocolo</h4>
+            <p className="text-xs text-slate-300 leading-relaxed">
               Instruções claras de onde e como submeter a petição perante o Detran, Correios ou portal digital do órgão.
             </p>
           </div>
         </div>
       </section>
 
-      {/* 7. PERGUNTAS FREQUENTES (ACCORDION) */}
-      <section id="faq" className="py-20 border-t border-slate-800 bg-[#070D1F]/60 px-6 scroll-mt-20">
+      {/* 8. PERGUNTAS FREQUENTES (ACCORDION) */}
+      <section id="faq" className="py-20 border-t border-slate-800/80 bg-[#070D1F]/80 px-6 scroll-mt-20">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <span className="text-[#E0B253] text-xs font-bold uppercase tracking-widest">Perguntas Frequentes</span>
-            <h2 className="text-3xl font-bold text-white mt-2">Esclarecimentos Legais</h2>
+            <span className="text-amber-400 text-xs font-black uppercase tracking-widest">Perguntas Frequentes</span>
+            <h2 className="text-3xl font-black text-white mt-2">Esclarecimentos Legais</h2>
           </div>
 
           <div className="space-y-4">
             {faqs.map((faq, i) => (
-              <div key={i} className="bg-[#1C2541]/60 border border-slate-800 rounded-lg overflow-hidden transition">
+              <div key={i} className="bg-[#101932]/80 border border-slate-800 hover:border-slate-700 rounded-2xl overflow-hidden transition shadow-sm">
                 <button
                   type="button"
                   onClick={() => toggleFaq(i)}
-                  className="w-full px-6 py-4 text-left flex justify-between items-center text-sm font-semibold text-white hover:text-[#E0B253] cursor-pointer"
+                  className="w-full px-6 py-4.5 text-left flex justify-between items-center text-sm font-bold text-white hover:text-amber-300 cursor-pointer transition"
                 >
                   <span>{faq.pergunta}</span>
-                  <span className="text-[#E0B253] text-lg font-mono ml-4">{openFaq === i ? "−" : "+"}</span>
+                  <span className="text-amber-400 text-lg font-mono ml-4">{openFaq === i ? "−" : "+"}</span>
                 </button>
                 {openFaq === i && (
                   <div className="px-6 pb-5 text-xs text-slate-300 leading-relaxed border-t border-slate-800/80 pt-3">
@@ -377,43 +546,43 @@ export default function AutoRecursoLandingPage() {
         </div>
       </section>
 
-      {/* 8. CANAL DE ATENDIMENTO FLUTUANTE (SUPORTE TÉCNICO WHATSAPP) */}
+      {/* 9. CANAL DE ATENDIMENTO FLUTUANTE (SUPORTE TÉCNICO WHATSAPP) */}
       <a
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-3 px-4 py-3 rounded-full bg-[#1C2541] border border-[#C5A059]/50 shadow-2xl text-white hover:border-[#E0B253] transition duration-200 group"
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-3 px-4.5 py-3.5 rounded-full bg-gradient-to-r from-emerald-600 to-green-600 border border-emerald-400/50 shadow-2xl shadow-emerald-600/40 text-white hover:brightness-110 transition duration-200 group hover:scale-105"
         aria-label="Atendimento no WhatsApp"
       >
-        <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
+        <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse"></div>
         <div className="text-left hidden sm:block">
-          <p className="text-[10px] uppercase tracking-wider text-[#94A3B8] font-bold">Suporte Técnico</p>
-          <p className="text-xs font-medium text-slate-200 group-hover:text-[#E0B253] transition">Dúvidas no WhatsApp</p>
+          <p className="text-[10px] uppercase tracking-wider text-emerald-100 font-black">Suporte Especializado</p>
+          <p className="text-xs font-bold text-white">Dúvidas no WhatsApp</p>
         </div>
       </a>
 
-      {/* 9. RODAPÉ */}
-      <footer className="border-t border-slate-800/80 bg-[#060913] py-12 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-slate-500">
+      {/* 10. RODAPÉ INSTITUCIONAL */}
+      <footer className="border-t border-slate-800/80 bg-[#050914] py-12 px-6">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-slate-400">
           <div className="flex items-center gap-3">
-            <img src="/logo-icon.png" alt="AutoRecurso" className="w-8 h-8 rounded-md border border-[#C5A059]/30" />
+            <img src="/logo-icon.png" alt="AutoRecurso" className="w-9 h-9 rounded-lg border border-amber-400/40" />
             <div>
-              <span className="text-slate-300 font-bold tracking-wider uppercase block leading-tight">
-                Auto<span className="text-[#E0B253]">Recurso</span>
+              <span className="text-white font-black tracking-wider uppercase block leading-tight">
+                Auto<span className="text-amber-400">Recurso</span>
               </span>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-slate-400">
                 Sistemas Tecnológicos para Elaboração de Peças Administrativas de Trânsito.
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-6 text-slate-400 font-medium">
-            <Link href="/fale-conosco" className="hover:text-slate-200 transition">
+          <div className="flex items-center gap-6 text-slate-300 font-bold">
+            <Link href="/fale-conosco" className="hover:text-amber-300 transition">
               Fale Conosco
             </Link>
-            <Link href="/afiliados" className="hover:text-[#E0B253] transition text-[#E0B253] font-semibold">
-              Programa de Afiliados (R$ 10)
+            <Link href="/afiliados" className="text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1">
+              💰 Programa de Afiliados (R$ 10)
             </Link>
-            <Link href="/login" className="hover:text-slate-200 transition">
+            <Link href="/login" className="hover:text-amber-300 transition">
               Área do Cliente
             </Link>
           </div>
