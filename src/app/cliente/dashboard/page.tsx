@@ -224,7 +224,7 @@ function DashboardContent() {
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-xs font-black bg-amber-50 text-amber-800 border border-amber-200">
-                          <CreditCard className="w-3.5 h-3.5" /> Aguardando Pix (R$ {(item.paymentAmount || 20.0).toFixed(2)})
+                          <CreditCard className="w-3.5 h-3.5" /> Aguardando Pix (R$ {(item.paymentAmount || 30.0).toFixed(2)})
                         </span>
                       )}
                     </div>

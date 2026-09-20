@@ -23,6 +23,7 @@ import {
   Phone,
   Sparkles,
   ArrowLeft,
+  DollarSign,
 } from "lucide-react";
 
 // Lista de infrações comuns para o assistente de convencimento
@@ -496,7 +497,7 @@ export default function HomePage() {
                     <div className="flex items-center gap-2 text-slate-800 font-medium">
                       <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
                       <span>
-                        <strong>Valor único de apenas R$ 20,00:</strong> Peça completa fundamentada em PDF e Word.
+                        <strong>Valor único de apenas R$ 30,00:</strong> Peça completa fundamentada em PDF e Word.
                       </span>
                     </div>
                   </div>
@@ -719,7 +720,7 @@ export default function HomePage() {
             <div className="text-right">
               <span className="text-xs font-bold text-zinc-400 block">Investimento único de</span>
               <span className="text-4xl sm:text-5xl font-black text-white tracking-tight">
-                R$ 20<span className="text-xl text-zinc-400 font-bold">,00</span>
+                R$ 30<span className="text-xl text-zinc-400 font-bold">,00</span>
               </span>
             </div>
             <button
@@ -732,6 +733,104 @@ export default function HomePage() {
             >
               Começar Agora
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* SEÇÃO CHAMATIVA INDIQUE E GANHE COM REGRAS CLARAS */}
+      <section id="indique-ganhe" className="py-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
+        <div className="bg-gradient-to-br from-zinc-950 via-emerald-950 to-zinc-950 rounded-3xl p-8 sm:p-12 border-2 border-emerald-500/60 shadow-2xl relative overflow-hidden text-white">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative z-10">
+            {/* Topo Chamativo */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-white/10">
+              <div>
+                <span className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-emerald-400 text-zinc-950 text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full shadow-md mb-3">
+                  <Sparkles className="w-4 h-4 text-zinc-950" />
+                  Programa Indique & Ganhe no Pix
+                </span>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+                  Ganhe <span className="text-emerald-400">R$ 10,00</span> por amigo indicado!
+                </h2>
+                <p className="text-zinc-300 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
+                  Ajude outros condutores a recorrerem de multas de trânsito por apenas <strong className="text-white">R$ 30,00</strong> e receba <strong className="text-emerald-400">R$ 10,00 líquido no seu Pix</strong> a cada recurso contratado.
+                </p>
+              </div>
+
+              <div className="flex-shrink-0">
+                <Link
+                  href="/afiliados"
+                  className="inline-flex items-center gap-2.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 hover:from-emerald-400 hover:to-teal-300 text-zinc-950 font-black text-base px-8 py-4.5 rounded-2xl shadow-xl shadow-emerald-500/25 transition-all transform hover:scale-105 cursor-pointer whitespace-nowrap"
+                >
+                  <DollarSign className="w-5 h-5 text-zinc-950" />
+                  Quero Indicar e Ganhar R$ 10 no Pix
+                </Link>
+              </div>
+            </div>
+
+            {/* Regras Claras e Transparentes da Promoção */}
+            <div className="mt-8 space-y-4">
+              <div className="flex items-center gap-2 text-emerald-400 font-black text-sm uppercase tracking-wider">
+                <Info className="w-4 h-4" />
+                <span>Regras Oficiais de Como Funciona a Indicação:</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-xs">
+                  <span className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 font-black text-sm flex items-center justify-center mb-3">
+                    1
+                  </span>
+                  <h4 className="font-black text-white text-sm mb-1">Cadastre sua Chave Pix</h4>
+                  <p className="text-xs text-zinc-400 leading-relaxed">
+                    Crie sua conta gratuita em 1 minuto e cadastre o Pix onde receberá suas comissões.
+                  </p>
+                </div>
+
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-xs">
+                  <span className="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 font-black text-sm flex items-center justify-center mb-3">
+                    2
+                  </span>
+                  <h4 className="font-black text-white text-sm mb-1">Compartilhe seu Link</h4>
+                  <p className="text-xs text-zinc-400 leading-relaxed">
+                    Envie seu link exclusivo para amigos, motoristas de app e grupos no WhatsApp.
+                  </p>
+                </div>
+
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-xs">
+                  <span className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 font-black text-sm flex items-center justify-center mb-3">
+                    3
+                  </span>
+                  <h4 className="font-black text-white text-sm mb-1">Recurso por R$ 30,00</h4>
+                  <p className="text-xs text-zinc-400 leading-relaxed">
+                    Seu amigo contrata a defesa técnica completa personalizada pelo valor acessível de R$ 30,00.
+                  </p>
+                </div>
+
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-xs">
+                  <span className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 font-black text-sm flex items-center justify-center mb-3">
+                    4
+                  </span>
+                  <h4 className="font-black text-white text-sm mb-1">R$ 10,00 no seu Pix</h4>
+                  <p className="text-xs text-zinc-400 leading-relaxed">
+                    Com a confirmação do pagamento, R$ 10,00 são liberados direto no seu Pix cadastrado!
+                  </p>
+                </div>
+              </div>
+
+              {/* Detalhes de conformidade e sem limite */}
+              <div className="p-4.5 rounded-2xl bg-white/5 border border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-zinc-300">
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                  <span>
+                    <strong>Sem limite de ganhos:</strong> Indique 10 amigos = R$ 100 | 50 amigos = R$ 500 | 100 amigos = R$ 1.000 no Pix!
+                  </span>
+                </div>
+                <span className="text-[11px] text-zinc-400">
+                  *Comissão válida 1 vez por novo cliente indicado após a confirmação do pagamento.
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -819,7 +918,7 @@ export default function HomePage() {
             },
             {
               q: "Como recebo o recurso após o pagamento?",
-              a: "Após a confirmação do pagamento de R$ 20,00, nossa equipe técnica elabora e revisa sua peça. Assim que liberada, o documento completo em PDF e Word (.docx) fica disponível imediatamente para download no seu painel.",
+              a: "Após a confirmação do pagamento de R$ 30,00, nossa equipe técnica elabora e revisa sua peça. Assim que liberada, o documento completo em PDF e Word (.docx) fica disponível imediatamente para download no seu painel.",
             },
           ].map((item, idx) => (
             <div

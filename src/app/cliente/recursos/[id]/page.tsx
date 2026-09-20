@@ -87,7 +87,7 @@ export default function VisualizarRecursoPage() {
   }, [params.id]);
 
   const pixKey = "pix@autorecurso.com.br";
-  const pixCopiaCola = `00020126580014BR.GOV.BCB.PIX0114pix@autorecurso.com.br5204000053039865405${(appeal?.paymentAmount || 20.0).toFixed(2)}5802BR5915AUTORECURSO LTDA6009SAO PAULO62070503***6304ABCD`;
+  const pixCopiaCola = `00020126580014BR.GOV.BCB.PIX0114pix@autorecurso.com.br5204000053039865405${(appeal?.paymentAmount || 30.0).toFixed(2)}5802BR5915AUTORECURSO LTDA6009SAO PAULO62070503***6304ABCD`;
 
   const copyPix = () => {
     navigator.clipboard.writeText(pixCopiaCola);
@@ -343,7 +343,7 @@ export default function VisualizarRecursoPage() {
                     rel="noopener noreferrer"
                     className="w-full mb-3 inline-flex items-center justify-center gap-1.5 py-3 px-4 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl shadow-md transition"
                   >
-                    Pagar na Kiwify (R$ 20,00)
+                    Pagar na Kiwify (R$ 30,00)
                   </a>
                 </div>
                 <button

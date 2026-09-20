@@ -111,7 +111,7 @@ export default function AdminDashboard() {
   }).length;
   const totalPaidRevenue = appeals
     .filter((a) => a.paymentStatus === "PAID")
-    .reduce((acc, a) => acc + (a.paymentAmount || 20.0), 0);
+    .reduce((acc, a) => acc + (a.paymentAmount || 30.0), 0);
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-100/70">

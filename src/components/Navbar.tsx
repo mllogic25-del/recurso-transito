@@ -101,6 +101,15 @@ export default function Navbar() {
 
           {/* Área de Autenticação / Painel */}
           <div className="hidden md:flex items-center gap-3">
+            {/* Botão Chamativo Indique e Ganhe para Todos */}
+            <Link
+              href="/afiliados"
+              className="text-xs font-black text-white bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 px-4 py-2.5 rounded-xl shadow-md shadow-emerald-600/25 border border-emerald-400/40 flex items-center gap-1.5 transition-all transform hover:scale-105 cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
+              <span>💰 Indique & Ganhe R$ 10</span>
+            </Link>
+
             {user ? (
               <div className="flex items-center gap-3">
                 {isAdmin ? (
@@ -109,7 +118,7 @@ export default function Navbar() {
                       href="/admin/comissoes"
                       className="text-xs font-extrabold bg-amber-50 text-amber-900 border border-amber-200/80 px-3.5 py-2.5 rounded-xl hover:bg-amber-100 transition shadow-2xs"
                     >
-                      💰 Comissões Pix
+                      Comissões Pix
                     </Link>
                     <Link
                       href="/admin/whatsapp"
@@ -127,13 +136,6 @@ export default function Navbar() {
                   </>
                 ) : (
                   <>
-                    <Link
-                      href="/afiliados"
-                      className="text-xs font-black text-emerald-700 bg-emerald-50/80 hover:bg-emerald-100 border border-emerald-200/80 px-3.5 py-2.5 rounded-xl transition shadow-2xs flex items-center gap-1.5"
-                    >
-                      <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-                      Ganhe R$ 10 no Pix
-                    </Link>
                     <Link
                       href="/cliente/dashboard"
                       className={`text-xs font-black px-4 py-2.5 rounded-xl transition flex items-center gap-2 ${

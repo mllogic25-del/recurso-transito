@@ -75,7 +75,7 @@ export default function AfiliadoDashboardPage() {
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "5579998340176";
 
   const handleShareWhatsAppSite = () => {
-    const text = `Olá! Se você recebeu alguma multa de trânsito ou precisa de recurso para Defesa Prévia ou JARI, use esse link com desconto para gerar sua defesa personalizada em PDF e Word por apenas R$ 20,00:\n\n${referralLink}`;
+    const text = `Olá! Se você recebeu alguma multa de trânsito ou precisa de recurso para Defesa Prévia ou JARI, use esse link com desconto para gerar sua defesa personalizada em PDF e Word por apenas R$ 30,00:\n\n${referralLink}`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, "_blank");
   };
 

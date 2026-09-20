@@ -1,5 +1,5 @@
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -56,7 +56,7 @@ model AppealRequest {
   readyAt            DateTime?
   // Controle de Pagamento
   paymentStatus      String           @default("PENDING") // PENDING (Aguardando Pagamento), PAID (Confirmado)
-  paymentAmount      Float            @default(20.00)
+  paymentAmount      Float            @default(30.00)
   paymentMethod      String?          @default("PIX")
   paymentProofUrl    String?
   paymentConfirmedAt DateTime?

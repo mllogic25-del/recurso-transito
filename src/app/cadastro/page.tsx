@@ -105,7 +105,7 @@ function CadastroForm() {
                   <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">
                     <Check className="w-3 h-3" />
                   </div>
-                  <span>Investimento fixo de R$ 20,00 por recurso</span>
+                  <span>Investimento fixo de R$ 30,00 por recurso</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">
