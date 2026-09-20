@@ -78,33 +78,33 @@ export default function AutoRecursoLandingPage() {
     {
       titulo: "Excesso de Velocidade",
       artigo: "Art. 218 do CTB",
-      badgeColor: "bg-amber-500/20 text-amber-300 border-amber-500/30",
-      cardBorder: "hover:border-amber-400/50 hover:shadow-amber-500/10",
-      accentDot: "bg-amber-400",
+      badgeColor: "bg-amber-400 text-slate-950 border-amber-300 font-black",
+      cardBorder: "hover:border-amber-400 hover:shadow-amber-400/20",
+      accentDot: "bg-amber-400 shadow-sm shadow-amber-400",
       desc: "Aferição periódica do radar pelo Inmetro (validade de 12 meses), margem de tolerância obrigatória e prazo legal de 30 dias para notificação.",
     },
     {
       titulo: "Lei Seca / Bafômetro",
       artigo: "Art. 165 e 165-A do CTB",
-      badgeColor: "bg-rose-500/20 text-rose-300 border-rose-500/30",
-      cardBorder: "hover:border-rose-400/50 hover:shadow-rose-500/10",
-      accentDot: "bg-rose-400",
+      badgeColor: "bg-rose-500 text-white border-rose-400 font-black",
+      cardBorder: "hover:border-rose-400 hover:shadow-rose-400/20",
+      accentDot: "bg-rose-400 shadow-sm shadow-rose-400",
       desc: "Nulidades em autos sem descrição objetiva de sinais psicomotores, irregularidades formais no termo de constatação e calibração anual do etilômetro.",
     },
     {
       titulo: "Sinal Vermelho / Radar",
       artigo: "Art. 208 do CTB",
-      badgeColor: "bg-red-500/20 text-red-300 border-red-500/30",
-      cardBorder: "hover:border-red-400/50 hover:shadow-red-500/10",
-      accentDot: "bg-red-400",
+      badgeColor: "bg-red-500 text-white border-red-400 font-black",
+      cardBorder: "hover:border-red-400 hover:shadow-red-400/20",
+      accentDot: "bg-red-400 shadow-sm shadow-red-400",
       desc: "Falta de sequência de fotos nítidas do veículo cruzando a linha de retenção, ausência de homologação e problemas de tempo no amarelo.",
     },
     {
       titulo: "Uso de Celular ao Volante",
       artigo: "Art. 252 do CTB",
-      badgeColor: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
-      cardBorder: "hover:border-cyan-400/50 hover:shadow-cyan-500/10",
-      accentDot: "bg-cyan-400",
+      badgeColor: "bg-cyan-400 text-slate-950 border-cyan-300 font-black",
+      cardBorder: "hover:border-cyan-400 hover:shadow-cyan-400/20",
+      accentDot: "bg-cyan-400 shadow-sm shadow-cyan-400",
       desc: "Inviabilidade visual evidente do agente em patrulhamento, ausência de abordagem justificada e ausência de elementos fáticos no auto.",
     },
   ];
@@ -233,16 +233,16 @@ export default function AutoRecursoLandingPage() {
             feita sob medida para o seu caso.
           </p>
 
-          {/* Destaques Coloridos com Checkmarks */}
+          {/* Destaques com Alto Contraste Límpido */}
           <div className="pt-2 flex flex-wrap items-center gap-3 text-xs font-bold">
-            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-950/60 border border-emerald-500/30 text-emerald-300">
+            <span className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-700 text-white shadow-md">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Sem advogado necessário
             </span>
-            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-950/60 border border-blue-500/30 text-blue-300">
-              <CheckCircle2 className="w-4 h-4 text-blue-400" /> Formatos PDF e Word (.docx)
+            <span className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-700 text-white shadow-md">
+              <CheckCircle2 className="w-4 h-4 text-cyan-400" /> Formatos PDF e Word (.docx)
             </span>
-            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-950/60 border border-amber-500/30 text-amber-300">
-              <CheckCircle2 className="w-4 h-4 text-amber-400" /> Elaboração em minutos
+            <span className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-400 text-slate-950 font-black shadow-lg shadow-amber-400/25">
+              <CheckCircle2 className="w-4 h-4 text-slate-950" /> Elaboração em minutos
             </span>
           </div>
         </div>
@@ -555,21 +555,6 @@ export default function AutoRecursoLandingPage() {
           </div>
         </div>
       </section>
-
-      {/* 9. CANAL DE ATENDIMENTO FLUTUANTE (SUPORTE TÉCNICO WHATSAPP) */}
-      <a
-        href={whatsappUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-3 px-4.5 py-3.5 rounded-full bg-gradient-to-r from-emerald-600 to-green-600 border border-emerald-400/50 shadow-2xl shadow-emerald-600/40 text-white hover:brightness-110 transition duration-200 group hover:scale-105"
-        aria-label="Atendimento no WhatsApp"
-      >
-        <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse"></div>
-        <div className="text-left hidden sm:block">
-          <p className="text-[10px] uppercase tracking-wider text-emerald-100 font-black">Suporte Especializado</p>
-          <p className="text-xs font-bold text-white">Dúvidas no WhatsApp</p>
-        </div>
-      </a>
 
       {/* 10. RODAPÉ INSTITUCIONAL */}
       <footer className="border-t border-slate-800/80 bg-[#050914] py-12 px-6">
