@@ -131,52 +131,51 @@ export default function AutoRecursoLandingPage() {
         </p>
       </aside>
 
-      {/* 2. CABEÇALHO (NAVBAR) REFINADO E BEM DISTRIBUÍDO */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#070D1F]/95 border-b border-slate-800/80 px-4 sm:px-8 py-3.5 transition-all shadow-xl shadow-black/50">
+      {/* 2. CABEÇALHO (NAVBAR) CLARO COM MÁXIMO CONTRASTE */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/95 border-b border-slate-200/90 px-4 sm:px-8 py-3.5 transition-all shadow-xl shadow-slate-950/15">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           {/* Logo / Marca */}
           <Link href="/" className="flex items-center gap-3 group shrink-0">
             <div className="relative">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-400 to-emerald-400 rounded-xl blur-xs opacity-60 group-hover:opacity-100 transition duration-300"></div>
               <img
                 src="/logo-icon.png"
                 alt="AutoRecurso"
-                className="relative w-11 h-11 rounded-lg border border-amber-400/50 shadow-md object-cover bg-[#0F172A] group-hover:scale-105 transition duration-200"
+                className="w-11 h-11 rounded-xl border border-amber-500/40 shadow-md object-cover bg-slate-950 group-hover:scale-105 transition duration-200"
               />
             </div>
             <div className="flex flex-col whitespace-nowrap">
-              <span className="text-xl font-black tracking-tight text-white uppercase leading-none">
-                Auto<span className="bg-gradient-to-r from-amber-300 to-yellow-400 bg-clip-text text-transparent">Recurso</span>
+              <span className="text-xl font-black tracking-tight text-slate-950 uppercase leading-none">
+                Auto<span className="text-amber-500">Recurso</span>
               </span>
-              <span className="text-[10px] tracking-[0.2em] text-emerald-400 uppercase font-bold mt-1 leading-none">
+              <span className="text-[10px] tracking-[0.2em] text-emerald-700 uppercase font-bold mt-1 leading-none">
                 Defesas &amp; Recursos de Trânsito
               </span>
             </div>
           </Link>
 
-          {/* Links Centrais Limpos e Espaçados */}
+          {/* Links Centrais Limpos e com Alto Contraste */}
           <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
             <a
               href="#como-funciona"
-              className="text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-white hover:bg-white/5 px-3 py-2 rounded-lg transition-colors whitespace-nowrap"
+              className="text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-950 hover:bg-slate-100 px-3 py-2 rounded-lg transition-colors whitespace-nowrap"
             >
               Como Funciona
             </a>
             <a
               href="#servicos"
-              className="text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-white hover:bg-white/5 px-3 py-2 rounded-lg transition-colors whitespace-nowrap"
+              className="text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-950 hover:bg-slate-100 px-3 py-2 rounded-lg transition-colors whitespace-nowrap"
             >
               Infrações
             </a>
             <a
               href="#incluso"
-              className="text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-white hover:bg-white/5 px-3 py-2 rounded-lg transition-colors whitespace-nowrap"
+              className="text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-950 hover:bg-slate-100 px-3 py-2 rounded-lg transition-colors whitespace-nowrap"
             >
               O Que Inclui
             </a>
             <a
               href="#faq"
-              className="text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-white hover:bg-white/5 px-3 py-2 rounded-lg transition-colors whitespace-nowrap"
+              className="text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-950 hover:bg-slate-100 px-3 py-2 rounded-lg transition-colors whitespace-nowrap"
             >
               Dúvidas
             </a>
@@ -184,25 +183,25 @@ export default function AutoRecursoLandingPage() {
 
           {/* Ações / Botões no Topo */}
           <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-            {/* Botão Único e Chamativo Indique e Ganhe R$ 10 */}
+            {/* Botão Chamativo Indique e Ganhe */}
             <Link
               href="/afiliados"
-              className="text-xs font-black text-slate-950 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 hover:from-emerald-300 hover:to-teal-200 px-3.5 py-2.5 rounded-xl shadow-lg shadow-emerald-500/20 border border-emerald-300/60 flex items-center gap-1.5 transition-all transform hover:scale-105 cursor-pointer whitespace-nowrap"
+              className="text-xs font-black text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 px-3.5 py-2.5 rounded-xl shadow-md shadow-emerald-600/20 border border-emerald-500/40 flex items-center gap-1.5 transition-all transform hover:scale-105 cursor-pointer whitespace-nowrap"
             >
-              <Coins className="w-4 h-4 text-slate-950 shrink-0" />
+              <Coins className="w-4 h-4 text-amber-300 shrink-0" />
               <span>Indique &amp; Ganhe R$ 10</span>
             </Link>
 
             <Link
               href="/login"
-              className="hidden sm:inline-block text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-white px-2.5 py-2 transition whitespace-nowrap"
+              className="hidden sm:inline-block text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-950 px-2.5 py-2 transition whitespace-nowrap"
             >
               Entrar
             </Link>
 
             <a
               href="#iniciar"
-              className="px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 hover:from-amber-300 hover:to-yellow-300 shadow-lg shadow-amber-400/20 hover:scale-105 transition-all duration-200 whitespace-nowrap shrink-0"
+              className="px-4.5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 hover:from-amber-300 hover:to-yellow-300 shadow-md shadow-amber-400/25 hover:scale-105 transition-all duration-200 whitespace-nowrap shrink-0"
             >
               Gerar Defesa
             </a>
