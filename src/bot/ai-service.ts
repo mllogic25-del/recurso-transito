@@ -129,9 +129,11 @@ export async function generateSamucaResponse(
       },
     ];
 
-    // Modelos oficiais validados e ativos na API do Google
+    // Modelos oficiais validados e ativos na API do Google com tolerância a picos de demanda
     const candidateModels = [
       "gemini-2.5-flash",
+      "gemini-flash-lite-latest",
+      "gemini-3-flash-preview",
       "gemini-flash-latest",
     ];
 
