@@ -125,9 +125,24 @@ function CadastroForm() {
           {/* Coluna Direita - Formulário de Cadastro Bold & Big */}
           <div className="lg:col-span-7 bg-white rounded-3xl shadow-xl border border-zinc-200/90 p-8 sm:p-10 flex flex-col justify-center">
             <div className="mb-6">
-              <span className="text-[10px] font-black uppercase tracking-widest text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100 mb-2.5 inline-block">
-                Cadastro Rápido
-              </span>
+              <div className="flex items-center justify-between gap-3 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-zinc-950 flex items-center justify-center text-white shadow-md">
+                    <ShieldCheck className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 leading-none">
+                      Recursos de Trânsito
+                    </span>
+                    <span className="text-lg font-black tracking-tight text-zinc-950 leading-none mt-1">
+                      auto<span className="text-blue-600">recurso</span>
+                    </span>
+                  </div>
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100 inline-block">
+                  Cadastro Rápido
+                </span>
+              </div>
               <h1 className="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight">
                 Criar Nova Conta
               </h1>

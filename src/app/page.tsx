@@ -280,14 +280,27 @@ export default function HomePage() {
             <div className="absolute bottom-0 left-0 w-56 h-56 bg-indigo-500/10 rounded-full blur-2xl -ml-10 -mb-10 pointer-events-none" />
 
             <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-5">
+              <div className="flex items-center justify-between gap-4 mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-zinc-950/80 border border-zinc-700/80 flex items-center justify-center text-white shadow-lg">
+                    <ShieldCheck className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 leading-none">
+                      Recursos de Trânsito
+                    </span>
+                    <span className="text-xl font-black tracking-tight text-white leading-none mt-1">
+                      auto<span className="text-blue-400">recurso</span>
+                    </span>
+                  </div>
+                </div>
                 <span className="bg-white/10 text-zinc-200 text-[11px] font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-white/15 backdrop-blur-md">
                   Processo 100% Online
                 </span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1]">
-                <span className="text-white">Recurso</span>
-                <span className="text-blue-400">Fácil</span>
+                <span className="text-white">auto</span>
+                <span className="text-blue-400">recurso</span>
                 <br />
                 <span className="text-zinc-300 font-extrabold text-2xl sm:text-3xl lg:text-3xl">
                   para todas as multas de trânsito
@@ -969,12 +982,17 @@ export default function HomePage() {
       <footer id="contato" className="mt-auto bg-zinc-950 text-zinc-400 py-12 px-4 sm:px-8 border-t border-zinc-800">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-white">
+            <div className="w-10 h-10 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-white shadow-md">
               <ShieldCheck className="w-5 h-5 text-blue-400" />
             </div>
-            <span className="text-xl font-black text-white tracking-tight">
-              auto<span className="text-blue-500">recurso</span>
-            </span>
+            <div className="flex flex-col">
+              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 leading-none">
+                Recursos de Trânsito
+              </span>
+              <span className="text-xl font-black text-white tracking-tight leading-none mt-1">
+                auto<span className="text-blue-500">recurso</span>
+              </span>
+            </div>
           </div>
 
           <p className="text-xs text-zinc-500 text-center sm:text-left leading-relaxed">
