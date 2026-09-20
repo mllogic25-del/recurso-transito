@@ -110,15 +110,15 @@ export default function AutoRecursoLandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#070D1F] text-slate-100 font-sans antialiased selection:bg-[#E0B253] selection:text-[#0B132B] relative overflow-x-hidden">
-      {/* Luzes Ambientais de Fundo (Glow Multicolorido) */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-600/15 rounded-full blur-[140px] pointer-events-none"></div>
-      <div className="absolute top-40 right-10 w-[450px] h-[450px] bg-emerald-500/15 rounded-full blur-[130px] pointer-events-none"></div>
-      <div className="absolute top-[800px] left-10 w-[550px] h-[550px] bg-amber-500/10 rounded-full blur-[150px] pointer-events-none"></div>
-      <div className="absolute top-[1400px] right-1/4 w-[500px] h-[500px] bg-purple-600/15 rounded-full blur-[140px] pointer-events-none"></div>
+    <div className="min-h-screen bg-slate-100 text-slate-900 font-sans antialiased selection:bg-amber-400 selection:text-slate-950 relative overflow-x-hidden">
+      {/* Luzes Ambientais de Fundo Suaves */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-[140px] pointer-events-none"></div>
+      <div className="absolute top-40 right-10 w-[450px] h-[450px] bg-emerald-400/10 rounded-full blur-[130px] pointer-events-none"></div>
+      <div className="absolute top-[800px] left-10 w-[550px] h-[550px] bg-amber-400/10 rounded-full blur-[150px] pointer-events-none"></div>
+      <div className="absolute top-[1400px] right-1/4 w-[500px] h-[500px] bg-purple-400/10 rounded-full blur-[140px] pointer-events-none"></div>
 
-      {/* 1. TOPO INSTITUCIONAL COM DEGRADÊ REFINADO */}
-      <aside className="bg-gradient-to-r from-[#060B18] via-[#0D1B3E] to-[#060B18] border-b border-blue-900/40 px-6 py-2.5 text-center text-xs text-slate-300 shadow-sm relative z-10">
+      {/* 1. TOPO INSTITUCIONAL */}
+      <aside className="bg-slate-900 border-b border-slate-800 px-6 py-2 text-center text-xs text-slate-300 shadow-xs relative z-10">
         <p className="flex items-center justify-center gap-2 flex-wrap">
           <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-[11px]">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
@@ -131,8 +131,8 @@ export default function AutoRecursoLandingPage() {
         </p>
       </aside>
 
-      {/* 2. CABEÇALHO (NAVBAR) CLARO COM MÁXIMO CONTRASTE */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/95 border-b border-slate-200/90 px-4 sm:px-8 py-3.5 transition-all shadow-xl shadow-slate-950/15">
+      {/* 2. CABEÇALHO (NAVBAR) BRANCO COM MÁXIMO CONTRASTE */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/95 border-b border-slate-200/90 px-4 sm:px-8 py-3.5 transition-all shadow-md shadow-slate-200/60">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           {/* Logo / Marca */}
           <Link href="/" className="flex items-center gap-3 group shrink-0">
@@ -209,71 +209,71 @@ export default function AutoRecursoLandingPage() {
         </div>
       </header>
 
-      {/* 3. SECÇÃO HERO MULTICOLORIDA & IMPACTANTE */}
+      {/* 3. SECÇÃO HERO DE ALTO CONTRASTE (TEMA CLARO ELEGANTE) */}
       <section className="relative px-6 pt-12 pb-16 max-w-6xl mx-auto grid md:grid-cols-12 gap-10 items-center z-10">
         <div className="md:col-span-7 space-y-6">
           {/* Badge Chamativo */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-400/40 bg-gradient-to-r from-emerald-950/80 via-slate-900 to-blue-950/80 text-emerald-300 text-xs font-bold tracking-wide shadow-md shadow-emerald-900/30">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-50 text-emerald-800 text-xs font-bold tracking-wide shadow-xs">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
             Conformidade Integral com o CTB &amp; CONTRAN
           </div>
 
-          <h1 className="text-4xl sm:text-5xl font-black tracking-tight leading-[1.15] text-white">
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tight leading-[1.15] text-slate-950">
             Defenda os seus direitos com fundamentação jurídica de{" "}
-            <span className="bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 bg-clip-text text-transparent drop-shadow-sm">
+            <span className="bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 bg-clip-text text-transparent drop-shadow-xs">
               alto nível
             </span>
             .
           </h1>
 
-          <p className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-xl">
+          <p className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-xl font-medium">
             Crie defesas prévias e recursos administrativos personalizados contra multas do{" "}
-            <strong className="text-white">DETRAN, PRF, DNIT e prefeituras</strong>. Peça técnica pronta em PDF e Word
+            <strong className="text-slate-950 font-black">DETRAN, PRF, DNIT e prefeituras</strong>. Peça técnica pronta em PDF e Word
             feita sob medida para o seu caso.
           </p>
 
           {/* Destaques com Alto Contraste Límpido */}
           <div className="pt-2 flex flex-wrap items-center gap-3 text-xs font-bold">
-            <span className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-700 text-white shadow-md">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Sem advogado necessário
+            <span className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-200/90 text-slate-800 shadow-xs">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Sem advogado necessário
             </span>
-            <span className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-700 text-white shadow-md">
-              <CheckCircle2 className="w-4 h-4 text-cyan-400" /> Formatos PDF e Word (.docx)
+            <span className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-200/90 text-slate-800 shadow-xs">
+              <CheckCircle2 className="w-4 h-4 text-blue-600" /> Formatos PDF e Word (.docx)
             </span>
-            <span className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-400 text-slate-950 font-black shadow-lg shadow-amber-400/25">
+            <span className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 font-black shadow-md shadow-amber-400/25">
               <CheckCircle2 className="w-4 h-4 text-slate-950" /> Elaboração em minutos
             </span>
           </div>
         </div>
 
-        {/* FORMULÁRIO DE ENTRADA COM BORDA E BRILHO DOURADO */}
+        {/* FORMULÁRIO DE ENTRADA COM CARD BRANCO ELEGANTE E BORDA DOURADA */}
         <div
           id="iniciar"
-          className="md:col-span-5 relative group bg-gradient-to-b from-[#111C38] to-[#0A1128] border-2 border-amber-400/40 rounded-3xl p-7 sm:p-8 shadow-2xl shadow-black/80 scroll-mt-28"
+          className="md:col-span-5 relative group bg-white border-2 border-amber-400/80 rounded-3xl p-7 sm:p-8 shadow-2xl shadow-slate-300/70 scroll-mt-28"
         >
-          {/* Brilho de fundo no card */}
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+          {/* Brilho suave de fundo no card */}
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-amber-400/10 rounded-full blur-2xl pointer-events-none"></div>
 
-          <div className="mb-6 pb-4 border-b border-slate-700/60 flex justify-between items-end">
+          <div className="mb-6 pb-4 border-b border-slate-100 flex justify-between items-end">
             <div>
-              <span className="text-amber-400 text-[10px] uppercase tracking-widest font-black block mb-1">
+              <span className="text-amber-600 text-[10px] uppercase tracking-widest font-black block mb-1">
                 Elaboração Completa &amp; Técnica
               </span>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-amber-300 via-yellow-200 to-emerald-300 bg-clip-text text-transparent">
+                <span className="text-3xl sm:text-4xl font-black text-slate-950">
                   R$ 30,00
                 </span>
-                <span className="text-xs font-semibold text-slate-400">/ taxa única</span>
+                <span className="text-xs font-semibold text-slate-500">/ taxa única</span>
               </div>
             </div>
-            <span className="text-[11px] px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-extrabold flex items-center gap-1 shadow-sm">
-              <Zap className="w-3 h-3 text-emerald-400" /> Entrega Digital
+            <span className="text-[11px] px-3 py-1 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-700 font-extrabold flex items-center gap-1 shadow-xs">
+              <Zap className="w-3 h-3 text-emerald-600" /> Entrega Digital
             </span>
           </div>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="text-xs font-bold text-slate-200 block mb-1.5 uppercase tracking-wide">
+              <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wide">
                 Placa do Veículo
               </label>
               <input
@@ -284,12 +284,12 @@ export default function AutoRecursoLandingPage() {
                 value={placa}
                 onChange={(e) => setPlaca(e.target.value.toUpperCase())}
                 required
-                className="w-full bg-[#060B18] border border-slate-700 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none text-sm uppercase tracking-wider transition font-medium"
+                className="w-full bg-slate-50 border border-slate-300 focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-400/20 rounded-xl px-4 py-3 text-slate-950 placeholder-slate-400 focus:outline-none text-sm uppercase tracking-wider transition font-semibold"
               />
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-200 block mb-1.5 uppercase tracking-wide">
+              <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wide">
                 Número do Auto de Infração (AIT)
               </label>
               <input
@@ -297,18 +297,18 @@ export default function AutoRecursoLandingPage() {
                 placeholder="Código impresso na notificação"
                 value={numeroAIT}
                 onChange={(e) => setNumeroAIT(e.target.value.toUpperCase())}
-                className="w-full bg-[#060B18] border border-slate-700 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none text-sm uppercase tracking-wider transition font-medium"
+                className="w-full bg-slate-50 border border-slate-300 focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-400/20 rounded-xl px-4 py-3 text-slate-950 placeholder-slate-400 focus:outline-none text-sm uppercase tracking-wider transition font-semibold"
               />
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-200 block mb-1.5 uppercase tracking-wide">
+              <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wide">
                 Órgão Autuador
               </label>
               <select
                 value={orgao}
                 onChange={(e) => setOrgao(e.target.value)}
-                className="w-full bg-[#060B18] border border-slate-700 focus:border-amber-400 rounded-xl px-4 py-3 text-white text-sm focus:outline-none transition font-medium cursor-pointer"
+                className="w-full bg-slate-50 border border-slate-300 focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-400/20 rounded-xl px-4 py-3 text-slate-950 focus:outline-none text-sm font-semibold transition cursor-pointer"
               >
                 <option value="DETRAN">DETRAN (Estadual)</option>
                 <option value="PRF">PRF (Polícia Rodoviária Federal)</option>
@@ -319,7 +319,7 @@ export default function AutoRecursoLandingPage() {
 
             <button
               type="submit"
-              className="w-full mt-2 py-4 rounded-xl font-black text-xs uppercase tracking-widest bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 hover:from-amber-300 hover:to-yellow-300 shadow-xl shadow-amber-500/25 transition duration-200 cursor-pointer flex items-center justify-center gap-2 transform hover:scale-[1.02]"
+              className="w-full mt-2 py-4 rounded-xl font-black text-xs uppercase tracking-widest bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 hover:from-amber-300 hover:to-yellow-300 shadow-xl shadow-amber-400/30 transition duration-200 cursor-pointer flex items-center justify-center gap-2 transform hover:scale-[1.02]"
             >
               <span>Confeccionar Minha Defesa</span>
               <ArrowRight className="w-4 h-4" />
@@ -328,49 +328,49 @@ export default function AutoRecursoLandingPage() {
         </div>
       </section>
 
-      {/* 4. MEGA PAINEL CHAMATIVO: INDIQUE & GANHE R$ 10,00 NO PIX (SHOWSTOPPER) */}
+      {/* 4. MEGA PAINEL CHAMATIVO: INDIQUE & GANHE R$ 10,00 NO PIX (SHOWSTOPPER CLARO) */}
       <section id="indique-ganhe" className="py-12 px-6 max-w-6xl mx-auto scroll-mt-24 relative z-20">
-        <div className="relative rounded-3xl p-8 sm:p-12 overflow-hidden border-2 border-emerald-400/50 bg-gradient-to-br from-emerald-950 via-slate-900 to-indigo-950 shadow-[0_0_50px_-10px_rgba(16,185,129,0.35)]">
-          {/* Efeitos de iluminação interna */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
-          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-purple-500/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="relative rounded-3xl p-8 sm:p-12 overflow-hidden border-2 border-emerald-500/60 bg-gradient-to-br from-white via-emerald-50/70 to-teal-50 shadow-2xl shadow-emerald-900/10">
+          {/* Efeitos de iluminação interna suave */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-400/15 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-amber-400/15 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
           <div className="relative z-10">
             {/* Header do Painel */}
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-8 border-b border-emerald-500/30">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-8 border-b border-emerald-200/80">
               <div>
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-emerald-500/20 border border-amber-400/40 text-amber-300 text-xs font-black tracking-wider mb-3 shadow-xs">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-spin" />
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/80 border border-emerald-300 text-emerald-800 text-xs font-black tracking-wider mb-3 shadow-xs">
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-600 animate-spin" />
                   PROGRAMA DE AFILIADOS EXCLUSIVO
                 </div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 leading-tight">
                   Indique e Ganhe{" "}
-                  <span className="bg-gradient-to-r from-emerald-300 via-teal-200 to-amber-300 bg-clip-text text-transparent underline decoration-emerald-400/60 decoration-wavy">
+                  <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 bg-clip-text text-transparent underline decoration-emerald-400 decoration-wavy">
                     R$ 10,00 no PIX
                   </span>{" "}
                   por indicação!
                 </h2>
-                <p className="text-slate-200 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
+                <p className="text-slate-600 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed font-medium">
                   Conhece amigos, familiares ou motoristas de aplicativo com multas? Compartilhe seu link exclusivo. A
-                  cada defesa gerada (R$ 30), <strong className="text-emerald-300">você recebe R$ 10,00 no Pix</strong>.
+                  cada defesa gerada (R$ 30), <strong className="text-emerald-700 font-black">você recebe R$ 10,00 no Pix</strong>.
                   Sem limite de indicações!
                 </p>
               </div>
 
               {/* Card de Simulação Rápida */}
-              <div className="bg-[#070D1F]/80 backdrop-blur-md border border-emerald-400/30 rounded-2xl p-5 shrink-0 w-full lg:w-auto shadow-lg text-center">
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+              <div className="bg-white/95 backdrop-blur-md border border-emerald-300 rounded-2xl p-5 shrink-0 w-full lg:w-auto shadow-md text-center">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
                   Exemplo de Lucro
                 </span>
-                <div className="flex items-center justify-center gap-3 text-emerald-300 font-black">
-                  <div className="bg-emerald-950/80 px-3.5 py-2 rounded-xl border border-emerald-500/40">
-                    <span className="text-xs block text-slate-400">10 Amigos</span>
-                    <span className="text-lg text-amber-300">R$ 100 Pix</span>
+                <div className="flex items-center justify-center gap-3 font-black">
+                  <div className="bg-emerald-50 px-3.5 py-2.5 rounded-xl border border-emerald-200">
+                    <span className="text-xs block text-slate-500 font-semibold">10 Amigos</span>
+                    <span className="text-lg text-amber-600 font-black">R$ 100 Pix</span>
                   </div>
-                  <div className="bg-emerald-950/80 px-3.5 py-2 rounded-xl border border-emerald-500/40">
-                    <span className="text-xs block text-slate-400">50 Amigos</span>
-                    <span className="text-lg text-emerald-300">R$ 500 Pix</span>
+                  <div className="bg-emerald-50 px-3.5 py-2.5 rounded-xl border border-emerald-200">
+                    <span className="text-xs block text-slate-500 font-semibold">50 Amigos</span>
+                    <span className="text-lg text-emerald-700 font-black">R$ 500 Pix</span>
                   </div>
                 </div>
               </div>
@@ -378,35 +378,35 @@ export default function AutoRecursoLandingPage() {
 
             {/* 3 Passos Rápidos com Cores Vivas */}
             <div className="grid md:grid-cols-3 gap-6 my-8">
-              <div className="bg-[#070D1F]/70 border border-blue-500/30 hover:border-blue-400/60 rounded-2xl p-6 transition-all duration-300 group">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-300 flex items-center justify-center font-black text-xl mb-4 border border-blue-500/30 group-hover:scale-110 transition">
+              <div className="bg-white/90 border border-blue-200 hover:border-blue-400 rounded-2xl p-6 transition-all duration-300 group shadow-sm hover:shadow-md">
+                <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-black text-xl mb-4 border border-blue-200 group-hover:scale-110 transition">
                   <Share2 className="w-6 h-6" />
                 </div>
-                <span className="text-xs font-bold text-blue-400 uppercase tracking-wider block mb-1">Passo 1</span>
-                <h3 className="text-base font-bold text-white mb-2">Pegue seu Link Único</h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <span className="text-xs font-bold text-blue-600 uppercase tracking-wider block mb-1">Passo 1</span>
+                <h3 className="text-base font-bold text-slate-900 mb-2">Pegue seu Link Único</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
                   Cadastre sua chave Pix em 30 segundos no painel de afiliados e receba seu link exclusivo.
                 </p>
               </div>
 
-              <div className="bg-[#070D1F]/70 border border-purple-500/30 hover:border-purple-400/60 rounded-2xl p-6 transition-all duration-300 group">
-                <div className="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center font-black text-xl mb-4 border border-purple-500/30 group-hover:scale-110 transition">
+              <div className="bg-white/90 border border-purple-200 hover:border-purple-400 rounded-2xl p-6 transition-all duration-300 group shadow-sm hover:shadow-md">
+                <div className="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-black text-xl mb-4 border border-purple-200 group-hover:scale-110 transition">
                   <QrCode className="w-6 h-6" />
                 </div>
-                <span className="text-xs font-bold text-purple-400 uppercase tracking-wider block mb-1">Passo 2</span>
-                <h3 className="text-base font-bold text-white mb-2">Compartilhe no WhatsApp</h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <span className="text-xs font-bold text-purple-600 uppercase tracking-wider block mb-1">Passo 2</span>
+                <h3 className="text-base font-bold text-slate-900 mb-2">Compartilhe no WhatsApp</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
                   Envie para amigos, grupos de motoristas, táxi, Uber ou redes sociais com um toque.
                 </p>
               </div>
 
-              <div className="bg-[#070D1F]/70 border border-emerald-500/40 hover:border-emerald-400/70 rounded-2xl p-6 transition-all duration-300 group shadow-md shadow-emerald-950">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-black text-xl mb-4 border border-emerald-500/40 group-hover:scale-110 transition">
+              <div className="bg-white/90 border border-emerald-300 hover:border-emerald-500 rounded-2xl p-6 transition-all duration-300 group shadow-sm hover:shadow-md">
+                <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-black text-xl mb-4 border border-emerald-200 group-hover:scale-110 transition">
                   <DollarSign className="w-6 h-6" />
                 </div>
-                <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider block mb-1">Passo 3</span>
-                <h3 className="text-base font-bold text-white mb-2">Receba R$ 10 no Pix</h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block mb-1">Passo 3</span>
+                <h3 className="text-base font-bold text-slate-900 mb-2">Receba R$ 10 no Pix</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
                   A cada cliente que contratar o recurso, R$ 10,00 caem diretamente na sua chave Pix!
                 </p>
               </div>
@@ -414,14 +414,14 @@ export default function AutoRecursoLandingPage() {
 
             {/* Chamada para Ação Vibrante */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
-              <div className="flex items-center gap-2 text-xs font-bold text-slate-300">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>Sem taxa de adesão • 100% gratuito • Acesso instantâneo</span>
               </div>
 
               <Link
                 href="/afiliados"
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-300 text-slate-950 hover:from-emerald-300 hover:to-amber-200 shadow-xl shadow-emerald-500/30 hover:shadow-emerald-400/50 hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white hover:from-emerald-500 hover:to-teal-500 shadow-xl shadow-emerald-600/25 hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Quero Começar a Indicar e Lucrar Agora</span>
                 <ArrowRight className="w-4 h-4" />
@@ -432,36 +432,36 @@ export default function AutoRecursoLandingPage() {
       </section>
 
       {/* 5. METODOLOGIA / COMO FUNCIONA */}
-      <section id="como-funciona" className="py-20 border-t border-slate-800/80 bg-[#070D1F]/70 px-6 scroll-mt-20">
+      <section id="como-funciona" className="py-20 border-t border-slate-200 bg-white px-6 scroll-mt-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center max-w-xl mx-auto mb-16">
-            <span className="text-amber-400 text-xs font-black uppercase tracking-widest">Passo a Passo</span>
-            <h2 className="text-3xl font-black text-white mt-2">Como confeccionamos o seu recurso</h2>
+            <span className="text-amber-600 text-xs font-black uppercase tracking-widest">Passo a Passo</span>
+            <h2 className="text-3xl font-black text-slate-950 mt-2">Como confeccionamos o seu recurso</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-gradient-to-b from-[#111B35] to-[#0A1128] border border-blue-500/30 hover:border-blue-400/60 rounded-2xl p-7 transition shadow-lg">
-              <span className="text-3xl font-black text-blue-400 font-mono">01</span>
-              <h3 className="text-lg font-bold text-white mt-4 mb-2">Análise das Nulidades</h3>
-              <p className="text-sm text-slate-300 leading-relaxed">
+            <div className="bg-slate-50 border border-slate-200 hover:border-blue-400 hover:shadow-md rounded-2xl p-7 transition">
+              <span className="text-3xl font-black text-blue-600 font-mono">01</span>
+              <h3 className="text-lg font-bold text-slate-900 mt-4 mb-2">Análise das Nulidades</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Identificação de vícios formais do Auto de Infração de Trânsito (AIT), prazos decadenciais e
                 incongruências de preenchimento.
               </p>
             </div>
 
-            <div className="bg-gradient-to-b from-[#111B35] to-[#0A1128] border border-purple-500/30 hover:border-purple-400/60 rounded-2xl p-7 transition shadow-lg">
-              <span className="text-3xl font-black text-purple-400 font-mono">02</span>
-              <h3 className="text-lg font-bold text-white mt-4 mb-2">Fundamentação Legal</h3>
-              <p className="text-sm text-slate-300 leading-relaxed">
+            <div className="bg-slate-50 border border-slate-200 hover:border-purple-400 hover:shadow-md rounded-2xl p-7 transition">
+              <span className="text-3xl font-black text-purple-600 font-mono">02</span>
+              <h3 className="text-lg font-bold text-slate-900 mt-4 mb-2">Fundamentação Legal</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Estruturação de argumentos com base estrita no Código de Trânsito Brasileiro, deliberações do CONTRAN e
                 jurisprudência dos tribunais.
               </p>
             </div>
 
-            <div className="bg-gradient-to-b from-[#111B35] to-[#0A1128] border border-emerald-500/30 hover:border-emerald-400/60 rounded-2xl p-7 transition shadow-lg">
-              <span className="text-3xl font-black text-emerald-400 font-mono">03</span>
-              <h3 className="text-lg font-bold text-white mt-4 mb-2">Emissão e Assinatura</h3>
-              <p className="text-sm text-slate-300 leading-relaxed">
+            <div className="bg-slate-50 border border-slate-200 hover:border-emerald-400 hover:shadow-md rounded-2xl p-7 transition">
+              <span className="text-3xl font-black text-emerald-600 font-mono">03</span>
+              <h3 className="text-lg font-bold text-slate-900 mt-4 mb-2">Emissão e Assinatura</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Receba a minuta completa formatada nos padrões das câmaras recursais, pronta para ser assinada e
                 protocolada pelo condutor.
               </p>
@@ -473,52 +473,52 @@ export default function AutoRecursoLandingPage() {
       {/* 6. INFRAÇÕES MAIS RECORRIDAS */}
       <section id="servicos" className="py-20 px-6 max-w-6xl mx-auto scroll-mt-20">
         <div className="text-center max-w-xl mx-auto mb-16">
-          <span className="text-emerald-400 text-xs font-black uppercase tracking-widest">Ampla Cobertura</span>
-          <h2 className="text-3xl font-black text-white mt-2">Principais Infrações Defendidas</h2>
+          <span className="text-emerald-700 text-xs font-black uppercase tracking-widest">Ampla Cobertura</span>
+          <h2 className="text-3xl font-black text-slate-950 mt-2">Principais Infrações Defendidas</h2>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {infracoes.map((item, idx) => (
             <div
               key={idx}
-              className={`bg-gradient-to-b from-[#101932] to-[#080E20] border border-slate-800 ${item.cardBorder} p-6 rounded-2xl transition-all duration-200 shadow-md`}
+              className={`bg-white border border-slate-200 hover:shadow-lg ${item.cardBorder} p-6 rounded-2xl transition-all duration-200 shadow-xs`}
             >
               <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md border inline-block mb-3 ${item.badgeColor}`}>
                 {item.artigo}
               </span>
-              <h3 className="text-base font-bold text-white mb-2 flex items-center gap-2">
+              <h3 className="text-base font-bold text-slate-900 mb-2 flex items-center gap-2">
                 <span className={`w-2 h-2 rounded-full ${item.accentDot}`}></span>
                 {item.titulo}
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">{item.desc}</p>
+              <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* 7. O QUE ESTÁ INCLUÍDO */}
-      <section id="incluso" className="py-20 px-6 max-w-6xl mx-auto border-t border-slate-800/80 scroll-mt-20">
+      <section id="incluso" className="py-20 px-6 max-w-6xl mx-auto border-t border-slate-200 scroll-mt-20">
         <div className="text-center max-w-xl mx-auto mb-16">
-          <span className="text-amber-400 text-xs font-black uppercase tracking-widest">Garantia Técnica</span>
-          <h2 className="text-3xl font-black text-white mt-2">O que você recebe na sua defesa</h2>
+          <span className="text-amber-600 text-xs font-black uppercase tracking-widest">Garantia Técnica</span>
+          <h2 className="text-3xl font-black text-slate-950 mt-2">O que você recebe na sua defesa</h2>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="p-7 rounded-2xl bg-gradient-to-b from-[#101932] to-[#080E20] border border-amber-500/30 shadow-lg">
-            <h4 className="text-base font-bold text-amber-300 mb-2">Tese Personalizada</h4>
-            <p className="text-xs text-slate-300 leading-relaxed">
+          <div className="p-7 rounded-2xl bg-white border border-slate-200 hover:border-amber-400 hover:shadow-md transition shadow-xs">
+            <h4 className="text-base font-bold text-amber-700 mb-2">Tese Personalizada</h4>
+            <p className="text-xs text-slate-600 leading-relaxed">
               Peça elaborada especificamente para as particularidades do seu auto, sem modelos genéricos.
             </p>
           </div>
-          <div className="p-7 rounded-2xl bg-gradient-to-b from-[#101932] to-[#080E20] border border-blue-500/30 shadow-lg">
-            <h4 className="text-base font-bold text-blue-300 mb-2">Ficheiros PDF &amp; Word</h4>
-            <p className="text-xs text-slate-300 leading-relaxed">
+          <div className="p-7 rounded-2xl bg-white border border-slate-200 hover:border-blue-400 hover:shadow-md transition shadow-xs">
+            <h4 className="text-base font-bold text-blue-700 mb-2">Ficheiros PDF &amp; Word</h4>
+            <p className="text-xs text-slate-600 leading-relaxed">
               Liberdade para imprimir a versão definitiva em PDF ou efetuar edições adicionais no Word (.docx).
             </p>
           </div>
-          <div className="p-7 rounded-2xl bg-gradient-to-b from-[#101932] to-[#080E20] border border-emerald-500/30 shadow-lg">
-            <h4 className="text-base font-bold text-emerald-300 mb-2">Manual de Protocolo</h4>
-            <p className="text-xs text-slate-300 leading-relaxed">
+          <div className="p-7 rounded-2xl bg-white border border-slate-200 hover:border-emerald-400 hover:shadow-md transition shadow-xs">
+            <h4 className="text-base font-bold text-emerald-700 mb-2">Manual de Protocolo</h4>
+            <p className="text-xs text-slate-600 leading-relaxed">
               Instruções claras de onde e como submeter a petição perante o Detran, Correios ou portal digital do órgão.
             </p>
           </div>
@@ -526,26 +526,26 @@ export default function AutoRecursoLandingPage() {
       </section>
 
       {/* 8. PERGUNTAS FREQUENTES (ACCORDION) */}
-      <section id="faq" className="py-20 border-t border-slate-800/80 bg-[#070D1F]/80 px-6 scroll-mt-20">
+      <section id="faq" className="py-20 border-t border-slate-200 bg-white px-6 scroll-mt-20">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <span className="text-amber-400 text-xs font-black uppercase tracking-widest">Perguntas Frequentes</span>
-            <h2 className="text-3xl font-black text-white mt-2">Esclarecimentos Legais</h2>
+            <span className="text-amber-600 text-xs font-black uppercase tracking-widest">Perguntas Frequentes</span>
+            <h2 className="text-3xl font-black text-slate-950 mt-2">Esclarecimentos Legais</h2>
           </div>
 
           <div className="space-y-4">
             {faqs.map((faq, i) => (
-              <div key={i} className="bg-[#101932]/80 border border-slate-800 hover:border-slate-700 rounded-2xl overflow-hidden transition shadow-sm">
+              <div key={i} className="bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-2xl overflow-hidden transition shadow-xs">
                 <button
                   type="button"
                   onClick={() => toggleFaq(i)}
-                  className="w-full px-6 py-4.5 text-left flex justify-between items-center text-sm font-bold text-white hover:text-amber-300 cursor-pointer transition"
+                  className="w-full px-6 py-4.5 text-left flex justify-between items-center text-sm font-bold text-slate-900 hover:text-blue-600 cursor-pointer transition"
                 >
                   <span>{faq.pergunta}</span>
-                  <span className="text-amber-400 text-lg font-mono ml-4">{openFaq === i ? "−" : "+"}</span>
+                  <span className="text-amber-600 text-lg font-mono ml-4">{openFaq === i ? "−" : "+"}</span>
                 </button>
                 {openFaq === i && (
-                  <div className="px-6 pb-5 text-xs text-slate-300 leading-relaxed border-t border-slate-800/80 pt-3">
+                  <div className="px-6 pb-5 text-xs text-slate-600 leading-relaxed border-t border-slate-200/80 pt-3">
                     {faq.resposta}
                   </div>
                 )}
@@ -556,7 +556,7 @@ export default function AutoRecursoLandingPage() {
       </section>
 
       {/* 10. RODAPÉ INSTITUCIONAL */}
-      <footer className="border-t border-slate-800/80 bg-[#050914] py-12 px-6">
+      <footer className="border-t border-slate-800 bg-slate-950 py-12 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-slate-400">
           <div className="flex items-center gap-3">
             <img src="/logo-icon.png" alt="AutoRecurso" className="w-9 h-9 rounded-lg border border-amber-400/40" />
