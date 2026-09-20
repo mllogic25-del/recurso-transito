@@ -55,9 +55,9 @@ export default function Navbar() {
         <div className="flex justify-between h-20 sm:h-22 items-center py-2">
           <Link href="/" className="flex items-center gap-3 sm:gap-3.5 group flex-shrink-0">
             <img
-              src="/samuca.png"
-              alt="AutoRecurso - Samuca"
-              className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-emerald-400 shadow-md group-hover:scale-105 transition-all duration-200 object-cover bg-white flex-shrink-0"
+              src="/logo-icon.png"
+              alt="AutoRecurso - Recursos de Trânsito"
+              className="w-13 h-13 sm:w-15 sm:h-15 rounded-2xl border border-amber-500/40 shadow-md shadow-amber-950/20 group-hover:scale-105 transition-all duration-200 object-cover bg-slate-950 flex-shrink-0"
             />
             <div className="flex flex-col whitespace-nowrap">
               <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] text-zinc-400 leading-none">
