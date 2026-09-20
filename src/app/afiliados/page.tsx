@@ -102,10 +102,9 @@ export default function AfiliadosPage() {
                 <DollarSign className="w-4 h-4 text-emerald-600" /> R$ 10,00 no seu Pix
               </p>
               <p className="text-slate-600">
-                Você recebe R$ 10,00 de comissão líquida diretamente na chave Pix cadastrada no seu perfil.
+                Você recebe R$ 10,00 de comissão líquida diretamente na chave Pix cadastrada no seu perfil no prazo de até 72 horas após a confirmação.
               </p>
             </div>
-
             <div className="bg-white/90 p-4 rounded-2xl border border-amber-200 space-y-1.5">
               <p className="font-extrabold text-blue-700 flex items-center gap-1.5 text-sm">
                 <CheckCircle2 className="w-4 h-4 text-blue-600" /> Válido se o indicado pagar
@@ -160,7 +159,7 @@ export default function AfiliadosPage() {
               </span>
               <h3 className="font-bold text-slate-900 mb-1">Receba no Pix</h3>
               <p className="text-xs text-slate-600">
-                Quando o indicado pagar o recurso, o sistema registra sua comissão de R$ 10,00 e o valor é pago no seu Pix.
+                Quando o indicado pagar o recurso, o sistema registra sua comissão de R$ 10,00 e o valor é pago no seu Pix no prazo de até 72 horas.
               </p>
             </div>
           </div>

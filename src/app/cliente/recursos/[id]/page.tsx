@@ -106,7 +106,7 @@ export default function VisualizarRecursoPage() {
       });
       const data = await res.json();
       if (res.ok) {
-        setPaymentMsg("Após o pagamento, o administrador confirmará e liberará seu recurso.");
+        setPaymentMsg("Após a confirmação do pagamento, sua defesa técnica é elaborada e liberada no seu painel no prazo de até 72 horas.");
         loadData();
       }
     } catch {

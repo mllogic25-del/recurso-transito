@@ -732,8 +732,8 @@ function NovoRecursoForm() {
                   </>
                 )}
               </button>
-              <p className="text-center text-xs text-slate-400 mt-3">
-                Sua solicitação entrará para análise imediata da equipe técnica.
+              <p className="text-center text-xs text-slate-500 mt-3 font-medium">
+                Sua solicitação entrará em análise técnica. Prazo de elaboração de até 72 horas após confirmação do pagamento.
               </p>
             </div>
           </form>

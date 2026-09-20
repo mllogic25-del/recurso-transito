@@ -17,6 +17,7 @@ import {
   AlertTriangle,
   Flame,
   Zap,
+  Clock,
 } from "lucide-react";
 
 export default function AutoRecursoLandingPage() {
@@ -65,7 +66,7 @@ export default function AutoRecursoLandingPage() {
     {
       pergunta: "Qual o formato do documento que irei receber?",
       resposta:
-        "O documento é disponibilizado imediatamente em formato PDF (pronto para imprimir e assinar) e Word editável (.docx), acompanhado das orientações passo a passo para envio presencial ou eletrônico.",
+        "O documento é elaborado e disponibilizado no seu painel em até 72 horas em formato PDF (pronto para imprimir e assinar) e Word editável (.docx), acompanhado das orientações passo a passo para envio presencial ou eletrônico.",
     },
     {
       pergunta: "E se o prazo da notificação já tiver expirado?",
@@ -241,7 +242,7 @@ export default function AutoRecursoLandingPage() {
               <CheckCircle2 className="w-4 h-4 text-blue-600" /> Formatos PDF e Word (.docx)
             </span>
             <span className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 font-black shadow-md shadow-amber-400/25">
-              <CheckCircle2 className="w-4 h-4 text-slate-950" /> Elaboração em minutos
+              <Clock className="w-4 h-4 text-slate-950" /> Prazo de até 72 horas
             </span>
           </div>
         </div>
@@ -267,7 +268,7 @@ export default function AutoRecursoLandingPage() {
               </div>
             </div>
             <span className="text-[11px] px-3 py-1 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-700 font-extrabold flex items-center gap-1 shadow-xs">
-              <Zap className="w-3 h-3 text-emerald-600" /> Entrega Digital
+              <Clock className="w-3 h-3 text-emerald-600" /> Prazo de até 72h
             </span>
           </div>
 
@@ -353,7 +354,7 @@ export default function AutoRecursoLandingPage() {
                 </h2>
                 <p className="text-slate-600 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed font-medium">
                   Conhece amigos, familiares ou motoristas de aplicativo com multas? Compartilhe seu link exclusivo. A
-                  cada defesa gerada (R$ 30), <strong className="text-emerald-700 font-black">você recebe R$ 10,00 no Pix</strong>.
+                  cada defesa gerada (R$ 30), <strong className="text-emerald-700 font-black">você recebe R$ 10,00 no Pix em até 72 horas</strong> após a confirmação.
                   Sem limite de indicações!
                 </p>
               </div>
@@ -407,7 +408,7 @@ export default function AutoRecursoLandingPage() {
                 <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block mb-1">Passo 3</span>
                 <h3 className="text-base font-bold text-slate-900 mb-2">Receba R$ 10 no Pix</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  A cada cliente que contratar o recurso, R$ 10,00 caem diretamente na sua chave Pix!
+                  A cada cliente que contratar o recurso, R$ 10,00 caem diretamente na sua chave Pix em até 72 horas!
                 </p>
               </div>
             </div>
