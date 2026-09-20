@@ -108,6 +108,16 @@ async function startBot() {
     }
   });
 
+  // Buffer inteligente de loteamento para mensagens e mídias (permite envio de 1 por 1 ou vários de uma vez)
+  interface UserBatchQueue {
+    texts: string[];
+    mediaFiles: Array<{ buffer: Buffer; mimeType: string }>;
+    lastMsg: any;
+    timer: NodeJS.Timeout;
+  }
+
+  const userBatchQueues = new Map<string, UserBatchQueue>();
+
   sock.ev.on("messages.upsert", async ({ messages, type }) => {
     if (type !== "notify") return;
 
@@ -180,36 +190,61 @@ async function startBot() {
       // Se não tem nem texto nem arquivo baixado, ignora
       if (!messageText.trim() && !mediaBuffer) continue;
 
-      if (messageText.trim()) {
-        console.log(`\n📩 Mensagem de [${remoteJid.replace("@s.whatsapp.net", "")}]: "${messageText}"`);
-      }
-
       try {
-        // 1. Marca como lida
+        // Marca como lida imediatamente
         await sock.readMessages([msg.key]);
+      } catch (_) {}
 
-        // 2. Simula presença "Digitando..."
-        await sock.sendPresenceUpdate("composing", remoteJid);
-
-        // 3. Delay humanizado: espera entre 2.5 e 4.5 segundos antes de responder
-        const randomDelay = Math.floor(Math.random() * 2000) + 2500;
-        await new Promise((resolve) => setTimeout(resolve, randomDelay));
-
-        // 4. Gera a resposta com o cérebro do Samuca (passando mídia se houver)
-        let reply = "Opa! Estou analisando aqui com calma, me dá só 1 minutinho!";
-        if (GEMINI_API_KEY) {
-          const mediaPayload = mediaBuffer && mimeType ? { buffer: mediaBuffer, mimeType } : null;
-          reply = await generateSamucaResponse(remoteJid, messageText, GEMINI_API_KEY, mediaPayload);
-        }
-
-        // 5. Para de digitar e envia a resposta
-        await sock.sendPresenceUpdate("paused", remoteJid);
-        await sock.sendMessage(remoteJid, { text: reply }, { quoted: msg });
-
-        console.log(`🤖 Samuca respondeu: "${reply}"`);
-      } catch (err) {
-        console.error("Erro ao processar e responder mensagem:", err);
+      // Gerencia loteamento inteligente (espera até 3.5 segundos por novas fotos do mesmo cliente)
+      let existingBatch = userBatchQueues.get(remoteJid);
+      if (existingBatch) {
+        clearTimeout(existingBatch.timer);
+        if (messageText.trim()) existingBatch.texts.push(messageText.trim());
+        if (mediaBuffer && mimeType) existingBatch.mediaFiles.push({ buffer: mediaBuffer, mimeType });
+        existingBatch.lastMsg = msg;
+      } else {
+        existingBatch = {
+          texts: messageText.trim() ? [messageText.trim()] : [],
+          mediaFiles: mediaBuffer && mimeType ? [{ buffer: mediaBuffer, mimeType }] : [],
+          lastMsg: msg,
+          timer: setTimeout(() => {}, 0),
+        };
+        userBatchQueues.set(remoteJid, existingBatch);
       }
+
+      // Reinicia o temporizador do lote
+      existingBatch.timer = setTimeout(async () => {
+        const batch = userBatchQueues.get(remoteJid);
+        userBatchQueues.delete(remoteJid);
+        if (!batch) return;
+
+        const combinedText = batch.texts.join("\n").trim();
+        const totalFiles = batch.mediaFiles.length;
+
+        console.log(`\n📦 Processando lote de [${remoteJid.replace("@s.whatsapp.net", "")}]: ${totalFiles} arquivo(s), texto: "${combinedText}"`);
+
+        try {
+          // 1. Simula presença "Digitando..."
+          await sock.sendPresenceUpdate("composing", remoteJid);
+
+          // 2. Delay humanizado
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+
+          // 3. Gera a resposta única inteligente para o lote de documentos
+          let reply = "Opa! Estou analisando aqui com calma, me dá só 1 minutinho!";
+          if (GEMINI_API_KEY) {
+            reply = await generateSamucaResponse(remoteJid, combinedText, GEMINI_API_KEY, batch.mediaFiles);
+          }
+
+          // 4. Para de digitar e envia a resposta citando a última mensagem
+          await sock.sendPresenceUpdate("paused", remoteJid);
+          await sock.sendMessage(remoteJid, { text: reply }, { quoted: batch.lastMsg });
+
+          console.log(`🤖 Samuca respondeu lote: "${reply}"\n`);
+        } catch (err) {
+          console.error("Erro ao processar lote e responder mensagem:", err);
+        }
+      }, 3500);
     }
   });
 }

@@ -30,10 +30,19 @@ CONSULTA DE PROTOCOLO E STATUS DO RECURSO (MUITO IMPORTANTE):
 
 COMO CONDUZIR A CONVERSA NO WHATSAPP:
 10. Conduza passo a passo: Não mande tudo de uma vez só em um bloco gigante! Faça perguntas naturais e divididas (no máximo 2 a 3 frases por mensagem).
-11. Se o cliente enviar foto ou documento (Notificação/AIT, CRLV, CNH, Comprovante):
-   - Identifique especificamente o documento que você abriu e mencione algum dado real que você leu na imagem (ex: "Perfeito, acabei de ver a notificação da multa!", "Ótimo, recebi o CRLV do veículo!", "Show de bola, CNH recebida com sucesso!").
-   - NUNCA repita o mesmo pedido de documento se ele já te enviou. Preste atenção no que já foi mandado. Se ele já mandou os documentos principais, passe para o próximo passo: pergunte o e-mail dele para cadastro e envio da defesa pronta, e se ele quer acrescentar algum detalhe sobre o que aconteceu no dia.
-   - Seja sempre fluido, acolhedor e dinâmico. Jamais envie mensagens repetitivas ou em looping!
+11. ANÁLISE DE DOCUMENTOS (UM POR VEZ OU VÁRIOS DE UMA VEZ):
+   - O cliente pode enviar um documento por vez OU selecionar e enviar vários documentos de uma vez só no WhatsApp.
+   - ANALISE CADA DOCUMENTO IDENTIFICADO:
+     * Notificação / Auto de Infração (AIT): Cite a placa, a infração e os pontos identificados.
+     * CRLV (Doc do Veículo): Cite o modelo do carro e o nome do proprietário registrado.
+     * CNH (Habilitação): Cite o nome do condutor identificado na carteira.
+   - ANÁLISE DO QUE FALTA (CHECKLIST INTELIGENTE):
+     * Os 3 documentos principais necessários são: Notificação/AIT + CRLV + CNH.
+     * Avalie todos os documentos recebidos até agora nesta conversa e informe com clareza o que foi reconhecido e o que AINDA FALTA:
+       - Se enviou só a Notificação: "Recebi a notificação da multa! Para montarmos a defesa, agora só falta o CRLV do veículo e a sua CNH."
+       - Se já tem Notificação e CRLV: "Ótimo, já temos a notificação e o CRLV! Agora só falta a foto da sua CNH."
+       - Se enviou os 3 juntos ou já completou os 3: "Show de bola! Recebi todos os 3 documentos principais (Notificação, CRLV e CNH)! A documentação básica está completa. Agora, para finalizarmos o cadastro: qual o seu e-mail para enviarmos a defesa pronta? E você gostaria de relatar algum detalhe do ocorrido no dia?"
+   - NUNCA peça novamente um documento que o cliente já enviou nesta conversa!
 12. Se o cliente enviar áudio:
    - Responda normalmente e com simpatia ao que ele falou.
 13. Valores e Pagamento:
@@ -60,15 +69,22 @@ export async function generateSamucaResponse(
   userPhone: string,
   userMessage: string,
   apiKey: string,
-  mediaData?: { buffer: Buffer; mimeType: string } | null
+  mediaData?: { buffer: Buffer; mimeType: string } | Array<{ buffer: Buffer; mimeType: string }> | null
 ): Promise<string> {
   try {
     let history = chatHistories.get(userPhone) || [];
 
-    // Mantém as últimas 10 mensagens no histórico
-    if (history.length > 10) {
-      history = history.slice(history.length - 10);
+    // Mantém as últimas 12 mensagens no histórico
+    if (history.length > 12) {
+      history = history.slice(history.length - 12);
     }
+
+    // Normaliza arquivos recebidos (seja único ou múltiplos)
+    const files: Array<{ buffer: Buffer; mimeType: string }> = Array.isArray(mediaData)
+      ? mediaData
+      : mediaData && mediaData.buffer
+      ? [mediaData]
+      : [];
 
     // Verifica se é uma solicitação de consulta de protocolo/status/placa/cpf
     let systemContextExtra = "";
@@ -96,23 +112,27 @@ export async function generateSamucaResponse(
 
     const currentParts: any[] = [];
 
-    // Se houver arquivo (foto, PDF ou áudio)
-    if (mediaData && mediaData.buffer) {
-      const cleanMimeType = mediaData.mimeType.split(";")[0].trim();
-      currentParts.push({
-        inline_data: {
-          mime_type: cleanMimeType,
-          data: mediaData.buffer.toString("base64"),
-        },
-      });
+    // Anexa todos os arquivos do lote (seja 1 ou múltiplos)
+    for (const file of files) {
+      if (file && file.buffer) {
+        const cleanMimeType = file.mimeType.split(";")[0].trim();
+        currentParts.push({
+          inline_data: {
+            mime_type: cleanMimeType,
+            data: file.buffer.toString("base64"),
+          },
+        });
+      }
     }
 
-    // Adiciona o texto ou prompt padrão
+    // Adiciona o texto ou prompt padrão enriquecido
     let textPrompt =
       userMessage && userMessage.trim()
         ? userMessage
-        : mediaData
-        ? "Analise esta foto ou documento que acabei de enviar. Identifique exatamente o que é (CNH, CRLV, Notificação de Multa ou outro), cite os dados relevantes que conseguir ler e continue a conversa com naturalidade."
+        : files.length > 1
+        ? `Analise estes ${files.length} documentos/fotos que acabei de enviar juntos. Identifique cada um deles individualmente (Notificação/AIT de multa, CRLV, CNH, Comprovante, etc.), confira com os que já te mandei antes e me diga o que encontrou e se ainda falta algum documento para dar entrada no recurso.`
+        : files.length === 1
+        ? "Analise esta foto ou documento que acabei de enviar. Identifique exatamente o que é (CNH, CRLV, Notificação de Multa ou outro), confira com os que já te mandei antes e me diga o que encontrou e se ainda falta algum documento."
         : "Olá";
 
     if (systemContextExtra) {
