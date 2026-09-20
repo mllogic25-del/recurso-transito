@@ -12,14 +12,12 @@ import {
   FileDown,
   ChevronRight,
   HelpCircle,
-  AlertCircle,
   Car,
   CheckCheck,
   Calendar,
-  AlertTriangle,
-  ArrowRight,
-  ShieldCheck,
   CreditCard,
+  ArrowRight,
+  Sparkles,
 } from "lucide-react";
 import { calculateDeadlineInfo } from "@/lib/deadlineUtils";
 
@@ -70,135 +68,133 @@ function DashboardContent() {
   const ready = appeals.filter((a) => a.status === "READY").length;
   const pending = appeals.filter((a) => a.status !== "READY").length;
 
-  const getTypeName = (type: string) => {
-    switch (type) {
-      case "DEFESA_PREVIA":
-        return "Defesa Prévia";
-      case "JARI":
-        return "Recurso 1ª Instância (JARI)";
-      case "CETRAN":
-        return "Recurso 2ª Instância (CETRAN)";
-      default:
-        return type;
-    }
-  };
-
   return (
     <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Banner de Sucesso pós-envio */}
       {acabouDeEnviar && (
-        <div className="mb-8 p-6 bg-emerald-50 border border-emerald-300 rounded-3xl flex items-start gap-4 executive-shadow animate-fade-in">
-          <div className="p-2.5 bg-emerald-600 text-white rounded-2xl flex-shrink-0 shadow-sm">
+        <div className="mb-8 p-6 bg-emerald-50 border border-emerald-200 rounded-3xl flex items-start gap-4 executive-shadow animate-fade-in">
+          <div className="p-3 bg-emerald-600 text-white rounded-2xl flex-shrink-0 shadow-sm">
             <CheckCheck className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-base font-extrabold text-emerald-950">
+            <h3 className="text-lg font-black text-emerald-950">
               Solicitação e Documentos Recebidos com Sucesso!
             </h3>
-            <p className="text-xs sm:text-sm text-emerald-800 mt-1 leading-relaxed">
-              Registramos seus dados e todos os arquivos anexados. Agora, basta efetuar o pagamento via Pix para darmos início imediato à redação da sua defesa jurídica.
+            <p className="text-sm text-emerald-800 mt-1 leading-relaxed">
+              Registramos seus dados e todos os arquivos anexados. Agora, basta efetuar o pagamento via Pix para darmos início imediato à redação da sua defesa técnica.
             </p>
           </div>
         </div>
       )}
 
-      {/* Topo do Painel */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      {/* Topo do Painel - Estilo Bold & Big */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10">
         <div>
-          <span className="text-[11px] font-extrabold uppercase tracking-widest text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100 mb-1.5 inline-block">
-            Portal do Cliente
-          </span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 border border-zinc-200 mb-3">
+            <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+            <span className="text-[11px] font-black uppercase tracking-wider text-zinc-700">
+              Portal do Condutor
+            </span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 tracking-tight leading-tight">
             Meus Recursos de Trânsito
           </h1>
-          <p className="text-slate-500 text-sm mt-1">
-            Acompanhe o prazo de vencimento da notificação, status de pagamento e baixe suas peças prontas.
+          <p className="text-zinc-500 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
+            Acompanhe o status de análise, o prazo de vencimento da notificação e faça o download das suas peças jurídicas finalizadas.
           </p>
         </div>
 
         <Link
           href="/cliente/novo"
-          className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold px-6 py-3 rounded-2xl shadow-lg shadow-blue-600/20 transition transform hover:-translate-y-0.5"
+          className="inline-flex items-center justify-center gap-2.5 bg-zinc-950 hover:bg-zinc-800 text-white text-sm font-black px-7 py-4 rounded-2xl shadow-md transition transform hover:-translate-y-0.5 flex-shrink-0"
         >
-          <PlusCircle className="w-4 h-4" />
-          Enviar Nova Multa & Documentos
+          <PlusCircle className="w-5 h-5 text-blue-400" />
+          Cadastrar Nova Multa
         </Link>
       </div>
 
-      {/* Métricas */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
-        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 executive-shadow flex items-center gap-4">
-          <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl">
-            <FileText className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+      {/* Métricas Bold & Big */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
+        {/* Total Solicitado */}
+        <div className="bg-white p-7 rounded-3xl border border-zinc-200/80 executive-shadow transition hover:border-zinc-300">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-xs font-black uppercase tracking-wider text-zinc-400">
               Total Solicitado
-            </p>
-            <p className="text-3xl font-extrabold text-slate-900 mt-0.5">{total}</p>
+            </span>
+            <div className="w-10 h-10 rounded-xl bg-zinc-100 text-zinc-700 flex items-center justify-center">
+              <FileText className="w-5 h-5" />
+            </div>
           </div>
+          <p className="text-4xl sm:text-5xl font-black text-zinc-950 tracking-tight">{total}</p>
+          <p className="text-xs text-zinc-400 mt-2 font-medium">Processos cadastrados no sistema</p>
         </div>
 
-        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 executive-shadow flex items-center gap-4">
-          <div className="p-3 bg-emerald-50 text-emerald-600 rounded-2xl">
-            <CheckCircle2 className="w-6 h-6" />
+        {/* Defesas Prontas */}
+        <div className="bg-white p-7 rounded-3xl border border-zinc-200/80 executive-shadow transition hover:border-zinc-300">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-xs font-black uppercase tracking-wider text-zinc-400">
+              Defesas Concluídas
+            </span>
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <CheckCircle2 className="w-5 h-5" />
+            </div>
           </div>
-          <div>
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Defesas Prontas
-            </p>
-            <p className="text-3xl font-extrabold text-emerald-700 mt-0.5">{ready}</p>
-          </div>
+          <p className="text-4xl sm:text-5xl font-black text-emerald-600 tracking-tight">{ready}</p>
+          <p className="text-xs text-zinc-400 mt-2 font-medium">Prontas para download e protocolo</p>
         </div>
 
-        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 executive-shadow flex items-center gap-4">
-          <div className="p-3 bg-amber-50 text-amber-600 rounded-2xl">
-            <Clock className="w-6 h-6" />
+        {/* Em Elaboração */}
+        <div className="bg-white p-7 rounded-3xl border border-zinc-200/80 executive-shadow transition hover:border-zinc-300">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-xs font-black uppercase tracking-wider text-zinc-400">
+              Em Análise / Elaboração
+            </span>
+            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+              <Clock className="w-5 h-5" />
+            </div>
           </div>
-          <div>
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Em Processamento
-            </p>
-            <p className="text-3xl font-extrabold text-amber-700 mt-0.5">{pending}</p>
-          </div>
+          <p className="text-4xl sm:text-5xl font-black text-amber-600 tracking-tight">{pending}</p>
+          <p className="text-xs text-zinc-400 mt-2 font-medium">Aguardando pagamento ou redação</p>
         </div>
       </div>
 
-      {/* Lista de Recursos */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 executive-shadow overflow-hidden mb-10">
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-          <h2 className="text-base font-extrabold text-slate-900">Seus Pedidos de Defesa</h2>
-          <span className="text-xs text-slate-400 font-semibold">
-            {appeals.length} registro(s)
-          </span>
+      {/* Lista de Recursos com Visual Limpo e Bold */}
+      <div className="bg-white rounded-3xl border border-zinc-200/80 executive-shadow overflow-hidden mb-12">
+        <div className="p-6 sm:p-7 border-b border-zinc-100 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <h2 className="text-lg font-black text-zinc-950">Seus Pedidos de Defesa</h2>
+            <span className="text-xs font-black bg-zinc-100 text-zinc-600 px-3 py-1 rounded-full">
+              {appeals.length}
+            </span>
+          </div>
         </div>
 
         {loading ? (
-          <div className="p-16 text-center text-slate-400">
-            <Clock className="w-8 h-8 animate-spin mx-auto mb-3 text-blue-500" />
-            <p className="text-sm font-medium">Carregando seus recursos...</p>
+          <div className="p-20 text-center text-zinc-400">
+            <Clock className="w-8 h-8 animate-spin mx-auto mb-3 text-zinc-900" />
+            <p className="text-sm font-bold">Carregando seus recursos...</p>
           </div>
         ) : appeals.length === 0 ? (
-          <div className="p-16 text-center">
-            <div className="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4">
-              <FileText className="w-8 h-8" />
+          <div className="p-16 sm:p-20 text-center">
+            <div className="w-20 h-20 bg-zinc-100 text-zinc-400 rounded-3xl flex items-center justify-center mx-auto mb-5">
+              <FileText className="w-10 h-10" />
             </div>
-            <h3 className="text-base font-bold text-slate-800">
+            <h3 className="text-xl font-black text-zinc-950">
               Nenhuma solicitação cadastrada ainda
             </h3>
-            <p className="text-sm text-slate-500 max-w-md mx-auto mt-1 mb-6 leading-relaxed">
-              Envie os dados da notificação de trânsito e seus documentos para que a equipe jurídica elabore sua defesa.
+            <p className="text-sm text-zinc-500 max-w-md mx-auto mt-2 mb-7 leading-relaxed">
+              Envie os dados da notificação de trânsito e seus documentos para que nossa equipe técnica elabore a sua peça jurídica fundamentada.
             </p>
             <Link
               href="/cliente/novo"
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md shadow-blue-600/20"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-black px-6 py-3.5 rounded-2xl transition shadow-md shadow-blue-600/20"
             >
               <PlusCircle className="w-4 h-4" />
-              Enviar Documentos da Multa
+              Cadastrar Minha Primeira Multa
             </Link>
           </div>
         ) : (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-zinc-100">
             {appeals.map((item) => {
               const deadline = calculateDeadlineInfo(item.defenseDeadline);
               const isPaid = item.paymentStatus === "PAID";
@@ -207,92 +203,92 @@ function DashboardContent() {
               return (
                 <div
                   key={item.id}
-                  className="p-6 hover:bg-slate-50/70 transition flex flex-col lg:flex-row lg:items-center justify-between gap-6"
+                  className="p-6 sm:p-8 hover:bg-zinc-50/70 transition flex flex-col lg:flex-row lg:items-center justify-between gap-6"
                 >
-                  <div className="space-y-2 max-w-2xl">
-                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                      <span className="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200">
+                  <div className="space-y-2.5 max-w-2xl">
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <span className="font-mono text-xs font-black text-zinc-900 bg-zinc-100 px-3 py-1 rounded-lg border border-zinc-200">
                         {item.protocol}
                       </span>
 
-                      {/* Badge de Prazo de Vencimento */}
-                      <span className={`inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs ${deadline.badgeClass}`}>
+                      {/* Badge de Prazo */}
+                      <span className={`inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-bold ${deadline.badgeClass}`}>
                         <Calendar className="w-3.5 h-3.5" />
                         {deadline.badgeText}
                       </span>
 
                       {/* Badge de Pagamento */}
                       {isPaid ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                          <CheckCircle2 className="w-3 h-3" /> Pix Pago
+                        <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-xs font-black bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          <CheckCircle2 className="w-3.5 h-3.5" /> Pix Confirmado
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
-                          <CreditCard className="w-3 h-3" /> Aguardando Pix (R$ {(item.paymentAmount || 20.0).toFixed(2)})
+                        <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-xs font-black bg-amber-50 text-amber-800 border border-amber-200">
+                          <CreditCard className="w-3.5 h-3.5" /> Aguardando Pix (R$ {(item.paymentAmount || 20.0).toFixed(2)})
                         </span>
                       )}
                     </div>
 
-                    <h4 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                      <Car className="w-4 h-4 text-slate-500" />
+                    <h4 className="text-lg font-black text-zinc-950 flex items-center gap-2">
+                      <Car className="w-5 h-5 text-zinc-400" />
                       Placa: {item.plate} {item.vehicleModel ? `(${item.vehicleModel})` : ""}
-                      <span className="text-slate-300 font-normal">|</span>
-                      <span className="text-slate-600 font-medium text-sm">
+                      <span className="text-zinc-300 font-normal">|</span>
+                      <span className="text-zinc-500 font-bold text-sm">
                         AIT: {item.aitNumber}
                       </span>
                     </h4>
 
-                    <p className="text-sm text-slate-600">
-                      <span className="font-bold text-slate-800">Infração:</span> {item.ctbArticle}
+                    <p className="text-sm text-zinc-600 font-medium">
+                      <strong className="text-zinc-900 font-black">Infração:</strong> {item.ctbArticle}
                     </p>
 
-                    <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 pt-1">
-                      <span>Órgão: <strong>{item.authority}</strong></span>
-                      <span>Data da Infração: {item.infractionDate}</span>
+                    <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-400 font-semibold pt-1">
+                      <span>Órgão: <strong className="text-zinc-700">{item.authority}</strong></span>
+                      <span>Data: <strong className="text-zinc-700">{item.infractionDate}</strong></span>
                       {item.documents.length > 0 && (
-                        <span>📎 {item.documents.length} anexo(s) enviado(s)</span>
+                        <span className="text-zinc-600">📎 {item.documents.length} anexo(s) enviado(s)</span>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2.5 sm:self-center">
+                  <div className="flex flex-wrap items-center gap-3 sm:self-center">
                     {isReady ? (
                       <>
                         <Link
                           href={`/cliente/recursos/${item.id}`}
-                          className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-md transition"
+                          className="inline-flex items-center gap-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl shadow-md transition"
                         >
-                          <FileText className="w-3.5 h-3.5" />
+                          <FileText className="w-4 h-4" />
                           Baixar Petição Pronta
                         </Link>
 
                         <a
                           href={`/api/appeals/${item.id}/docx`}
                           download
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold rounded-xl transition shadow-xs"
+                          className="inline-flex items-center gap-1.5 px-4 py-3 bg-white hover:bg-zinc-100 text-zinc-800 border border-zinc-300 text-xs font-black rounded-xl transition"
                           title="Baixar em Word"
                         >
-                          <FileDown className="w-3.5 h-3.5 text-blue-600" />
+                          <FileDown className="w-4 h-4 text-blue-600" />
                           Word (.docx)
                         </a>
                       </>
                     ) : (
                       <Link
                         href={`/cliente/recursos/${item.id}`}
-                        className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-slate-900 hover:bg-blue-600 text-white text-xs font-bold rounded-xl shadow-sm transition"
+                        className="inline-flex items-center gap-2 px-6 py-3.5 bg-zinc-950 hover:bg-blue-600 text-white text-xs font-black rounded-xl shadow-sm transition transform hover:-translate-y-0.5"
                       >
                         {!isPaid ? (
                           <>
-                            <CreditCard className="w-3.5 h-3.5 text-amber-400" />
+                            <CreditCard className="w-4 h-4 text-amber-400" />
                             Pagar Pix / Acompanhar
                           </>
                         ) : (
                           <>
-                            <Clock className="w-3.5 h-3.5 text-blue-400" />
+                            <Clock className="w-4 h-4 text-blue-400" />
                             Acompanhar Elaboração
                           </>
                         )}
-                        <ArrowRight className="w-3.5 h-3.5" />
+                        <ArrowRight className="w-4 h-4" />
                       </Link>
                     )}
                   </div>
@@ -303,20 +299,19 @@ function DashboardContent() {
         )}
       </div>
 
-      {/* Guia Informativo de Prazos */}
-      <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-800">
-        <div className="flex items-start gap-4">
-          <div className="p-3 bg-blue-500/20 text-blue-400 rounded-2xl flex-shrink-0">
+      {/* Card Informativo Executivo */}
+      <div className="bg-zinc-950 text-white rounded-3xl p-7 sm:p-9 shadow-xl border border-zinc-800">
+        <div className="flex items-start gap-4 sm:gap-5">
+          <div className="p-3.5 bg-zinc-900 text-blue-400 rounded-2xl flex-shrink-0 border border-zinc-800">
             <HelpCircle className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-extrabold text-white mb-1.5">
-              Por que é fundamental observar o prazo de vencimento da notificação?
+            <h3 className="text-lg sm:text-xl font-black text-white mb-2">
+              Efeito Suspensivo e Prazos Administrativos
             </h3>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">
-              Cada notificação de trânsito possui uma data limite fixada pelo órgão para recebimento da Defesa Prévia ou Recurso JARI. 
-              Nosso sistema prioriza as defesas mais próximas do vencimento para garantir a tempestividade da sua peça. 
-              Mesmo caso a notificação já tenha vencido, ainda podemos sustentar a tese de falta de notificação no prazo de 30 dias (Art. 281 do CTB).
+            <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed max-w-3xl">
+              Ao apresentar a sua Defesa Prévia ou Recurso dentro do prazo regulamentar, a pontuação correspondente NÃO ingressa na sua CNH enquanto o processo estiver em julgamento. 
+              Nosso sistema analisa os prazos de expedição e notificação (Art. 281 do CTB) para fundamentar a nulidade do auto de infração caso tenha havido decadência do direito de punir.
             </p>
           </div>
         </div>
@@ -327,9 +322,9 @@ function DashboardContent() {
 
 export default function ClienteDashboard() {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-100/70">
+    <div className="min-h-screen flex flex-col bg-zinc-50/60">
       <Navbar />
-      <Suspense fallback={<div className="p-16 text-center text-slate-400 font-medium">Carregando painel...</div>}>
+      <Suspense fallback={<div className="p-20 text-center text-zinc-400 font-black">Carregando painel...</div>}>
         <DashboardContent />
       </Suspense>
     </div>

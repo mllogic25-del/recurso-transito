@@ -240,120 +240,120 @@ export default function HomePage() {
     INFRACTION_TYPES.find((i) => i.id === selectedInfraction) || INFRACTION_TYPES[0];
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 relative">
+    <div className="min-h-screen flex flex-col bg-zinc-50/50 text-zinc-900 relative">
       <Navbar />
 
       {/* Seção Principal / Hero */}
-      <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
+      <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
         {/* Banner Informativo de Escopo de Atuação */}
-        <div className="mb-6 p-3.5 sm:p-4 rounded-2xl bg-blue-50/90 border border-blue-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-xs">
-          <div className="flex items-center gap-2.5 text-slate-800">
-            <span className="p-1.5 bg-blue-600 text-white rounded-lg flex-shrink-0">
+        <div className="mb-7 p-4 rounded-2xl bg-white border border-zinc-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs executive-shadow">
+          <div className="flex items-center gap-3 text-zinc-800">
+            <span className="p-2 bg-zinc-950 text-blue-400 rounded-xl flex-shrink-0">
               <Info className="w-4 h-4" />
             </span>
-            <p className="leading-relaxed text-slate-700">
-              <strong>Como atuamos:</strong> Elaboramos sua defesa técnica fundamentada em PDF e Word.
-              <strong> Não damos entrada nem acompanhamos o processo</strong> — o protocolo é feito por você no órgão autuador.
+            <p className="leading-relaxed text-zinc-700">
+              <strong className="text-zinc-950">Como atuamos:</strong> Elaboramos sua defesa técnica fundamentada em PDF e Word (.docx).
+              <strong className="text-zinc-950"> Não damos entrada nem acompanhamos o processo</strong> — o protocolo é realizado por você diretamente no órgão autuador.
             </p>
           </div>
           <Link
             href="/fale-conosco"
-            className="text-blue-700 hover:text-blue-900 font-extrabold whitespace-nowrap flex items-center gap-1 hover:underline flex-shrink-0"
+            className="text-blue-600 hover:text-blue-800 font-black whitespace-nowrap flex items-center gap-1 hover:underline flex-shrink-0"
           >
             Entenda o serviço ➔
           </Link>
         </div>
 
-        {/* Subtítulo discreto no topo - Ajustado conforme solicitado */}
+        {/* Subtítulo discreto no topo */}
         <div className="mb-4">
-          <p className="text-xs sm:text-sm font-extrabold uppercase tracking-widest text-slate-500">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-zinc-400">
             Recursos Administrativos de Multas de Trânsito
           </p>
         </div>
 
-        {/* Grid com Banner Azul à Esquerda e Card Interativo à Direita */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-          {/* Card Banner Esquerdo (Azul Vibrante) */}
-          <div className="lg:col-span-6 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-3xl p-8 sm:p-10 text-white flex flex-col justify-between relative overflow-hidden shadow-xl shadow-blue-600/15 min-h-[420px]">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-400/20 rounded-full blur-2xl -ml-10 -mb-10 pointer-events-none" />
+        {/* Grid com Banner Escuro Executivo à Esquerda e Card Interativo à Direita */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-stretch">
+          {/* Card Banner Esquerdo - Bold & Big */}
+          <div className="lg:col-span-6 bg-gradient-to-br from-zinc-950 via-zinc-900 to-blue-950 rounded-3xl p-8 sm:p-11 text-white flex flex-col justify-between relative overflow-hidden shadow-2xl border border-zinc-800/80 min-h-[440px]">
+            <div className="absolute top-0 right-0 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-56 h-56 bg-indigo-500/10 rounded-full blur-2xl -ml-10 -mb-10 pointer-events-none" />
 
             <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="bg-white/20 text-white text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full border border-white/20 backdrop-blur-xs">
+              <div className="flex items-center gap-2 mb-5">
+                <span className="bg-white/10 text-zinc-200 text-[11px] font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-white/15 backdrop-blur-md">
                   Processo 100% Online
                 </span>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1]">
                 <span className="text-white">Recurso</span>
-                <span className="text-sky-300">Fácil</span>
+                <span className="text-blue-400">Fácil</span>
                 <br />
-                <span className="text-slate-100 font-bold text-2xl sm:text-3xl">
+                <span className="text-zinc-300 font-extrabold text-2xl sm:text-3xl lg:text-3xl">
                   para todas as multas de trânsito
                 </span>
               </h1>
-              <p className="text-blue-100 text-xs sm:text-sm mt-3 max-w-md leading-relaxed">
-                Elaboramos sua defesa fundamentada no Código de Trânsito Brasileiro e nas Resoluções do CONTRAN. Rápido, seguro e sem sair de casa.
+              <p className="text-zinc-400 text-xs sm:text-sm mt-4 max-w-md leading-relaxed font-medium">
+                Elaboramos sua petição fundamentada no Código de Trânsito Brasileiro e nas Resoluções vigentes do CONTRAN. Rápido, seguro e sem sair de casa.
               </p>
             </div>
 
             {/* Ilustração / Destaque central */}
             <div className="my-6 py-2 flex items-center gap-4 relative z-10">
-              <div className="w-14 h-14 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center flex-shrink-0 backdrop-blur-md">
-                <Smartphone className="w-8 h-8 text-sky-200" />
+              <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center flex-shrink-0 backdrop-blur-md">
+                <Smartphone className="w-7 h-7 text-blue-400" />
               </div>
-              <div className="text-xs text-blue-100 space-y-1">
-                <p className="font-bold text-white flex items-center gap-1">
-                  <Check className="w-3.5 h-3.5 text-emerald-300" /> Defesa Prévia, JARI e CETRAN
+              <div className="text-xs text-zinc-300 space-y-1.5">
+                <p className="font-black text-white flex items-center gap-1.5">
+                  <Check className="w-4 h-4 text-emerald-400" /> Defesa Prévia, JARI e CETRAN
                 </p>
-                <p className="flex items-center gap-1">
-                  <Check className="w-3.5 h-3.5 text-emerald-300" /> Análise de prazos e inconsistências
+                <p className="flex items-center gap-1.5 text-zinc-400">
+                  <Check className="w-4 h-4 text-emerald-400" /> Análise criteriosa de prazos e inconsistências
                 </p>
               </div>
             </div>
 
             {/* Box inferior escuro com Escudo */}
-            <div className="relative z-10 bg-slate-900/40 border border-white/20 backdrop-blur-md rounded-2xl p-3.5 flex items-center gap-3">
-              <div className="p-2 bg-blue-500 text-white rounded-xl flex-shrink-0">
+            <div className="relative z-10 bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-4 flex items-center gap-3.5">
+              <div className="p-2.5 bg-blue-600 text-white rounded-xl flex-shrink-0 shadow-sm">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <p className="text-xs text-slate-100 font-medium">
-                Vamos verificar se temos o recurso disponível para sua multa.
+              <p className="text-xs text-zinc-300 font-bold">
+                Consulte gratuitamente a tese cabível para a sua infração.
               </p>
             </div>
           </div>
 
-          {/* Card Formulário Direito com Fluxo Interativo de Convencimento */}
-          <div className="lg:col-span-6 bg-white rounded-3xl p-6 sm:p-9 border border-slate-200/80 executive-shadow-lg flex flex-col justify-center transition-all duration-300">
+          {/* Card Formulário Direito - Bold & Big */}
+          <div className="lg:col-span-6 bg-white rounded-3xl p-7 sm:p-10 border border-zinc-200/90 executive-shadow-lg flex flex-col justify-center transition-all duration-300">
             {/* ETAPA 1: DIGITAÇÃO APENAS DA PLACA */}
             {step === "PLATE" && (
               <div>
                 <div className="mb-6">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100 mb-2 inline-block">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-md border border-blue-100 mb-2.5 inline-block">
                     Consulta Rápida de Recursos
                   </span>
-                  <h2 className="text-2xl font-black text-slate-950">
+                  <h2 className="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight">
                     Consulte o recurso da sua multa
                   </h2>
-                  <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                  <p className="text-xs sm:text-sm text-zinc-500 mt-1.5 leading-relaxed">
                     Digite a placa do veículo para verificar as teses e prazos legais cabíveis.
                   </p>
                 </div>
 
                 {error && (
-                  <div className="mb-4 p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold flex items-center gap-2">
+                  <div className="mb-4 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-bold flex items-center gap-2.5">
                     <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
                     <span>{error}</span>
                   </div>
                 )}
 
-                <form onSubmit={handleStartPlate} className="space-y-4">
+                <form onSubmit={handleStartPlate} className="space-y-5">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    <label className="block text-xs font-black text-zinc-800 mb-2">
                       Placa do Veículo <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-400">
                         <Car className="w-5 h-5" />
                       </div>
                       <input
@@ -366,20 +366,20 @@ export default function HomePage() {
                           setError("");
                         }}
                         placeholder="Ex.: ABC1D23"
-                        className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-slate-300 text-base font-mono font-black uppercase tracking-wider focus:border-blue-600 focus:ring-3 focus:ring-blue-100 outline-none transition"
+                        className="w-full pl-12 pr-4 py-4 rounded-2xl border border-zinc-300 text-lg font-mono font-black uppercase tracking-wider focus:border-zinc-950 focus:ring-4 focus:ring-zinc-100 outline-none transition bg-zinc-50/50"
                       />
                     </div>
-                    <p className="text-[11px] text-slate-400 mt-1">
+                    <p className="text-[11px] text-zinc-400 mt-1.5 font-medium">
                       Aceita placa padrão Mercosul ou modelo tradicional cinza.
                     </p>
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-black py-4 px-6 rounded-xl shadow-lg shadow-blue-600/25 text-base transition flex items-center justify-center gap-2 transform hover:-translate-y-0.5 cursor-pointer"
+                    className="w-full mt-3 bg-zinc-950 hover:bg-zinc-800 text-white font-black py-4 px-6 rounded-2xl shadow-md text-base transition flex items-center justify-center gap-2 transform hover:-translate-y-0.5 cursor-pointer"
                   >
                     Continuar Análise do Recurso
-                    <ArrowRight className="w-5 h-5" />
+                    <ArrowRight className="w-5 h-5 text-blue-400" />
                   </button>
                 </form>
 
@@ -492,14 +492,14 @@ export default function HomePage() {
                 </div>
 
                 {/* Botões de Ação: WhatsApp ou Gerar Recurso */}
-                <div className="space-y-2 pt-1">
+                <div className="space-y-3 pt-2">
                   <button
                     type="button"
                     onClick={handleProceedToResource}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 px-5 rounded-xl shadow-lg shadow-blue-600/20 text-sm transition flex items-center justify-center gap-2 cursor-pointer transform hover:-translate-y-0.5"
+                    className="w-full bg-zinc-950 hover:bg-zinc-800 text-white font-black py-4 px-6 rounded-2xl shadow-md text-sm sm:text-base transition flex items-center justify-center gap-2.5 cursor-pointer transform hover:-translate-y-0.5"
                   >
                     Prosseguir e Gerar Meu Recurso
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-5 h-5 text-blue-400" />
                   </button>
 
                   <button
@@ -509,7 +509,7 @@ export default function HomePage() {
                         `Olá! Gostaria de uma análise para o recurso da placa *${plate}* sobre a infração de *${activeInfractionData.label}*. Como podemos proceder?`
                       )
                     }
-                    className="w-full py-3 px-4 rounded-xl border border-emerald-500 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full py-3.5 px-4 rounded-2xl border border-emerald-500/80 bg-emerald-50/80 hover:bg-emerald-100 text-emerald-900 font-black text-xs sm:text-sm transition flex items-center justify-center gap-2.5 cursor-pointer"
                   >
                     <WhatsAppIcon className="w-4 h-4 text-emerald-600" />
                     Tirar Dúvidas no WhatsApp com Atendente
@@ -521,24 +521,24 @@ export default function HomePage() {
             {/* ETAPA 3: LOGIN / CADASTRO RÁPIDO (APÓS O CONVENCIMENTO) */}
             {step === "AUTH" && (
               <div className="space-y-4 animate-fade-in">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div className="flex items-center justify-between pb-2 border-b border-zinc-100">
                   <button
                     type="button"
                     onClick={() => setStep("PERSUASION")}
-                    className="text-xs text-slate-500 hover:text-slate-800 font-bold flex items-center gap-1 cursor-pointer"
+                    className="text-xs text-zinc-500 hover:text-zinc-900 font-black flex items-center gap-1 cursor-pointer"
                   >
                     <ArrowLeft className="w-3.5 h-3.5" /> Voltar ao diagnóstico
                   </button>
-                  <span className="font-mono text-xs font-bold text-slate-700">
+                  <span className="font-mono text-xs font-black text-zinc-900 bg-zinc-100 px-2.5 py-0.5 rounded-md">
                     Placa: {plate}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-black text-slate-900 leading-tight">
+                  <h3 className="text-xl sm:text-2xl font-black text-zinc-950 leading-tight">
                     {authMode === "REGISTER" ? "Crie seu acesso rápido" : "Entrar no sistema"}
                   </h3>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <p className="text-xs text-zinc-500 mt-1">
                     {authMode === "REGISTER"
                       ? "Crie seu usuário e senha em segundos para salvar seu recurso e receber a petição pronta."
                       : "Digite seus dados de acesso para continuar."}
@@ -546,17 +546,17 @@ export default function HomePage() {
                 </div>
 
                 {/* Abas Alternar Cadastro / Login */}
-                <div className="flex p-1 bg-slate-100 rounded-xl">
+                <div className="flex p-1 bg-zinc-100 rounded-xl">
                   <button
                     type="button"
                     onClick={() => {
                       setAuthMode("REGISTER");
                       setAuthError("");
                     }}
-                    className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
+                    className={`flex-1 py-2 text-xs font-black rounded-lg transition cursor-pointer ${
                       authMode === "REGISTER"
-                        ? "bg-white text-blue-700 shadow-xs"
-                        : "text-slate-600 hover:text-slate-900"
+                        ? "bg-white text-zinc-950 shadow-xs"
+                        : "text-zinc-500 hover:text-zinc-900"
                     }`}
                   >
                     Criar Nova Conta
@@ -567,10 +567,10 @@ export default function HomePage() {
                       setAuthMode("LOGIN");
                       setAuthError("");
                     }}
-                    className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
+                    className={`flex-1 py-2 text-xs font-black rounded-lg transition cursor-pointer ${
                       authMode === "LOGIN"
-                        ? "bg-white text-blue-700 shadow-xs"
-                        : "text-slate-600 hover:text-slate-900"
+                        ? "bg-white text-zinc-950 shadow-xs"
+                        : "text-zinc-500 hover:text-zinc-900"
                     }`}
                   >
                     Já Tenho Conta
@@ -578,79 +578,79 @@ export default function HomePage() {
                 </div>
 
                 {authError && (
-                  <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold flex items-center gap-2">
+                  <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-bold flex items-center gap-2">
                     <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
                     <span>{authError}</span>
                   </div>
                 )}
 
-                <form onSubmit={handleAuthSubmit} className="space-y-3">
+                <form onSubmit={handleAuthSubmit} className="space-y-3.5">
                   {authMode === "REGISTER" && (
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                      <label className="block text-xs font-bold text-zinc-700 mb-1">
                         Seu Nome Completo *
                       </label>
                       <div className="relative">
-                        <User className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                        <User className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
                         <input
                           type="text"
                           required
                           value={authData.name}
                           onChange={(e) => setAuthData({ ...authData, name: e.target.value })}
                           placeholder="Ex: Carlos Silva"
-                          className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none"
+                          className="w-full pl-10 pr-3 py-3 rounded-xl border border-zinc-300 text-xs focus:border-zinc-950 focus:ring-2 focus:ring-zinc-100 outline-none bg-zinc-50/50"
                         />
                       </div>
                     </div>
                   )}
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                    <label className="block text-xs font-bold text-zinc-700 mb-1">
                       Seu E-mail *
                     </label>
                     <div className="relative">
-                      <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                      <Mail className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
                       <input
                         type="email"
                         required
                         value={authData.email}
                         onChange={(e) => setAuthData({ ...authData, email: e.target.value })}
                         placeholder="seuemail@exemplo.com"
-                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none"
+                        className="w-full pl-10 pr-3 py-3 rounded-xl border border-zinc-300 text-xs focus:border-zinc-950 focus:ring-2 focus:ring-zinc-100 outline-none bg-zinc-50/50"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                    <label className="block text-xs font-bold text-zinc-700 mb-1">
                       Sua Senha *
                     </label>
                     <div className="relative">
-                      <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                      <Lock className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
                       <input
                         type="password"
                         required
                         value={authData.password}
                         onChange={(e) => setAuthData({ ...authData, password: e.target.value })}
                         placeholder="Mínimo 6 caracteres"
-                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none"
+                        className="w-full pl-10 pr-3 py-3 rounded-xl border border-zinc-300 text-xs focus:border-zinc-950 focus:ring-2 focus:ring-zinc-100 outline-none bg-zinc-50/50"
                       />
                     </div>
                   </div>
 
                   {authMode === "REGISTER" && (
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                      <label className="block text-xs font-bold text-zinc-700 mb-1">
                         Telefone / WhatsApp
                       </label>
                       <div className="relative">
-                        <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                        <Phone className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
                         <input
                           type="text"
                           value={authData.phone}
                           onChange={(e) => setAuthData({ ...authData, phone: e.target.value })}
                           placeholder="(DDD) 99999-9999"
-                          className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-xs focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none"
+                          className="w-full pl-10 pr-3 py-3 rounded-xl border border-zinc-300 text-xs focus:border-zinc-950 focus:ring-2 focus:ring-zinc-100 outline-none bg-zinc-50/50"
                         />
                       </div>
                     </div>
@@ -659,7 +659,7 @@ export default function HomePage() {
                   <button
                     type="submit"
                     disabled={authLoading}
-                    className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-black py-3.5 px-4 rounded-xl shadow-lg shadow-blue-600/25 text-sm transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    className="w-full mt-2 bg-zinc-950 hover:bg-zinc-800 text-white font-black py-4 px-4 rounded-xl shadow-md text-sm transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 transform hover:-translate-y-0.5"
                   >
                     {authLoading
                       ? "Processando..."
@@ -678,7 +678,7 @@ export default function HomePage() {
                         `Olá! Gostaria de atendimento pelo WhatsApp para recorrer da multa da placa *${plate}*.`
                       )
                     }
-                    className="text-xs text-emerald-700 hover:underline font-bold inline-flex items-center gap-1 cursor-pointer"
+                    className="text-xs text-emerald-700 hover:underline font-bold inline-flex items-center gap-1.5 cursor-pointer"
                   >
                     <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-600" />
                     Prefere não cadastrar agora? Fale no WhatsApp
@@ -690,78 +690,104 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Divisor com Preço em Pílula (Pacote completo R$ 20,00) */}
-      <section id="pacotes" className="py-6 px-4 max-w-5xl mx-auto w-full">
-        <div className="relative flex items-center justify-center">
-          <div className="border-t border-slate-300 w-full" />
-          <div className="absolute bg-slate-50 px-6">
-            <span className="text-sm font-semibold text-slate-600">
-              Pacote completo <strong className="text-slate-900 text-lg">R$ 20,00</strong>
+      {/* Destaque de Preço Bold & Big */}
+      <section id="pacotes" className="py-10 px-4 max-w-5xl mx-auto w-full">
+        <div className="bg-gradient-to-r from-zinc-900 via-zinc-950 to-blue-950 rounded-3xl p-8 sm:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl border border-zinc-800">
+          <div>
+            <span className="text-[11px] font-black uppercase tracking-widest text-blue-400 bg-blue-950/80 px-3 py-1 rounded-full border border-blue-800 inline-block mb-2">
+              Valor Fixo & Transparente
             </span>
+            <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              Pacote Completo de Elaboração
+            </h3>
+            <p className="text-zinc-400 text-xs sm:text-sm mt-1 max-w-md">
+              Peça técnica fundamentada em PDF e Word (.docx), pronta para assinar e protocolar.
+            </p>
+          </div>
+          <div className="flex items-center gap-5 sm:self-center">
+            <div className="text-right">
+              <span className="text-xs font-bold text-zinc-400 block">Investimento único de</span>
+              <span className="text-4xl sm:text-5xl font-black text-white tracking-tight">
+                R$ 20<span className="text-xl text-zinc-400 font-bold">,00</span>
+              </span>
+            </div>
+            <button
+              onClick={() => {
+                const formEl = document.querySelector("input[placeholder='Ex.: ABC1D23']");
+                if (formEl) (formEl as HTMLElement).focus();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className="bg-blue-600 hover:bg-blue-500 text-white font-black text-sm px-6 py-4 rounded-2xl shadow-lg shadow-blue-600/30 transition transform hover:-translate-y-0.5 cursor-pointer whitespace-nowrap"
+            >
+              Começar Agora
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Seção "O que está incluído" (Os 3 cards da imagem) */}
+      {/* Seção "O que está incluído" - Bold & Big */}
       <section id="como-funciona" className="py-12 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
         <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            O que está incluído
+          <span className="text-[11px] font-black uppercase tracking-widest text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100 mb-2 inline-block">
+            Metodologia Eficiente
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-black text-zinc-950 tracking-tight">
+            O que está incluído no serviço
           </h2>
-          <p className="text-slate-500 text-xs sm:text-sm mt-1">
-            Atendimento técnico especializado focado exclusivamente na elaboração e geração da sua peça
+          <p className="text-zinc-500 text-xs sm:text-sm mt-1.5 max-w-lg mx-auto">
+            Atendimento técnico especializado focado exclusivamente na confecção rigorosa da sua peça de defesa
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Card 1 */}
-          <div className="bg-white rounded-3xl p-8 border border-slate-200/80 executive-shadow text-center flex flex-col items-center hover:border-blue-400 transition">
-            <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 shadow-xs">
+          <div className="bg-white rounded-3xl p-8 border border-zinc-200/90 executive-shadow text-center flex flex-col items-center hover:border-zinc-400 transition">
+            <div className="w-16 h-16 rounded-2xl bg-zinc-100 text-zinc-900 flex items-center justify-center mb-6 shadow-xs">
               <FileText className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">
-              Recurso personalizado
+            <h3 className="text-lg font-black text-zinc-950 mb-2">
+              Recurso Personalizado
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Preparado de acordo com a infração e com as resoluções vigentes do CONTRAN e Código de Trânsito Brasileiro.
+            <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed font-medium">
+              Preparado de acordo com a infração específica, resoluções vigentes do CONTRAN e jurisprudência pacificada do Código de Trânsito.
             </p>
           </div>
 
           {/* Card 2 */}
-          <div className="bg-white rounded-3xl p-8 border border-slate-200/80 executive-shadow text-center flex flex-col items-center hover:border-amber-400 transition">
+          <div className="bg-white rounded-3xl p-8 border border-zinc-200/90 executive-shadow text-center flex flex-col items-center hover:border-zinc-400 transition">
             <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mb-6 shadow-xs">
               <Scale className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">
-              Revisão técnica especializada
+            <h3 className="text-lg font-black text-zinc-950 mb-2">
+              Revisão Técnica Especializada
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Análise criteriosa dos autos, dos prazos legais e dos documentos antes da liberação da peça ao cliente.
+            <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed font-medium">
+              Análise criteriosa dos autos, verificação do prazo decadencial de 30 dias e consistência dos dados do agente antes da liberação ao cliente.
             </p>
           </div>
 
           {/* Card 3 */}
-          <div className="bg-white rounded-3xl p-8 border border-slate-200/80 executive-shadow text-center flex flex-col items-center hover:border-emerald-400 transition">
+          <div className="bg-white rounded-3xl p-8 border border-zinc-200/90 executive-shadow text-center flex flex-col items-center hover:border-zinc-400 transition">
             <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 shadow-xs">
               <Mail className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">
-              Envio automático & no sistema
+            <h3 className="text-lg font-black text-zinc-950 mb-2">
+              Entrega em PDF e Word
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Quando revisado e liberado, o recurso pronto para imprimir e assinar chega no seu e-mail e fica disponível para download.
+            <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed font-medium">
+              Documento formal pronto para imprimir, assinar e anexar aos seus documentos para protocolo no órgão autuador.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Seção de Dúvidas Frequentes (FAQ) */}
-      <section id="faq" className="py-14 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full">
-        <div className="text-center mb-10">
-          <span className="text-[11px] font-extrabold uppercase tracking-widest text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100 mb-2 inline-block">
-            Tire Suas Dúvidas
+      {/* Seção de Dúvidas Frequentes (FAQ) - Bold & Big */}
+      <section id="faq" className="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full">
+        <div className="text-center mb-12">
+          <span className="text-[11px] font-black uppercase tracking-widest text-zinc-400 bg-zinc-100 px-3 py-1 rounded-full border border-zinc-200 mb-2.5 inline-block">
+            Esclarecimentos Frequentes
           </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-black text-zinc-950 tracking-tight">
             Perguntas e Respostas
           </h2>
         </div>
@@ -774,25 +800,28 @@ export default function HomePage() {
             },
             {
               q: "Preciso de advogado para protocolar o recurso?",
-              a: "Não. O Código de Trânsito Brasileiro garante a todo cidadão o direito de apresentar a sua própria defesa e recurso administrativo perante o órgão sem a necessidade de constituir advogado.",
+              a: "Não. O Código de Trânsito Brasileiro garante expressamente a todo cidadão o direito de apresentar a sua própria defesa e recurso administrativo perante o órgão sem a necessidade de constituir advogado.",
             },
             {
               q: "E se o prazo da notificação já tiver expirado?",
-              a: "Nosso sistema calcula a data limite na hora. Se o prazo tiver passado, é possível apresentar o recurso fundamentando a ausência de notificação no prazo de 30 dias (Art. 281 do CTB / Súmula 312 do STJ) ou vícios formais.",
+              a: "Nosso sistema calcula a data limite na hora. Se o prazo tiver passado, é possível apresentar o recurso fundamentando a ausência de notificação no prazo legal de 30 dias (Art. 281 do CTB / Súmula 312 do STJ) ou vícios materiais do auto.",
             },
             {
               q: "Como recebo o recurso após o pagamento?",
-              a: "Após a confirmação do Pix (R$ 20,00), nossa equipe técnica elabora e revisa sua peça. Assim que liberada, o documento completo em PDF e Word (.docx) é enviado para o seu e-mail e liberado no seu painel.",
+              a: "Após a confirmação do pagamento de R$ 20,00, nossa equipe técnica elabora e revisa sua peça. Assim que liberada, o documento completo em PDF e Word (.docx) fica disponível imediatamente para download no seu painel.",
             },
           ].map((item, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs"
+              className="bg-white rounded-3xl border border-zinc-200/90 p-6 sm:p-7 executive-shadow transition hover:border-zinc-300"
             >
-              <h4 className="font-bold text-slate-900 text-sm sm:text-base mb-1.5 flex items-center gap-2">
-                <span className="text-blue-600 font-black">?</span> {item.q}
+              <h4 className="font-black text-zinc-950 text-base sm:text-lg mb-2 flex items-center gap-3">
+                <span className="w-6 h-6 rounded-full bg-zinc-950 text-white text-xs font-black flex items-center justify-center flex-shrink-0">
+                  ?
+                </span>
+                {item.q}
               </h4>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed pl-4 border-l-2 border-blue-100">
+              <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed pl-9 font-medium">
                 {item.a}
               </p>
             </div>
@@ -801,40 +830,40 @@ export default function HomePage() {
       </section>
 
       {/* Botão Flutuante do WhatsApp */}
-      <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 group">
-        <div className="hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-900 text-white text-xs font-bold py-1.5 px-3 rounded-xl shadow-xl pointer-events-none">
-          Fale Conosco no WhatsApp
+      <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 group">
+        <div className="hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-zinc-950 text-white text-xs font-black py-2 px-4 rounded-xl shadow-xl pointer-events-none">
+          Atendimento no WhatsApp
         </div>
         <button
           type="button"
           onClick={() => openWhatsapp()}
           aria-label="Atendimento no WhatsApp"
-          className="w-14 h-14 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-xl shadow-emerald-500/30 hover:scale-105 active:scale-95 transition-all cursor-pointer relative"
+          className="w-14 h-14 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl flex items-center justify-center shadow-xl shadow-emerald-500/25 hover:scale-105 active:scale-95 transition-all cursor-pointer relative"
         >
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-2 border-white rounded-full animate-pulse" />
+          <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-rose-500 border-2 border-white rounded-full animate-pulse" />
           <WhatsAppIcon className="w-7 h-7" />
         </button>
       </div>
 
-      {/* Footer elegante */}
-      <footer id="contato" className="mt-auto bg-slate-900 text-slate-400 py-10 px-4 sm:px-8 border-t border-slate-800">
+      {/* Footer Elegante Bold & Big */}
+      <footer id="contato" className="mt-auto bg-zinc-950 text-zinc-400 py-12 px-4 sm:px-8 border-t border-zinc-800">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white">
-              <ShieldCheck className="w-5 h-5" />
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-white">
+              <ShieldCheck className="w-5 h-5 text-blue-400" />
             </div>
-            <span className="text-lg font-black text-white">
-              auto<span className="text-blue-400">recurso</span>
+            <span className="text-xl font-black text-white tracking-tight">
+              auto<span className="text-blue-500">recurso</span>
             </span>
           </div>
 
-          <p className="text-xs text-slate-500 text-center sm:text-left">
-            AutoRecurso &copy; {new Date().getFullYear()} - Sistema de Gestão e Geração de Recursos de Trânsito.
+          <p className="text-xs text-zinc-500 text-center sm:text-left leading-relaxed">
+            AutoRecurso &copy; {new Date().getFullYear()} — Plataforma de Elaboração Técnica de Recursos de Trânsito.
             <br />
-            Este sistema elabora a peça técnica. O protocolo final perante o órgão cabe ao usuário.
+            Este sistema elabora a peça fundamentada. O protocolo final no órgão autuador cabe ao cidadão.
           </p>
 
-          <div className="flex items-center gap-4 text-xs font-semibold text-slate-400">
+          <div className="flex items-center gap-4 text-xs font-semibold text-zinc-400">
             <Link
               href="/afiliados"
               className="text-emerald-400 hover:underline font-bold transition flex items-center gap-1"
