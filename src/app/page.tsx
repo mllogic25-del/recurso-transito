@@ -1,1030 +1,420 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Navbar from "@/components/Navbar";
-import {
-  Car,
-  FileText,
-  ArrowRight,
-  ShieldCheck,
-  Scale,
-  Mail,
-  HelpCircle,
-  CheckCircle2,
-  AlertCircle,
-  X,
-  Smartphone,
-  Check,
-  Info,
-  Lock,
-  User,
-  Phone,
-  Sparkles,
-  ArrowLeft,
-  DollarSign,
-} from "lucide-react";
 
-// Lista de infrações comuns para o assistente de convencimento
-const INFRACTION_TYPES = [
-  {
-    id: "EXCESSO_VELOCIDADE",
-    label: "Excesso de Velocidade (Radar)",
-    icon: "🏎️",
-    law: "Art. 218 do CTB & Resolução 798/2020 do CONTRAN",
-    thesis:
-      "Aferição do radar pelo Inmetro dentro do prazo de 12 meses, desconto obrigatório da margem de erro (velocidade considerada vs. medida) e prazo limite de 30 dias para envio da Notificação.",
-  },
-  {
-    id: "SEMAFORO",
-    label: "Sinal Vermelho ou Faixa",
-    icon: "🚦",
-    law: "Art. 208 do CTB & Resolução 920/2022 do CONTRAN",
-    thesis:
-      "Exigência de fotos sequenciais nítidas antes da linha de retenção e durante o cruzamento, homologação Senatran do equipamento e verificação do tempo do amarelo.",
-  },
-  {
-    id: "LEI_SECA",
-    label: "Lei Seca / Bafômetro",
-    icon: "🍷",
-    law: "Art. 165 e 165-A do CTB & Resolução 432/2013 do CONTRAN",
-    thesis:
-      "Em caso de recusa ao teste, obrigatoriedade de termo minucioso com múltiplos sinais de alteração psicomotora e calibração anual do etilômetro pelo Inmetro.",
-  },
-  {
-    id: "CELULAR",
-    label: "Celular ao Volante / Cinto",
-    icon: "📱",
-    law: "Art. 252, Parágrafo Único do CTB",
-    thesis:
-      "Diferenciação legal entre segurar, manusear ou falar ao celular, detalhamento obrigatório da conduta nas observações do AIT e inexistência de contradição visual.",
-  },
-  {
-    id: "ESTACIONAMENTO",
-    label: "Estacionamento / Parada Proibida",
-    icon: "🅿️",
-    law: "Art. 181 do CTB & Manual Brasileiro de Fiscalização",
-    thesis:
-      "Visibilidade e conformidade das placas de sinalização regulamentar (R-6a/R-6c), indicação exata do imóvel defronte e diferenciação entre parada rápida de embarque e estacionamento.",
-  },
-  {
-    id: "OUTROS",
-    label: "Outra Notificação / Multa",
-    icon: "📋",
-    law: "Código de Trânsito Brasileiro & Súmula 312 do STJ",
-    thesis:
-      "Análise integral de requisitos formais obrigatórios do Art. 280 do CTB, prazo decadencial de expedição em 30 dias (Art. 281) e nulidades procedimentais.",
-  },
-];
-
-// Ícone oficial em SVG do WhatsApp
-function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
-    >
-      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
-    </svg>
-  );
-}
-
-export default function HomePage() {
+export default function AutoRecursoLandingPage() {
   const router = useRouter();
+  const [placa, setPlaca] = useState("");
+  const [numeroAIT, setNumeroAIT] = useState("");
+  const [orgao, setOrgao] = useState("DETRAN");
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  // Estados do Fluxo Interativo de Convencimento: "PLATE" -> "PERSUASION" -> "AUTH"
-  const [step, setStep] = useState<"PLATE" | "PERSUASION" | "AUTH">("PLATE");
-  const [plate, setPlate] = useState("");
-  const [selectedInfraction, setSelectedInfraction] = useState("EXCESSO_VELOCIDADE");
-  const [error, setError] = useState("");
-  const [currentUser, setCurrentUser] = useState<any>(null);
-  const [phoneSupport, setPhoneSupport] = useState(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "5579998340176");
-
-  // Estados de Cadastro / Login no passo AUTH
-  const [authMode, setAuthMode] = useState<"REGISTER" | "LOGIN">("REGISTER");
-  const [authData, setAuthData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    phone: "",
-  });
-  const [authLoading, setAuthLoading] = useState(false);
-  const [authError, setAuthError] = useState("");
-
-  // Verifica se o usuário já está autenticado e busca número do WhatsApp
-  useEffect(() => {
-    fetch("/api/auth/me")
-      .then((res) => (res.ok ? res.json() : { user: null }))
-      .then((data) => {
-        if (data?.user) setCurrentUser(data.user);
-      })
-      .catch(() => {});
-
-    // Busca status do WhatsApp configurado
-    fetch("/api/whatsapp/status")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.phone) {
-          setPhoneSupport(data.phone);
-        } else if (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER) {
-          setPhoneSupport(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER);
-        }
-      })
-      .catch(() => {});
-  }, []);
-
-  // Formata o link do WhatsApp para atendimento (inclui código de indicação se houver)
-  const openWhatsapp = (customMessage?: string) => {
-    const cleanNumber = phoneSupport.replace(/\D/g, "") || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "5579998340176";
-
-    // Resgata o código do indicador do cookie ou localStorage
-    let refCode = "";
-    if (typeof window !== "undefined") {
-      refCode = localStorage.getItem("autorecurso_referral_code") || "";
-      if (!refCode) {
-        const match = document.cookie.match(/referral_code=([^;]+)/);
-        if (match) refCode = decodeURIComponent(match[1]);
-      }
-    }
-
-    const refTag = refCode ? ` [Indicação: ${refCode.toUpperCase().trim()}]` : "";
-
-    const defaultMsg = plate
-      ? `Olá! Gostaria de consultar um recurso de multa para o veículo de placa *${plate}*. Poderia me ajudar?`
-      : "Olá! Gostaria de informações sobre como recorrer de multas de trânsito.";
-    const textToSend = `${customMessage || defaultMsg}${refTag}`;
-    const url = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(textToSend)}`;
-    window.open(url, "_blank");
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index);
   };
 
-  // Validação inicial da placa (sem travar por AIT)
-  const handleStartPlate = (e: React.FormEvent) => {
+  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "5579998340176";
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+    "Olá! Gostaria de uma análise técnica para recorrer da minha multa de trânsito."
+  )}`;
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const cleanPlate = plate.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
-    if (cleanPlate.length < 7) {
-      setError("Por favor, digite uma placa válida com 7 caracteres (ex: ABC1D23 ou ABC1234).");
+    const cleanPlaca = placa.trim().toUpperCase();
+    if (!cleanPlaca) {
+      const el = document.getElementById("input-placa");
+      el?.focus();
       return;
     }
-    setError("");
-    setStep("PERSUASION");
+    const params = new URLSearchParams({
+      placa: cleanPlaca,
+      ait: numeroAIT.trim().toUpperCase(),
+      orgao,
+    });
+    router.push(`/cliente/novo?${params.toString()}`);
   };
 
-  // Ao clicar em "Gerar Meu Recurso" após o convencimento
-  const handleProceedToResource = () => {
-    if (currentUser) {
-      router.push(
-        `/cliente/novo?placa=${encodeURIComponent(plate.toUpperCase().trim())}&categoria=${encodeURIComponent(
-          selectedInfraction
-        )}`
-      );
-    } else {
-      setStep("AUTH");
-    }
-  };
+  const faqs = [
+    {
+      pergunta: "O que é o número do Auto de Infração (AIT)?",
+      resposta:
+        "É o identificador único da sua autuação, impresso no cabeçalho ou na lateral superior da Notificação de Autuação enviada pelo Detran, PRF, DNIT ou órgão de trânsito municipal.",
+    },
+    {
+      pergunta: "Preciso de constituir advogado para protocolar a defesa?",
+      resposta:
+        "Não. O Código de Trânsito Brasileiro assegura formalmente a qualquer cidadão o direito de interpor a sua própria defesa prévia e recursos perante a JARI e o CETRAN sem intermédio de advogado.",
+    },
+    {
+      pergunta: "Qual o formato do documento que irei receber?",
+      resposta:
+        "O documento é disponibilizado imediatamente em formato PDF (pronto para imprimir e assinar) e Word editável (.docx), acompanhado das orientações passo a passo para envio presencial ou eletrônico.",
+    },
+    {
+      pergunta: "E se o prazo da notificação já tiver expirado?",
+      resposta:
+        "Se o prazo tiver sido ultrapassado por falta de envio ou falha de entrega pelo órgão, o sistema estrutura a tese preliminar de decadência ou nulidade por inobservância do Artigo 281 do CTB e Súmula 312 do STJ.",
+    },
+  ];
 
-  // Cadastro ou Login Rápido
-  const handleAuthSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setAuthError("");
-    setAuthLoading(true);
-
-    try {
-      if (authMode === "REGISTER") {
-        const res = await fetch("/api/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: authData.name,
-            email: authData.email,
-            password: authData.password,
-            phone: authData.phone,
-            role: "CLIENT",
-          }),
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          setAuthError(data.error || "Erro ao criar conta.");
-          setAuthLoading(false);
-          return;
-        }
-      } else {
-        const res = await fetch("/api/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: authData.email,
-            password: authData.password,
-          }),
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          setAuthError(data.error || "Credenciais inválidas.");
-          setAuthLoading(false);
-          return;
-        }
-      }
-
-      router.push(
-        `/cliente/novo?placa=${encodeURIComponent(plate.toUpperCase().trim())}&categoria=${encodeURIComponent(
-          selectedInfraction
-        )}`
-      );
-    } catch {
-      setAuthError("Erro de conexão com o servidor.");
-      setAuthLoading(false);
-    }
-  };
-
-  const activeInfractionData =
-    INFRACTION_TYPES.find((i) => i.id === selectedInfraction) || INFRACTION_TYPES[0];
+  const infracoes = [
+    {
+      titulo: "Excesso de Velocidade",
+      artigo: "Art. 218 do CTB",
+      desc: "Verificação da aferição periódica do radar pelo Inmetro (máx. 12 meses), margem de tolerância obrigatória e prazo de expedição.",
+    },
+    {
+      titulo: "Lei Seca / Bafômetro",
+      artigo: "Art. 165 e 165-A do CTB",
+      desc: "Nulidades em autos sem descrição de sinais psicomotores, irregularidades no termo de constatação e calibração do etilômetro.",
+    },
+    {
+      titulo: "Sinal Vermelho / Radar",
+      artigo: "Art. 208 do CTB",
+      desc: "Falta de registro fotográfico panorâmico sequencial, ausência da linha de retenção e problemas de temporização semafórica.",
+    },
+    {
+      titulo: "Uso de Celular ao Volante",
+      artigo: "Art. 252 do CTB",
+      desc: "Inviabilidade visual do agente em movimento, ausência de abordagem justificada e carência de detalhes essenciais no AIT.",
+    },
+  ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-50/50 text-zinc-900 relative">
-      <Navbar />
+    <div className="min-h-screen bg-[#0B132B] text-slate-100 font-sans antialiased selection:bg-[#C5A059] selection:text-[#0B132B]">
+      {/* 1. TOPO INSTITUCIONAL / BANNER INFORMATIVO */}
+      <aside className="bg-[#070D1F] border-b border-slate-800/80 px-6 py-2.5 text-center text-xs text-slate-400">
+        <p>
+          <strong className="text-slate-200">Aviso Legal:</strong> Elaboramos peças técnicas fundamentadas. O protocolo
+          administrativo é efetuado pelo condutor perante o órgão autuador.
+        </p>
+      </aside>
 
-      {/* Seção Principal / Hero */}
-      <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
-        {/* Banner Informativo de Escopo de Atuação */}
-        <div className="mb-7 p-4 rounded-2xl bg-white border border-zinc-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs executive-shadow">
-          <div className="flex items-center gap-3 text-zinc-800">
-            <span className="p-2 bg-zinc-950 text-blue-400 rounded-xl flex-shrink-0">
-              <Info className="w-4 h-4" />
-            </span>
-            <p className="leading-relaxed text-zinc-700">
-              <strong className="text-zinc-950">Como atuamos:</strong> Elaboramos sua defesa técnica fundamentada em PDF e Word (.docx).
-              <strong className="text-zinc-950"> Não damos entrada nem acompanhamos o processo</strong> — o protocolo é realizado por você diretamente no órgão autuador.
-            </p>
-          </div>
-          <Link
-            href="/fale-conosco"
-            className="text-blue-600 hover:text-blue-800 font-black whitespace-nowrap flex items-center gap-1 hover:underline flex-shrink-0"
-          >
-            Entenda o serviço ➔
+      {/* 2. CABEÇALHO (NAVBAR) */}
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0B132B]/90 border-b border-[#C5A059]/20 px-6 py-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 group">
+            {/* Brasão Oficial Dourado */}
+            <img
+              src="/logo-icon.png"
+              alt="AutoRecurso"
+              className="w-10 h-10 rounded-lg border border-[#C5A059]/50 shadow-inner object-cover bg-[#1C2541] group-hover:scale-105 transition duration-200"
+            />
+            <div>
+              <span className="text-lg font-bold tracking-wider text-white uppercase block leading-tight">
+                Auto<span className="text-[#E0B253]">Recurso</span>
+              </span>
+              <span className="text-[9px] tracking-[0.22em] text-[#94A3B8] uppercase block font-medium">
+                Defesas &amp; Recursos de Trânsito
+              </span>
+            </div>
           </Link>
-        </div>
 
-        {/* Subtítulo discreto no topo */}
-        <div className="mb-4">
-          <p className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-zinc-400">
-            Recursos Administrativos de Multas de Trânsito
+          <nav className="hidden md:flex items-center gap-7 text-xs font-semibold uppercase tracking-wider text-slate-300">
+            <a href="#como-funciona" className="hover:text-[#E0B253] transition-colors">
+              Como Funciona
+            </a>
+            <a href="#servicos" className="hover:text-[#E0B253] transition-colors">
+              Infrações
+            </a>
+            <a href="#incluso" className="hover:text-[#E0B253] transition-colors">
+              O Que Inclui
+            </a>
+            <a href="#faq" className="hover:text-[#E0B253] transition-colors">
+              Dúvidas
+            </a>
+            <Link
+              href="/afiliados"
+              className="text-[#E0B253] hover:brightness-125 transition-colors font-bold flex items-center gap-1"
+            >
+              💰 Indique &amp; Ganhe R$ 10
+            </Link>
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="hidden sm:inline-block text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-white px-3 py-2 transition"
+            >
+              Entrar
+            </Link>
+            <a
+              href="#iniciar"
+              className="px-5 py-2.5 rounded text-xs font-bold uppercase tracking-widest bg-gradient-to-r from-[#E0B253] to-[#C5A059] text-[#0B132B] hover:brightness-110 shadow-lg shadow-[#E0B253]/15 transition duration-200"
+            >
+              Gerar Defesa
+            </a>
+          </div>
+        </div>
+      </header>
+
+      {/* 3. SECÇÃO HERO */}
+      <section className="relative px-6 pt-16 pb-20 max-w-6xl mx-auto grid md:grid-cols-12 gap-12 items-center">
+        <div className="md:col-span-7 space-y-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#C5A059]/30 bg-[#1C2541]/70 text-[#E0B253] text-xs font-semibold tracking-wide">
+            <span className="w-2 h-2 rounded-full bg-[#E0B253] animate-pulse"></span>
+            Conformidade Integral com o CTB &amp; CONTRAN
+          </div>
+
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-white">
+            Defenda os seus direitos com fundamentação jurídica de <span className="text-[#E0B253]">alto nível</span>.
+          </h1>
+
+          <p className="text-slate-300 text-base leading-relaxed max-w-xl">
+            Crie defesas prévias e recursos administrativos personalizados contra multas do DETRAN, PRF, DNIT e
+            municípios. Peça técnica completa em PDF e Word pronta para submissão.
           </p>
+
+          <div className="pt-2 flex flex-wrap items-center gap-5 text-xs text-slate-400 font-medium">
+            <span className="flex items-center gap-1.5">
+              <span className="text-[#E0B253]">✓</span> Sem necessidade de advogado
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="text-[#E0B253]">✓</span> Formatos PDF e Word (.docx)
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="text-[#E0B253]">✓</span> Elaboração rápida e segura
+            </span>
+          </div>
         </div>
 
-        {/* Grid com Banner Escuro Executivo à Esquerda e Card Interativo à Direita */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-stretch">
-          {/* Card Banner Esquerdo - Bold & Big */}
-          <div className="lg:col-span-6 bg-gradient-to-br from-zinc-950 via-zinc-900 to-blue-950 rounded-3xl p-8 sm:p-11 text-white flex flex-col justify-between relative overflow-hidden shadow-2xl border border-zinc-800/80 min-h-[440px]">
-            <div className="absolute top-0 right-0 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-56 h-56 bg-indigo-500/10 rounded-full blur-2xl -ml-10 -mb-10 pointer-events-none" />
-
-            <div className="relative z-10">
-              <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-                <span className="bg-emerald-500/20 text-emerald-300 text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-emerald-400/30 backdrop-blur-md flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Inteligência Artificial + Revisão Técnica
-                </span>
-                <span className="bg-white/10 text-zinc-300 text-[11px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full border border-white/15 backdrop-blur-md whitespace-nowrap">
-                  100% Online
-                </span>
+        {/* FORMULÁRIO DE ENTRADA */}
+        <div
+          id="iniciar"
+          className="md:col-span-5 bg-[#1C2541]/90 backdrop-blur-md border border-[#C5A059]/30 rounded-xl p-7 shadow-2xl shadow-black/60 scroll-mt-28"
+        >
+          <div className="mb-6 pb-4 border-b border-slate-700/60 flex justify-between items-end">
+            <div>
+              <span className="text-[#E0B253] text-[10px] uppercase tracking-widest font-bold block mb-1">
+                Elaboração Completa
+              </span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-3xl font-extrabold text-white">R$ 30,00</span>
+                <span className="text-xs text-slate-400">/ taxa única</span>
               </div>
+            </div>
+            <span className="text-[11px] px-2.5 py-1 rounded bg-[#0B132B] border border-slate-700 text-slate-300 font-semibold">
+              Entrega Digital
+            </span>
+          </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1]">
-                <span className="text-white">auto</span>
-                <span className="text-blue-400">recurso</span>
-                <br />
-                <span className="text-zinc-300 font-extrabold text-2xl sm:text-3xl lg:text-3xl">
-                  para todas as multas de trânsito
-                </span>
-              </h1>
-              <p className="text-zinc-400 text-xs sm:text-sm mt-3 max-w-lg leading-relaxed font-medium">
-                Elaboramos sua petição fundamentada no Código de Trânsito Brasileiro e nas Resoluções vigentes do CONTRAN. Rápido, seguro e sem sair de casa.
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <div>
+              <label className="text-xs font-semibold text-slate-300 block mb-1.5 uppercase tracking-wide">
+                Placa do Veículo
+              </label>
+              <input
+                id="input-placa"
+                type="text"
+                maxLength={8}
+                placeholder="Ex.: ABC-1234 ou ABC1D23"
+                value={placa}
+                onChange={(e) => setPlaca(e.target.value.toUpperCase())}
+                required
+                className="w-full bg-[#0B132B] border border-slate-700 rounded-md px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#E0B253] text-sm uppercase tracking-wider transition"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-300 block mb-1.5 uppercase tracking-wide">
+                Número do Auto de Infração (AIT)
+              </label>
+              <input
+                type="text"
+                placeholder="Código impresso na notificação"
+                value={numeroAIT}
+                onChange={(e) => setNumeroAIT(e.target.value.toUpperCase())}
+                className="w-full bg-[#0B132B] border border-slate-700 rounded-md px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-[#E0B253] text-sm uppercase tracking-wider transition"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-300 block mb-1.5 uppercase tracking-wide">
+                Órgão Autuador
+              </label>
+              <select
+                value={orgao}
+                onChange={(e) => setOrgao(e.target.value)}
+                className="w-full bg-[#0B132B] border border-slate-700 rounded-md px-4 py-3 text-white text-sm focus:outline-none focus:border-[#E0B253] transition"
+              >
+                <option value="DETRAN">DETRAN (Estadual)</option>
+                <option value="PRF">PRF (Polícia Rodoviária Federal)</option>
+                <option value="DNIT">DNIT</option>
+                <option value="PREFEITURA">Prefeitura / Trânsito Municipal</option>
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full mt-2 py-3.5 rounded-md font-bold text-xs uppercase tracking-widest bg-gradient-to-r from-[#E0B253] to-[#C5A059] text-[#0B132B] hover:brightness-110 shadow-lg shadow-[#E0B253]/15 transition cursor-pointer"
+            >
+              Confeccionar Minha Defesa
+            </button>
+          </form>
+        </div>
+      </section>
+
+      {/* 4. METODOLOGIA / COMO FUNCIONA */}
+      <section id="como-funciona" className="py-20 border-t border-slate-800 bg-[#070D1F]/50 px-6 scroll-mt-20">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center max-w-xl mx-auto mb-16">
+            <span className="text-[#E0B253] text-xs font-bold uppercase tracking-widest">Passo a Passo</span>
+            <h2 className="text-3xl font-bold text-white mt-2">Como confeccionamos o seu recurso</h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-[#1C2541]/40 border border-slate-800/80 rounded-lg p-7 hover:border-[#C5A059]/40 transition">
+              <span className="text-2xl font-bold text-[#E0B253] font-serif">01</span>
+              <h3 className="text-lg font-bold text-white mt-4 mb-2">Análise das Nulidades</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Identificação de vícios formais do Auto de Infração de Trânsito (AIT), prazos decadenciais e incongruências
+                de preenchimento.
               </p>
             </div>
 
-            {/* Destaque Grande do Mascote Samuca Oficial - 100% Legível e Nítido */}
-            <div className="my-6 p-5 sm:p-6 rounded-3xl bg-white/10 border border-white/15 backdrop-blur-md flex flex-col sm:flex-row items-center gap-6 relative z-10 shadow-2xl">
-              <div className="relative flex-shrink-0">
-                <img
-                  src="/samuca.png"
-                  alt="Samuca - Defesa de Autuações de Trânsito"
-                  className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-emerald-400 shadow-2xl object-cover bg-white"
-                />
-                <span className="absolute bottom-0 right-0 bg-emerald-500 text-zinc-950 text-[10px] font-black px-2.5 py-0.5 rounded-full border-2 border-zinc-950 shadow-md flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-950 animate-pulse" />
-                  ONLINE
-                </span>
-              </div>
-              <div className="text-center sm:text-left flex-1">
-                <div className="flex items-center justify-center sm:justify-start gap-2 mb-1.5">
-                  <span className="font-black text-white text-lg sm:text-xl">Samuca Oficial</span>
-                  <span className="text-[10px] sm:text-xs bg-emerald-500/30 text-emerald-300 font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-400/40">
-                    Defesa de Multas
-                  </span>
-                </div>
-                <p className="text-zinc-200 text-xs sm:text-sm leading-relaxed font-medium">
-                  "Oi! Eu analiso sua multa, identifico erros no Auto de Infração e tiro dúvidas de trânsito em tempo real pelo WhatsApp!"
-                </p>
-                <div className="mt-3.5">
-                  <button
-                    onClick={() => openWhatsapp("Olá, Samuca! Gostaria de uma análise para recorrer de uma multa.")}
-                    className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-lg transition transform hover:scale-105"
-                  >
-                    <WhatsAppIcon className="w-4 h-4" />
-                    Chamar Samuca no WhatsApp
-                  </button>
-                </div>
-              </div>
+            <div className="bg-[#1C2541]/40 border border-slate-800/80 rounded-lg p-7 hover:border-[#C5A059]/40 transition">
+              <span className="text-2xl font-bold text-[#E0B253] font-serif">02</span>
+              <h3 className="text-lg font-bold text-white mt-4 mb-2">Fundamentação Legal</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Estruturação de argumentos com base estrita no Código de Trânsito Brasileiro, deliberações do CONTRAN e
+                jurisprudência dos tribunais.
+              </p>
             </div>
 
-            {/* Box inferior escuro com Escudo */}
-            <div className="relative z-10 bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-4 flex items-center justify-between gap-3.5">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-600 text-white rounded-xl flex-shrink-0 shadow-sm">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <p className="text-xs text-zinc-300 font-bold">
-                  Defesas para DETRAN, PRF, DNIT e Prefeituras.
-                </p>
-              </div>
-              <span className="text-[11px] font-black text-blue-400 uppercase tracking-wider whitespace-nowrap">
-                CTB Atualizado
-              </span>
-            </div>
-          </div>
-
-          {/* Card Formulário Direito - Bold & Big */}
-          <div className="lg:col-span-6 bg-white rounded-3xl p-7 sm:p-10 border border-zinc-200/90 executive-shadow-lg flex flex-col justify-center transition-all duration-300">
-            {/* ETAPA 1: DIGITAÇÃO APENAS DA PLACA */}
-            {step === "PLATE" && (
-              <div>
-                <div className="mb-6">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-md border border-blue-100 mb-2.5 inline-block">
-                    Consulta Rápida de Recursos
-                  </span>
-                  <h2 className="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight">
-                    Consulte o recurso da sua multa
-                  </h2>
-                  <p className="text-xs sm:text-sm text-zinc-500 mt-1.5 leading-relaxed">
-                    Digite a placa do veículo para verificar as teses e prazos legais cabíveis.
-                  </p>
-                </div>
-
-                {error && (
-                  <div className="mb-4 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-bold flex items-center gap-2.5">
-                    <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
-                    <span>{error}</span>
-                  </div>
-                )}
-
-                <form onSubmit={handleStartPlate} className="space-y-5">
-                  <div>
-                    <label className="block text-xs font-black text-zinc-800 mb-2">
-                      Placa do Veículo <span className="text-red-500">*</span>
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-400">
-                        <Car className="w-5 h-5" />
-                      </div>
-                      <input
-                        type="text"
-                        required
-                        maxLength={8}
-                        value={plate}
-                        onChange={(e) => {
-                          setPlate(e.target.value.toUpperCase());
-                          setError("");
-                        }}
-                        placeholder="Ex.: ABC1D23"
-                        className="w-full pl-12 pr-4 py-4 rounded-2xl border border-zinc-300 text-lg font-mono font-black uppercase tracking-wider focus:border-zinc-950 focus:ring-4 focus:ring-zinc-100 outline-none transition bg-zinc-50/50"
-                      />
-                    </div>
-                    <p className="text-[11px] text-zinc-400 mt-1.5 font-medium">
-                      Aceita placa padrão Mercosul ou modelo tradicional cinza.
-                    </p>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full mt-3 bg-zinc-950 hover:bg-zinc-800 text-white font-black py-4 px-6 rounded-2xl shadow-md text-base transition flex items-center justify-center gap-2 transform hover:-translate-y-0.5 cursor-pointer"
-                  >
-                    Continuar Análise do Recurso
-                    <ArrowRight className="w-5 h-5 text-blue-400" />
-                  </button>
-                </form>
-
-                {/* Opção de Conversar pelo WhatsApp */}
-                <div className="mt-6 pt-5 border-t border-slate-100 text-center">
-                  <p className="text-xs text-slate-500 mb-3">
-                    Prefere tirar dúvidas diretamente com nosso time?
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => openWhatsapp()}
-                    className="w-full py-3.5 px-4 rounded-xl border-2 border-emerald-500/80 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-sm transition flex items-center justify-center gap-2.5 cursor-pointer"
-                  >
-                    <WhatsAppIcon className="w-5 h-5 text-emerald-600" />
-                    Conversar pelo WhatsApp
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* ETAPA 2: CONVERSA, DIAGNÓSTICO E CONVENCIMENTO DO CLIENTE */}
-            {step === "PERSUASION" && (
-              <div className="space-y-4 animate-fade-in">
-                {/* Placa em Destaque */}
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                  <div className="flex items-center gap-2">
-                    <span className="bg-slate-900 text-white font-mono font-black text-xs px-2.5 py-1 rounded-md border border-slate-700 shadow-xs flex items-center gap-1.5">
-                      <span>🇧🇷</span> {plate}
-                    </span>
-                    <span className="text-xs font-semibold text-emerald-600 flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> Placa registrada
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setStep("PLATE")}
-                    className="text-xs text-blue-600 hover:underline font-bold cursor-pointer"
-                  >
-                    Trocar Placa
-                  </button>
-                </div>
-
-                {/* Pergunta Conversacional */}
-                <div>
-                  <h3 className="text-lg font-black text-slate-900 leading-tight">
-                    Qual foi a infração que você deseja recorrer?
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Selecione para ver a fundamentação jurídica e chances reais do seu caso:
-                  </p>
-                </div>
-
-                {/* Seletor Rápido de Infração */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {INFRACTION_TYPES.map((inf) => {
-                    const isSelected = selectedInfraction === inf.id;
-                    return (
-                      <button
-                        key={inf.id}
-                        type="button"
-                        onClick={() => setSelectedInfraction(inf.id)}
-                        className={`p-2.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between min-h-[62px] ${
-                          isSelected
-                            ? "border-blue-600 bg-blue-50/90 text-blue-950 font-bold shadow-xs ring-2 ring-blue-500/20"
-                            : "border-slate-200 bg-white hover:bg-slate-50 text-slate-700"
-                        }`}
-                      >
-                        <span className="text-base mb-1">{inf.icon}</span>
-                        <span className="leading-tight line-clamp-2">{inf.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Caixa de Diagnóstico & Convencimento Técnico */}
-                <div className="p-4 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/40 border border-blue-100/80 space-y-3">
-                  <div className="flex items-start gap-2">
-                    <Sparkles className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-xs font-black text-slate-900">
-                        {activeInfractionData.law}
-                      </p>
-                      <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
-                        {activeInfractionData.thesis}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Vantagens Irrefutáveis para o Cliente */}
-                  <div className="pt-2 border-t border-slate-200/60 space-y-1.5 text-[11px]">
-                    <div className="flex items-center gap-2 text-slate-800 font-medium">
-                      <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                      <span>
-                        <strong>Efeito Suspensivo:</strong> Os pontos NÃO entram na sua CNH enquanto o recurso tramita.
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 text-slate-800 font-medium">
-                      <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                      <span>
-                        <strong>Sem custo com advogado:</strong> O CTB autoriza o próprio condutor a protocolar.
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 text-slate-800 font-medium">
-                      <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                      <span>
-                        <strong>Valor único de apenas R$ 30,00:</strong> Peça completa fundamentada em PDF e Word.
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Botões de Ação: WhatsApp ou Gerar Recurso */}
-                <div className="space-y-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={handleProceedToResource}
-                    className="w-full bg-zinc-950 hover:bg-zinc-800 text-white font-black py-4 px-6 rounded-2xl shadow-md text-sm sm:text-base transition flex items-center justify-center gap-2.5 cursor-pointer transform hover:-translate-y-0.5"
-                  >
-                    Prosseguir e Gerar Meu Recurso
-                    <ArrowRight className="w-5 h-5 text-blue-400" />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      openWhatsapp(
-                        `Olá! Gostaria de uma análise para o recurso da placa *${plate}* sobre a infração de *${activeInfractionData.label}*. Como podemos proceder?`
-                      )
-                    }
-                    className="w-full py-3.5 px-4 rounded-2xl border border-emerald-500/80 bg-emerald-50/80 hover:bg-emerald-100 text-emerald-900 font-black text-xs sm:text-sm transition flex items-center justify-center gap-2.5 cursor-pointer"
-                  >
-                    <WhatsAppIcon className="w-4 h-4 text-emerald-600" />
-                    Tirar Dúvidas no WhatsApp com Atendente
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* ETAPA 3: LOGIN / CADASTRO RÁPIDO (APÓS O CONVENCIMENTO) */}
-            {step === "AUTH" && (
-              <div className="space-y-4 animate-fade-in">
-                <div className="flex items-center justify-between pb-2 border-b border-zinc-100">
-                  <button
-                    type="button"
-                    onClick={() => setStep("PERSUASION")}
-                    className="text-xs text-zinc-500 hover:text-zinc-900 font-black flex items-center gap-1 cursor-pointer"
-                  >
-                    <ArrowLeft className="w-3.5 h-3.5" /> Voltar ao diagnóstico
-                  </button>
-                  <span className="font-mono text-xs font-black text-zinc-900 bg-zinc-100 px-2.5 py-0.5 rounded-md">
-                    Placa: {plate}
-                  </span>
-                </div>
-
-                <div>
-                  <h3 className="text-xl sm:text-2xl font-black text-zinc-950 leading-tight">
-                    {authMode === "REGISTER" ? "Crie seu acesso rápido" : "Entrar no sistema"}
-                  </h3>
-                  <p className="text-xs text-zinc-500 mt-1">
-                    {authMode === "REGISTER"
-                      ? "Crie seu usuário e senha em segundos para salvar seu recurso e receber a petição pronta."
-                      : "Digite seus dados de acesso para continuar."}
-                  </p>
-                </div>
-
-                {/* Abas Alternar Cadastro / Login */}
-                <div className="flex p-1 bg-zinc-100 rounded-xl">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setAuthMode("REGISTER");
-                      setAuthError("");
-                    }}
-                    className={`flex-1 py-2 text-xs font-black rounded-lg transition cursor-pointer ${
-                      authMode === "REGISTER"
-                        ? "bg-white text-zinc-950 shadow-xs"
-                        : "text-zinc-500 hover:text-zinc-900"
-                    }`}
-                  >
-                    Criar Nova Conta
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setAuthMode("LOGIN");
-                      setAuthError("");
-                    }}
-                    className={`flex-1 py-2 text-xs font-black rounded-lg transition cursor-pointer ${
-                      authMode === "LOGIN"
-                        ? "bg-white text-zinc-950 shadow-xs"
-                        : "text-zinc-500 hover:text-zinc-900"
-                    }`}
-                  >
-                    Já Tenho Conta
-                  </button>
-                </div>
-
-                {authError && (
-                  <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-bold flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
-                    <span>{authError}</span>
-                  </div>
-                )}
-
-                <form onSubmit={handleAuthSubmit} className="space-y-3.5">
-                  {authMode === "REGISTER" && (
-                    <div>
-                      <label className="block text-xs font-bold text-zinc-700 mb-1">
-                        Seu Nome Completo *
-                      </label>
-                      <div className="relative">
-                        <User className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
-                        <input
-                          type="text"
-                          required
-                          value={authData.name}
-                          onChange={(e) => setAuthData({ ...authData, name: e.target.value })}
-                          placeholder="Ex: Carlos Silva"
-                          className="w-full pl-10 pr-3 py-3 rounded-xl border border-zinc-300 text-xs focus:border-zinc-950 focus:ring-2 focus:ring-zinc-100 outline-none bg-zinc-50/50"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  <div>
-                    <label className="block text-xs font-bold text-zinc-700 mb-1">
-                      Seu E-mail *
-                    </label>
-                    <div className="relative">
-                      <Mail className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
-                      <input
-                        type="email"
-                        required
-                        value={authData.email}
-                        onChange={(e) => setAuthData({ ...authData, email: e.target.value })}
-                        placeholder="seuemail@exemplo.com"
-                        className="w-full pl-10 pr-3 py-3 rounded-xl border border-zinc-300 text-xs focus:border-zinc-950 focus:ring-2 focus:ring-zinc-100 outline-none bg-zinc-50/50"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-zinc-700 mb-1">
-                      Sua Senha *
-                    </label>
-                    <div className="relative">
-                      <Lock className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
-                      <input
-                        type="password"
-                        required
-                        value={authData.password}
-                        onChange={(e) => setAuthData({ ...authData, password: e.target.value })}
-                        placeholder="Mínimo 6 caracteres"
-                        className="w-full pl-10 pr-3 py-3 rounded-xl border border-zinc-300 text-xs focus:border-zinc-950 focus:ring-2 focus:ring-zinc-100 outline-none bg-zinc-50/50"
-                      />
-                    </div>
-                  </div>
-
-                  {authMode === "REGISTER" && (
-                    <div>
-                      <label className="block text-xs font-bold text-zinc-700 mb-1">
-                        Telefone / WhatsApp
-                      </label>
-                      <div className="relative">
-                        <Phone className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
-                        <input
-                          type="text"
-                          value={authData.phone}
-                          onChange={(e) => setAuthData({ ...authData, phone: e.target.value })}
-                          placeholder="(DDD) 99999-9999"
-                          className="w-full pl-10 pr-3 py-3 rounded-xl border border-zinc-300 text-xs focus:border-zinc-950 focus:ring-2 focus:ring-zinc-100 outline-none bg-zinc-50/50"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  <button
-                    type="submit"
-                    disabled={authLoading}
-                    className="w-full mt-2 bg-zinc-950 hover:bg-zinc-800 text-white font-black py-4 px-4 rounded-xl shadow-md text-sm transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 transform hover:-translate-y-0.5"
-                  >
-                    {authLoading
-                      ? "Processando..."
-                      : authMode === "REGISTER"
-                      ? "Criar Acesso e Concluir Recurso ➔"
-                      : "Entrar e Concluir Recurso ➔"}
-                  </button>
-                </form>
-
-                {/* Link para Zap se preferir não cadastrar agora */}
-                <div className="pt-2 text-center">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      openWhatsapp(
-                        `Olá! Gostaria de atendimento pelo WhatsApp para recorrer da multa da placa *${plate}*.`
-                      )
-                    }
-                    className="text-xs text-emerald-700 hover:underline font-bold inline-flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-600" />
-                    Prefere não cadastrar agora? Fale no WhatsApp
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Destaque de Preço Bold & Big */}
-      <section id="pacotes" className="py-10 px-4 max-w-5xl mx-auto w-full">
-        <div className="bg-gradient-to-r from-zinc-900 via-zinc-950 to-blue-950 rounded-3xl p-8 sm:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl border border-zinc-800">
-          <div>
-            <span className="text-[11px] font-black uppercase tracking-widest text-blue-400 bg-blue-950/80 px-3 py-1 rounded-full border border-blue-800 inline-block mb-2">
-              Valor Fixo & Transparente
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Pacote Completo de Elaboração
-            </h3>
-            <p className="text-zinc-400 text-xs sm:text-sm mt-1 max-w-md">
-              Peça técnica fundamentada em PDF e Word (.docx), pronta para assinar e protocolar.
-            </p>
-          </div>
-          <div className="flex items-center gap-5 sm:self-center">
-            <div className="text-right">
-              <span className="text-xs font-bold text-zinc-400 block">Investimento único de</span>
-              <span className="text-4xl sm:text-5xl font-black text-white tracking-tight">
-                R$ 30<span className="text-xl text-zinc-400 font-bold">,00</span>
-              </span>
-            </div>
-            <button
-              onClick={() => {
-                const formEl = document.querySelector("input[placeholder='Ex.: ABC1D23']");
-                if (formEl) (formEl as HTMLElement).focus();
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className="bg-blue-600 hover:bg-blue-500 text-white font-black text-sm px-6 py-4 rounded-2xl shadow-lg shadow-blue-600/30 transition transform hover:-translate-y-0.5 cursor-pointer whitespace-nowrap"
-            >
-              Começar Agora
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* SEÇÃO CHAMATIVA INDIQUE E GANHE COM REGRAS CLARAS */}
-      <section id="indique-ganhe" className="py-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
-        <div className="bg-gradient-to-br from-zinc-950 via-emerald-950 to-zinc-950 rounded-3xl p-8 sm:p-12 border-2 border-emerald-500/60 shadow-2xl relative overflow-hidden text-white">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="relative z-10">
-            {/* Topo Chamativo */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-white/10">
-              <div>
-                <span className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-emerald-400 text-zinc-950 text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full shadow-md mb-3">
-                  <Sparkles className="w-4 h-4 text-zinc-950" />
-                  Programa Indique & Ganhe no Pix
-                </span>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                  Ganhe <span className="text-emerald-400">R$ 10,00</span> por amigo indicado!
-                </h2>
-                <p className="text-zinc-300 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
-                  Ajude outros condutores a recorrerem de multas de trânsito por apenas <strong className="text-white">R$ 30,00</strong> e receba <strong className="text-emerald-400">R$ 10,00 líquido no seu Pix</strong> a cada recurso contratado.
-                </p>
-              </div>
-
-              <div className="flex-shrink-0">
-                <Link
-                  href="/afiliados"
-                  className="inline-flex items-center gap-2.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 hover:from-emerald-400 hover:to-teal-300 text-zinc-950 font-black text-base px-8 py-4.5 rounded-2xl shadow-xl shadow-emerald-500/25 transition-all transform hover:scale-105 cursor-pointer whitespace-nowrap"
-                >
-                  <DollarSign className="w-5 h-5 text-zinc-950" />
-                  Quero Indicar e Ganhar R$ 10 no Pix
-                </Link>
-              </div>
-            </div>
-
-            {/* Regras Claras e Transparentes da Promoção */}
-            <div className="mt-8 space-y-4">
-              <div className="flex items-center gap-2 text-emerald-400 font-black text-sm uppercase tracking-wider">
-                <Info className="w-4 h-4" />
-                <span>Regras Oficiais de Como Funciona a Indicação:</span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-xs">
-                  <span className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 font-black text-sm flex items-center justify-center mb-3">
-                    1
-                  </span>
-                  <h4 className="font-black text-white text-sm mb-1">Cadastre sua Chave Pix</h4>
-                  <p className="text-xs text-zinc-400 leading-relaxed">
-                    Crie sua conta gratuita em 1 minuto e cadastre o Pix onde receberá suas comissões.
-                  </p>
-                </div>
-
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-xs">
-                  <span className="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 font-black text-sm flex items-center justify-center mb-3">
-                    2
-                  </span>
-                  <h4 className="font-black text-white text-sm mb-1">Compartilhe seu Link</h4>
-                  <p className="text-xs text-zinc-400 leading-relaxed">
-                    Envie seu link exclusivo para amigos, motoristas de app e grupos no WhatsApp.
-                  </p>
-                </div>
-
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-xs">
-                  <span className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 font-black text-sm flex items-center justify-center mb-3">
-                    3
-                  </span>
-                  <h4 className="font-black text-white text-sm mb-1">Recurso por R$ 30,00</h4>
-                  <p className="text-xs text-zinc-400 leading-relaxed">
-                    Seu amigo contrata a defesa técnica completa personalizada pelo valor acessível de R$ 30,00.
-                  </p>
-                </div>
-
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-xs">
-                  <span className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 font-black text-sm flex items-center justify-center mb-3">
-                    4
-                  </span>
-                  <h4 className="font-black text-white text-sm mb-1">R$ 10,00 no seu Pix</h4>
-                  <p className="text-xs text-zinc-400 leading-relaxed">
-                    Com a confirmação do pagamento, R$ 10,00 são liberados direto no seu Pix cadastrado!
-                  </p>
-                </div>
-              </div>
-
-              {/* Detalhes de conformidade e sem limite */}
-              <div className="p-4.5 rounded-2xl bg-white/5 border border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-zinc-300">
-                <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>
-                    <strong>Sem limite de ganhos:</strong> Indique 10 amigos = R$ 100 | 50 amigos = R$ 500 | 100 amigos = R$ 1.000 no Pix!
-                  </span>
-                </div>
-                <span className="text-[11px] text-zinc-400">
-                  *Comissão válida 1 vez por novo cliente indicado após a confirmação do pagamento.
-                </span>
-              </div>
+            <div className="bg-[#1C2541]/40 border border-slate-800/80 rounded-lg p-7 hover:border-[#C5A059]/40 transition">
+              <span className="text-2xl font-bold text-[#E0B253] font-serif">03</span>
+              <h3 className="text-lg font-bold text-white mt-4 mb-2">Emissão e Assinatura</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Receba a minuta completa formatada nos padrões das câmaras recursais, pronta para ser assinada e protocolada
+                pelo condutor.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Seção "O que está incluído" - Bold & Big */}
-      <section id="como-funciona" className="py-12 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
-        <div className="text-center mb-12">
-          <span className="text-[11px] font-black uppercase tracking-widest text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100 mb-2 inline-block">
-            Metodologia Eficiente
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-black text-zinc-950 tracking-tight">
-            O que está incluído no serviço
-          </h2>
-          <p className="text-zinc-500 text-xs sm:text-sm mt-1.5 max-w-lg mx-auto">
-            Atendimento técnico especializado focado exclusivamente na confecção rigorosa da sua peça de defesa
-          </p>
+      {/* 5. INFRAÇÕES MAIS RECORRIDAS */}
+      <section id="servicos" className="py-20 px-6 max-w-6xl mx-auto scroll-mt-20">
+        <div className="text-center max-w-xl mx-auto mb-16">
+          <span className="text-[#E0B253] text-xs font-bold uppercase tracking-widest">Ampla Cobertura</span>
+          <h2 className="text-3xl font-bold text-white mt-2">Principais Infrações Defendidas</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1 */}
-          <div className="bg-white rounded-3xl p-8 border border-zinc-200/90 executive-shadow text-center flex flex-col items-center hover:border-zinc-400 transition">
-            <div className="w-16 h-16 rounded-2xl bg-zinc-100 text-zinc-900 flex items-center justify-center mb-6 shadow-xs">
-              <FileText className="w-8 h-8" />
-            </div>
-            <h3 className="text-lg font-black text-zinc-950 mb-2">
-              Recurso Personalizado
-            </h3>
-            <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed font-medium">
-              Preparado de acordo com a infração específica, resoluções vigentes do CONTRAN e jurisprudência pacificada do Código de Trânsito.
-            </p>
-          </div>
-
-          {/* Card 2 */}
-          <div className="bg-white rounded-3xl p-8 border border-zinc-200/90 executive-shadow text-center flex flex-col items-center hover:border-zinc-400 transition">
-            <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mb-6 shadow-xs">
-              <Scale className="w-8 h-8" />
-            </div>
-            <h3 className="text-lg font-black text-zinc-950 mb-2">
-              Revisão Técnica Especializada
-            </h3>
-            <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed font-medium">
-              Análise criteriosa dos autos, verificação do prazo decadencial de 30 dias e consistência dos dados do agente antes da liberação ao cliente.
-            </p>
-          </div>
-
-          {/* Card 3 */}
-          <div className="bg-white rounded-3xl p-8 border border-zinc-200/90 executive-shadow text-center flex flex-col items-center hover:border-zinc-400 transition">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 shadow-xs">
-              <Mail className="w-8 h-8" />
-            </div>
-            <h3 className="text-lg font-black text-zinc-950 mb-2">
-              Entrega em PDF e Word
-            </h3>
-            <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed font-medium">
-              Documento formal pronto para imprimir, assinar e anexar aos seus documentos para protocolo no órgão autuador.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Seção de Dúvidas Frequentes (FAQ) - Bold & Big */}
-      <section id="faq" className="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full">
-        <div className="text-center mb-12">
-          <span className="text-[11px] font-black uppercase tracking-widest text-zinc-400 bg-zinc-100 px-3 py-1 rounded-full border border-zinc-200 mb-2.5 inline-block">
-            Esclarecimentos Frequentes
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-black text-zinc-950 tracking-tight">
-            Perguntas e Respostas
-          </h2>
-        </div>
-
-        <div className="space-y-4">
-          {[
-            {
-              q: "O que é o número do Auto de Infração (AIT)?",
-              a: "É o código alfanumérico identificador único da sua multa, localizado no cabeçalho ou canto superior da Notificação de Autuação enviada pelo Detran, PRF, DNIT ou prefeitura municipal.",
-            },
-            {
-              q: "Preciso de advogado para protocolar o recurso?",
-              a: "Não. O Código de Trânsito Brasileiro garante expressamente a todo cidadão o direito de apresentar a sua própria defesa e recurso administrativo perante o órgão sem a necessidade de constituir advogado.",
-            },
-            {
-              q: "E se o prazo da notificação já tiver expirado?",
-              a: "Nosso sistema calcula a data limite na hora. Se o prazo tiver passado, é possível apresentar o recurso fundamentando a ausência de notificação no prazo legal de 30 dias (Art. 281 do CTB / Súmula 312 do STJ) ou vícios materiais do auto.",
-            },
-            {
-              q: "Como recebo o recurso após o pagamento?",
-              a: "Após a confirmação do pagamento de R$ 30,00, nossa equipe técnica elabora e revisa sua peça. Assim que liberada, o documento completo em PDF e Word (.docx) fica disponível imediatamente para download no seu painel.",
-            },
-          ].map((item, idx) => (
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {infracoes.map((item, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-3xl border border-zinc-200/90 p-6 sm:p-7 executive-shadow transition hover:border-zinc-300"
+              className="bg-[#1C2541]/30 border border-slate-800 hover:border-[#C5A059]/40 p-6 rounded-lg transition"
             >
-              <h4 className="font-black text-zinc-950 text-base sm:text-lg mb-2 flex items-center gap-3">
-                <span className="w-6 h-6 rounded-full bg-zinc-950 text-white text-xs font-black flex items-center justify-center flex-shrink-0">
-                  ?
-                </span>
-                {item.q}
-              </h4>
-              <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed pl-9 font-medium">
-                {item.a}
-              </p>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#E0B253] block mb-1">
+                {item.artigo}
+              </span>
+              <h3 className="text-base font-bold text-white mb-2">{item.titulo}</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Botão Flutuante do WhatsApp com Mascote Samuca Oficial */}
-      <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 group">
-        <div className="hidden sm:flex items-center gap-2.5 opacity-0 group-hover:opacity-100 transition-all duration-200 bg-zinc-950/95 backdrop-blur-md text-white py-2.5 px-4 rounded-2xl shadow-2xl border border-zinc-800 pointer-events-none transform translate-y-1 group-hover:translate-y-0">
-          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <div className="text-left">
-            <p className="text-xs font-black text-white leading-none">Fale com o Samuca</p>
-            <p className="text-[10px] text-emerald-400 font-bold mt-0.5">Consultor de trânsito no WhatsApp</p>
+      {/* 6. O QUE ESTÁ INCLUÍDO */}
+      <section id="incluso" className="py-20 px-6 max-w-6xl mx-auto border-t border-slate-800 scroll-mt-20">
+        <div className="text-center max-w-xl mx-auto mb-16">
+          <span className="text-[#E0B253] text-xs font-bold uppercase tracking-widest">Garantia Técnica</span>
+          <h2 className="text-3xl font-bold text-white mt-2">O que recebe na sua defesa</h2>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="p-6 rounded-lg bg-[#1C2541]/30 border border-slate-800">
+            <h4 className="text-base font-bold text-white mb-2 text-[#E0B253]">Tese Personalizada</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Peça elaborada especificamente para as particularidades do seu auto, sem modelos genéricos.
+            </p>
+          </div>
+          <div className="p-6 rounded-lg bg-[#1C2541]/30 border border-slate-800">
+            <h4 className="text-base font-bold text-white mb-2 text-[#E0B253]">Ficheiros PDF &amp; Word</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Liberdade para imprimir a versão definitiva em PDF ou efetuar edições adicionais no Word (.docx).
+            </p>
+          </div>
+          <div className="p-6 rounded-lg bg-[#1C2541]/30 border border-slate-800">
+            <h4 className="text-base font-bold text-white mb-2 text-[#E0B253]">Manual de Protocolo</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Instruções claras de onde e como submeter a petição perante o Detran, Correios ou portal digital do órgão.
+            </p>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => openWhatsapp()}
-          aria-label="Atendimento com Samuca no WhatsApp"
-          className="w-18 h-18 sm:w-20 sm:h-20 rounded-full flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer relative group"
-        >
-          <img
-            src="/samuca.png"
-            alt="Samuca"
-            className="w-18 h-18 sm:w-20 sm:h-20 rounded-full border-3 border-emerald-500 shadow-xl object-cover bg-white"
-          />
-          <span className="absolute bottom-0 right-0 w-6 h-6 bg-emerald-500 border-2 border-white rounded-full flex items-center justify-center shadow-sm">
-            <WhatsAppIcon className="w-3.5 h-3.5 text-white" />
-          </span>
-        </button>
-      </div>
+      </section>
 
-      {/* Footer Elegante Bold & Big */}
-      <footer id="contato" className="mt-auto bg-zinc-950 text-zinc-400 py-12 px-4 sm:px-8 border-t border-zinc-800">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3.5">
-            <img
-              src="/logo-icon.png"
-              alt="AutoRecurso - Recursos de Trânsito"
-              className="w-13 h-13 sm:w-15 sm:h-15 rounded-2xl border border-amber-500/40 shadow-md object-cover bg-slate-950 flex-shrink-0"
-            />
-            <div className="flex flex-col">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 leading-none">
-                Recursos de Trânsito
-              </span>
-              <span className="text-2xl font-black text-white tracking-tight leading-none mt-1">
-                auto<span className="text-blue-500">recurso</span>
-              </span>
-            </div>
+      {/* 7. PERGUNTAS FREQUENTES (ACCORDION) */}
+      <section id="faq" className="py-20 border-t border-slate-800 bg-[#070D1F]/60 px-6 scroll-mt-20">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-[#E0B253] text-xs font-bold uppercase tracking-widest">Perguntas Frequentes</span>
+            <h2 className="text-3xl font-bold text-white mt-2">Esclarecimentos Legais</h2>
           </div>
 
-          <p className="text-xs text-zinc-500 text-center sm:text-left leading-relaxed">
-            AutoRecurso &copy; {new Date().getFullYear()} — Plataforma de Elaboração Técnica de Recursos de Trânsito.
-            <br />
-            Este sistema elabora a peça fundamentada. O protocolo final no órgão autuador cabe ao cidadão.
-          </p>
+          <div className="space-y-4">
+            {faqs.map((faq, i) => (
+              <div key={i} className="bg-[#1C2541]/60 border border-slate-800 rounded-lg overflow-hidden transition">
+                <button
+                  type="button"
+                  onClick={() => toggleFaq(i)}
+                  className="w-full px-6 py-4 text-left flex justify-between items-center text-sm font-semibold text-white hover:text-[#E0B253] cursor-pointer"
+                >
+                  <span>{faq.pergunta}</span>
+                  <span className="text-[#E0B253] text-lg font-mono ml-4">{openFaq === i ? "−" : "+"}</span>
+                </button>
+                {openFaq === i && (
+                  <div className="px-6 pb-5 text-xs text-slate-300 leading-relaxed border-t border-slate-800/80 pt-3">
+                    {faq.resposta}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <div className="flex items-center gap-4 text-xs font-semibold text-zinc-400">
-            <Link
-              href="/afiliados"
-              className="text-emerald-400 hover:underline font-bold transition flex items-center gap-1"
-            >
-              💰 Indique e Ganhe R$ 10
+      {/* 8. CANAL DE ATENDIMENTO FLUTUANTE (SUPORTE TÉCNICO WHATSAPP) */}
+      <a
+        href={whatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-3 px-4 py-3 rounded-full bg-[#1C2541] border border-[#C5A059]/50 shadow-2xl text-white hover:border-[#E0B253] transition duration-200 group"
+        aria-label="Atendimento no WhatsApp"
+      >
+        <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
+        <div className="text-left hidden sm:block">
+          <p className="text-[10px] uppercase tracking-wider text-[#94A3B8] font-bold">Suporte Técnico</p>
+          <p className="text-xs font-medium text-slate-200 group-hover:text-[#E0B253] transition">Dúvidas no WhatsApp</p>
+        </div>
+      </a>
+
+      {/* 9. RODAPÉ */}
+      <footer className="border-t border-slate-800/80 bg-[#060913] py-12 px-6">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-slate-500">
+          <div className="flex items-center gap-3">
+            <img src="/logo-icon.png" alt="AutoRecurso" className="w-8 h-8 rounded-md border border-[#C5A059]/30" />
+            <div>
+              <span className="text-slate-300 font-bold tracking-wider uppercase block leading-tight">
+                Auto<span className="text-[#E0B253]">Recurso</span>
+              </span>
+              <p className="text-[11px] text-slate-500">
+                Sistemas Tecnológicos para Elaboração de Peças Administrativas de Trânsito.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-6 text-slate-400 font-medium">
+            <Link href="/fale-conosco" className="hover:text-slate-200 transition">
+              Fale Conosco
             </Link>
-            <button
-              onClick={() => openWhatsapp()}
-              className="hover:text-emerald-400 transition flex items-center gap-1 cursor-pointer"
-            >
-              <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-400" />
-              WhatsApp
-            </button>
-            <Link href="/login" className="hover:text-white transition">
-              Acesso Restrito
+            <Link href="/afiliados" className="hover:text-[#E0B253] transition text-[#E0B253] font-semibold">
+              Programa de Afiliados (R$ 10)
+            </Link>
+            <Link href="/login" className="hover:text-slate-200 transition">
+              Área do Cliente
             </Link>
           </div>
         </div>
