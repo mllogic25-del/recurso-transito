@@ -43,8 +43,13 @@ COMO CONDUZIR A CONVERSA NO WHATSAPP:
        - Se já tem Notificação e CRLV: "Ótimo, já temos a notificação e o CRLV! Agora só falta a foto da sua CNH."
        - Se enviou os 3 juntos ou já completou os 3: "Show de bola! Recebi todos os 3 documentos principais (Notificação, CRLV e CNH)! A documentação básica está completa. Agora, para finalizarmos o cadastro: qual o seu e-mail para enviarmos a defesa pronta? E você gostaria de relatar algum detalhe do ocorrido no dia?"
    - NUNCA peça novamente um documento que o cliente já enviou nesta conversa!
-12. Se o cliente enviar áudio:
-   - Responda normalmente e com simpatia ao que ele falou.
+12. RECONHECIMENTO NATIVO DE VOZ E MENSAGENS DE ÁUDIO:
+   - Você possui audição e compreensão profunda de mensagens de voz enviadas pelo cliente no WhatsApp!
+   - Quando o cliente mandar um áudio / mensagem de voz:
+     * Ouça com atenção tudo o que ele falou (o relato de como foi a multa, desabafo, dúvidas de prazos, perguntas de valores, dados do carro ou placa).
+     * Deixe claro que você ouviu com atenção o áudio dele (ex: "Ouvi seu áudio aqui com atenção, fica tranquilo!", "Entendi perfeitamente o que você explicou no áudio sobre a situação do radar...").
+     * Responda diretamente e com empatia ao que ele falou no áudio.
+     * Se ele enviou áudio junto com fotos de documentos, cruze as informações do áudio com o que está visível nos documentos!
 13. Valores e Pagamento:
    - Explique que a confecção da defesa técnica completa e personalizada custa apenas R$ 20,00 e fica pronta rapidamente.
    - Forneça o link seguro oficial da Kiwify para pagamento via Pix ou Cartão: https://pay.kiwify.com.br/AOM7Bs9
@@ -86,6 +91,10 @@ export async function generateSamucaResponse(
       ? [mediaData]
       : [];
 
+    // Classifica os tipos de arquivos recebidos
+    const hasAudio = files.some((f) => f.mimeType.startsWith("audio/"));
+    const hasMediaDocs = files.some((f) => f.mimeType.startsWith("image/") || f.mimeType === "application/pdf");
+
     // Verifica se é uma solicitação de consulta de protocolo/status/placa/cpf
     let systemContextExtra = "";
     const lowerMsg = (userMessage || "").toLowerCase();
@@ -112,7 +121,7 @@ export async function generateSamucaResponse(
 
     const currentParts: any[] = [];
 
-    // Anexa todos os arquivos do lote (seja 1 ou múltiplos)
+    // Anexa todos os arquivos do lote (seja áudios, fotos ou PDFs)
     for (const file of files) {
       if (file && file.buffer) {
         const cleanMimeType = file.mimeType.split(";")[0].trim();
@@ -125,15 +134,24 @@ export async function generateSamucaResponse(
       }
     }
 
-    // Adiciona o texto ou prompt padrão enriquecido
-    let textPrompt =
-      userMessage && userMessage.trim()
-        ? userMessage
-        : files.length > 1
-        ? `Analise estes ${files.length} documentos/fotos que acabei de enviar juntos. Identifique cada um deles individualmente (Notificação/AIT de multa, CRLV, CNH, Comprovante, etc.), confira com os que já te mandei antes e me diga o que encontrou e se ainda falta algum documento para dar entrada no recurso.`
-        : files.length === 1
-        ? "Analise esta foto ou documento que acabei de enviar. Identifique exatamente o que é (CNH, CRLV, Notificação de Multa ou outro), confira com os que já te mandei antes e me diga o que encontrou e se ainda falta algum documento."
-        : "Olá";
+    // Adiciona o prompt contextualizado para voz, fotos ou texto
+    let textPrompt = "";
+    if (userMessage && userMessage.trim()) {
+      textPrompt = userMessage;
+      if (hasAudio) {
+        textPrompt += "\n[Nota do Sistema: O cliente também enviou um áudio / mensagem de voz. Ouça atentamente e responda ao que ele falou no áudio!]";
+      }
+    } else if (hasAudio && hasMediaDocs) {
+      textPrompt = "Analise os documentos e fotos enviados e ouça atentamente a mensagem de voz do cliente. Conecte o que ele relatou no áudio com os documentos para responder de forma completa e personalizada.";
+    } else if (hasAudio) {
+      textPrompt = "Ouça atentamente esta mensagem de voz enviada pelo cliente. Transcreva e compreenda tudo o que ele falou (relato da multa, dúvidas, placas, dados) e responda de forma acolhedora, humana e prestativa diretamente ao áudio dele.";
+    } else if (files.length > 1) {
+      textPrompt = `Analise estes ${files.length} documentos/fotos que acabei de enviar juntos. Identifique cada um deles individualmente (Notificação/AIT de multa, CRLV, CNH, Comprovante, etc.), confira com os que já te mandei antes e me diga o que encontrou e se ainda falta algum documento para dar entrada no recurso.`;
+    } else if (files.length === 1) {
+      textPrompt = "Analise esta foto ou documento que acabei de enviar. Identifique exatamente o que é (CNH, CRLV, Notificação de Multa ou outro), confira com os que já te mandei antes e me diga o que encontrou e se ainda falta algum documento.";
+    } else {
+      textPrompt = "Olá";
+    }
 
     if (systemContextExtra) {
       textPrompt += `\n${systemContextExtra}`;
@@ -186,9 +204,13 @@ export async function generateSamucaResponse(
 
           // Salva no histórico mantendo o contexto rico
           const userSummary = userMessage
-            ? userMessage
-            : mediaData
-            ? "[Enviou foto / documento de trânsito]"
+            ? hasAudio
+              ? `${userMessage} [Mensagem de voz/áudio enviada]`
+              : userMessage
+            : hasAudio
+            ? "[Enviou mensagem de voz / áudio relatando o caso]"
+            : files.length > 0
+            ? `[Enviou ${files.length} documento(s) / foto(s)]`
             : "Olá";
 
           history.push({
