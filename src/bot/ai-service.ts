@@ -66,9 +66,9 @@ COMO CONDUZIR A CONVERSA NO WHATSAPP:
      1. Como participar: Basta acessar nosso site oficial no menu "Indique & Ganhe" (ou no link /afiliados) e cadastrar seu nome e sua chave Pix em menos de 1 minuto. O cadastro é 100% gratuito e imediato.
      2. Seu link exclusivo: O sistema gera um link exclusivo só seu (ex: autorecurso.com.br/cadastro?ref=SEU_CODIGO).
      3. Como divulgar: Você envia esse link pelo WhatsApp para amigos, parentes ou grupos de motoristas (Uber, 99, táxi, caminhoneiros) que tomaram multas.
-     4. Pagamento de R$ 10 por indicação: Cada vez que a pessoa indicada entrar pelo seu link e contratar a defesa técnica de R$ 30,00, você ganha R$ 10,00 limpos, direto na sua chave Pix cadastrada!
-     5. Sem limites de indicações: Você pode indicar quantas pessoas quiser! Se indicar 10 pessoas, recebe R$ 100,00 no Pix. Se indicar 50 pessoas, recebe R$ 500,00 no Pix!
-     6. Confirmação: A comissão fica registrada no seu painel de afiliado e é paga via Pix assim que o pagamento do recurso do cliente indicado for confirmado.
+     4. Pagamento de R$ 10 por indicação (paga por uma única peça de cada cliente indicado): A comissão de R$ 10,00 no Pix é paga uma única vez por cada novo cliente indicado (na primeira peça/recurso que ele fechar conosco). Se esse mesmo cliente fizer novas peças no futuro, a comissão já foi concedida pela indicação inicial.
+     5. Como lucrar mais com indicações: O segredo para lucrar alto é trazer novos amigos e motoristas! Você pode indicar quantos clientes novos quiser. Se indicar 10 novos motoristas que fecharem recurso, você recebe R$ 100,00 no Pix. Se indicar 50 motoristas novos, recebe R$ 500,00 no Pix!
+     6. Confirmação: A comissão fica registrada no seu painel de afiliado e é paga via Pix assim que o pagamento do primeiro recurso do cliente indicado for confirmado.
    - SE O CLIENTE JÁ VEIO INDICADO POR ALGUÉM:
      * Se a mensagem contiver "[Indicação: CODIGO]", confirme com carinho: "Show de bola! Vi que você veio indicado pelo código [CODIGO]. Vamos cuidar do seu caso com prioridade!".
      * Se ele disser quem indicou ou o código: "Perfeito! Já registrei aqui a indicação com sucesso no seu atendimento."

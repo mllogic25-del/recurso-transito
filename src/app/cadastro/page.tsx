@@ -130,7 +130,7 @@ function CadastroForm() {
                   <img
                     src="/logo-icon.png"
                     alt="AutoRecurso - Recursos de Trânsito"
-                    className="w-13 h-13 sm:w-15 sm:h-15 rounded-2xl border border-amber-500/40 shadow-md object-cover bg-slate-950 flex-shrink-0"
+                    className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl border border-amber-500/40 shadow-md object-cover bg-slate-950 flex-shrink-0"
                   />
                   <div className="flex flex-col">
                     <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-zinc-400 leading-none">
