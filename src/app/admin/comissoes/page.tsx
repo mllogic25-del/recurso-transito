@@ -62,8 +62,9 @@ export default function AdminComissoesPage() {
     setTimeout(() => setCopiedKeyId(null), 2500);
   };
 
-  const handleMarkAsPaid = async (commissionId: string) => {
-    if (!confirm("Confirmar que você já realizou o repasse de R$ 10,00 via Pix para este indicador?")) {
+  const handleMarkAsPaid = async (commissionId: string, affiliateName?: string, affiliateCpf?: string) => {
+    const titularDesc = affiliateName ? ` para ${affiliateName}${affiliateCpf ? ` (CPF: ${affiliateCpf})` : ""}` : "";
+    if (!confirm(`Confirmar que você já realizou o repasse de R$ 10,00 via Pix${titularDesc} conferindo a mesma titularidade?`)) {
       return;
     }
 
@@ -234,6 +235,19 @@ export default function AdminComissoesPage() {
           </div>
         </div>
 
+        {/* Aviso de mesma titularidade obrigatória */}
+        <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 flex items-start gap-3 text-amber-950 text-xs sm:text-sm">
+          <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div>
+            <span className="font-extrabold block text-amber-900 mb-0.5">
+              Regra Obrigatória de Titularidade do Pix:
+            </span>
+            <span>
+              O repasse de R$ 10,00 só é válido e deve ser realizado exclusivamente para conta bancária do <strong>mesmo titular (mesmo Nome e CPF)</strong> cadastrado do parceiro. Chaves de terceiros ou outro titular <strong>não são válidas</strong>.
+            </span>
+          </div>
+        </div>
+
         {/* Filtros e Busca */}
         <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -315,6 +329,9 @@ export default function AdminComissoesPage() {
 
                         <td className="py-3.5 px-4">
                           <p className="font-bold text-slate-900">{c.affiliateName}</p>
+                          <p className="text-[11px] text-slate-600 font-mono font-bold">
+                            CPF: {c.affiliateCpf || "Não informado"}
+                          </p>
                           <p className="text-[11px] text-slate-500">{c.affiliatePhone}</p>
                         </td>
 
@@ -338,6 +355,9 @@ export default function AdminComissoesPage() {
                               )}
                             </button>
                           </div>
+                          <span className="text-[10px] text-slate-500 font-medium block mt-1">
+                            Titular exigido: <strong>{c.affiliateName}</strong>
+                          </span>
                         </td>
 
                         <td className="py-3.5 px-4">
@@ -370,7 +390,7 @@ export default function AdminComissoesPage() {
                         <td className="py-3.5 px-4 text-right whitespace-nowrap">
                           {isPending ? (
                             <button
-                              onClick={() => handleMarkAsPaid(c.id)}
+                              onClick={() => handleMarkAsPaid(c.id, c.affiliateName, c.affiliateCpf)}
                               disabled={processingId === c.id}
                               className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-1.5 px-3 rounded-lg shadow-xs transition cursor-pointer disabled:opacity-50"
                             >

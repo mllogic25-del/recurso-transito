@@ -73,6 +73,11 @@ export default function AutoRecursoLandingPage() {
       resposta:
         "Se o prazo tiver sido ultrapassado por falta de envio ou falha de entrega pelo órgão, o sistema estrutura a tese preliminar de decadência ou nulidade por inobservância do Artigo 281 do CTB e Súmula 312 do STJ.",
     },
+    {
+      pergunta: "Como funciona o Indique & Ganhe e o repasse no Pix?",
+      resposta:
+        "Ao se cadastrar como parceiro, você gera seu link exclusivo. A cada indicado que emitir e pagar um recurso, você recebe R$ 10,00 no Pix em até 72 horas. Importante: a chave Pix informada deve ser obrigatoriamente da mesma titularidade (mesmo Nome e CPF) do seu cadastro. Chaves de outro titular não são válidas.",
+    },
   ];
 
   const infracoes = [
@@ -386,7 +391,7 @@ export default function AutoRecursoLandingPage() {
                 <span className="text-xs font-bold text-blue-600 uppercase tracking-wider block mb-1">Passo 1</span>
                 <h3 className="text-base font-bold text-slate-900 mb-2">Pegue seu Link Único</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Cadastre sua chave Pix em 30 segundos no painel de afiliados e receba seu link exclusivo.
+                  Cadastre-se com seu Nome, CPF e chave Pix de mesma titularidade para gerar seu link exclusivo.
                 </p>
               </div>
 
@@ -408,7 +413,7 @@ export default function AutoRecursoLandingPage() {
                 <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block mb-1">Passo 3</span>
                 <h3 className="text-base font-bold text-slate-900 mb-2">Receba R$ 10 no Pix</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  A cada cliente que contratar o recurso, R$ 10,00 caem diretamente na sua chave Pix em até 72 horas!
+                  A cada cliente que contratar o recurso, R$ 10,00 caem no seu Pix em até 72h (conta no mesmo nome e CPF do cadastro)!
                 </p>
               </div>
             </div>
@@ -417,7 +422,7 @@ export default function AutoRecursoLandingPage() {
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
               <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Sem taxa de adesão • 100% gratuito • Acesso instantâneo</span>
+                <span>100% gratuito • A chave Pix deve ser no mesmo nome e CPF do cadastro</span>
               </div>
 
               <Link

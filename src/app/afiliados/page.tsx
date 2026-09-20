@@ -11,6 +11,7 @@ import {
   AlertCircle,
   ArrowRight,
   ShieldCheck,
+  ShieldAlert,
   Zap,
   Info,
   User,
@@ -18,6 +19,7 @@ import {
   Lock,
   Phone,
   HelpCircle,
+  CreditCard,
 } from "lucide-react";
 
 export default function AfiliadosPage() {
@@ -28,6 +30,7 @@ export default function AfiliadosPage() {
     email: "",
     password: "",
     phone: "",
+    cpf: "",
     pixKeyType: "CPF",
     pixKey: "",
   });
@@ -35,15 +38,56 @@ export default function AfiliadosPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const formatCpf = (value: string) => {
+    const digits = value.replace(/\D/g, "").slice(0, 11);
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `${digits.slice(0, 3)}.${digits.slice(3)}`;
+    if (digits.length <= 9) return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6)}`;
+    return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9, 11)}`;
+  };
+
+  const handleCpfChange = (val: string) => {
+    const formatted = formatCpf(val);
+    setFormData((prev) => ({
+      ...prev,
+      cpf: formatted,
+      pixKey: prev.pixKeyType === "CPF" ? formatted : prev.pixKey,
+    }));
+  };
+
+  const handlePixKeyTypeChange = (type: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      pixKeyType: type,
+      pixKey: type === "CPF" ? prev.cpf : prev.pixKey,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
+    const cleanCpfDigits = formData.cpf.replace(/\D/g, "");
+    if (cleanCpfDigits.length !== 11) {
+      setError("Por favor, informe um CPF válido com 11 dígitos para comprovação da titularidade.");
+      setLoading(false);
+      return;
+    }
+
     if (!formData.pixKey.trim()) {
       setError("Por favor, informe sua Chave Pix para receber as comissões.");
       setLoading(false);
       return;
+    }
+
+    if (formData.pixKeyType === "CPF") {
+      const cleanPixDigits = formData.pixKey.replace(/\D/g, "");
+      if (cleanPixDigits !== cleanCpfDigits) {
+        setError("A Chave Pix do tipo CPF deve ser idêntica ao seu CPF cadastrado. Chave de outro titular não é permitida.");
+        setLoading(false);
+        return;
+      }
     }
 
     try {
@@ -96,7 +140,7 @@ export default function AfiliadosPage() {
             <span>Regras Claras e Transparência do Programa de Indicação</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm text-amber-950">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs sm:text-sm text-amber-950">
             <div className="bg-white/90 p-4 rounded-2xl border border-amber-200 space-y-1.5">
               <p className="font-extrabold text-emerald-700 flex items-center gap-1.5 text-sm">
                 <DollarSign className="w-4 h-4 text-emerald-600" /> R$ 10,00 no seu Pix
@@ -119,7 +163,16 @@ export default function AfiliadosPage() {
                 <ShieldCheck className="w-4 h-4 text-purple-600" /> 1 única vez por indicado
               </p>
               <p className="text-slate-600">
-                Cada pessoa indicada gera comissão apenas uma única vez (no primeiro recurso pago). Se o indicado já tiver cadastro prévio no sistema, o sistema detecta e informa.
+                Cada pessoa indicada gera comissão apenas uma única vez (no primeiro recurso pago).
+              </p>
+            </div>
+
+            <div className="bg-white/90 p-4 rounded-2xl border border-red-200 space-y-1.5">
+              <p className="font-extrabold text-red-700 flex items-center gap-1.5 text-sm">
+                <ShieldAlert className="w-4 h-4 text-red-600" /> Mesmo Titular (Nome e CPF)
+              </p>
+              <p className="text-slate-600">
+                A chave Pix deve ser obrigatoriamente do mesmo Nome e CPF do cadastro. Chave de outro titular não é válida nem receberá o pagamento.
               </p>
             </div>
           </div>
@@ -238,20 +291,39 @@ export default function AfiliadosPage() {
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                WhatsApp / Telefone para Contato *
-              </label>
-              <div className="relative">
-                <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
-                <input
-                  type="text"
-                  required
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="(DDD) 99999-9999"
-                  className="w-full pl-9 pr-4 py-3 rounded-xl border border-slate-300 text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 outline-none"
-                />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  WhatsApp / Telefone para Contato *
+                </label>
+                <div className="relative">
+                  <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
+                  <input
+                    type="text"
+                    required
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="(DDD) 99999-9999"
+                    className="w-full pl-9 pr-4 py-3 rounded-xl border border-slate-300 text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Seu CPF (Titular da Chave Pix) *
+                </label>
+                <div className="relative">
+                  <CreditCard className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
+                  <input
+                    type="text"
+                    required
+                    value={formData.cpf}
+                    onChange={(e) => handleCpfChange(e.target.value)}
+                    placeholder="000.000.000-00"
+                    className="w-full pl-9 pr-4 py-3 rounded-xl border border-slate-300 text-sm focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 outline-none font-mono"
+                  />
+                </div>
               </div>
             </div>
 
@@ -262,6 +334,14 @@ export default function AfiliadosPage() {
                 <span>Dados da Chave Pix para Recebimento</span>
               </div>
 
+              {/* AVISO DE MESMA TITULARIDADE */}
+              <div className="bg-amber-100/90 border border-amber-300 rounded-xl p-3 text-amber-950 text-xs font-semibold flex items-start gap-2">
+                <ShieldAlert className="w-4 h-4 text-amber-700 flex-shrink-0 mt-0.5" />
+                <span>
+                  <strong>Regra Obrigatória de Titularidade:</strong> A conta bancária e chave Pix devem pertencer <u>obrigatoriamente</u> à mesma pessoa cadastrada (mesmo Nome e CPF). Chaves de outro titular ou terceiros <strong>não são válidas</strong> e não receberão o valor.
+                </span>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="block text-[11px] font-bold text-slate-700 mb-1">
@@ -269,10 +349,10 @@ export default function AfiliadosPage() {
                   </label>
                   <select
                     value={formData.pixKeyType}
-                    onChange={(e) => setFormData({ ...formData, pixKeyType: e.target.value })}
+                    onChange={(e) => handlePixKeyTypeChange(e.target.value)}
                     className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs bg-white focus:border-emerald-600 outline-none font-medium"
                   >
-                    <option value="CPF">CPF</option>
+                    <option value="CPF">CPF (Mesmo do Titular)</option>
                     <option value="EMAIL">E-mail</option>
                     <option value="TELEFONE">Telefone</option>
                     <option value="ALEATORIA">Chave Aleatória</option>
@@ -288,9 +368,14 @@ export default function AfiliadosPage() {
                     required
                     value={formData.pixKey}
                     onChange={(e) => setFormData({ ...formData, pixKey: e.target.value })}
-                    placeholder="Digite sua chave Pix"
+                    placeholder={formData.pixKeyType === "CPF" ? "000.000.000-00" : "Digite sua chave Pix"}
                     className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs bg-white focus:border-emerald-600 outline-none font-mono font-bold"
                   />
+                  {formData.pixKeyType === "CPF" && (
+                    <span className="text-[10px] text-emerald-700 font-semibold block mt-1">
+                      ✓ Preenchida automaticamente com seu CPF de titular.
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

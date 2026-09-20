@@ -19,6 +19,7 @@ import {
   Zap,
   ArrowRight,
   Info,
+  ShieldAlert,
 } from "lucide-react";
 
 export default function AfiliadoDashboardPage() {
@@ -34,6 +35,7 @@ export default function AfiliadoDashboardPage() {
   const [pixKey, setPixKey] = useState("");
   const [savingPix, setSavingPix] = useState(false);
   const [pixSuccess, setPixSuccess] = useState("");
+  const [pixError, setPixError] = useState("");
 
   const fetchAffiliateData = async () => {
     try {
@@ -87,6 +89,18 @@ export default function AfiliadoDashboardPage() {
 
   const handleSavePix = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPixError("");
+    setPixSuccess("");
+
+    if (pixType === "CPF" && data?.userCpf) {
+      const cleanPixDigits = pixKey.replace(/\D/g, "");
+      const cleanCpfDigits = data.userCpf.replace(/\D/g, "");
+      if (cleanPixDigits !== cleanCpfDigits) {
+        setPixError(`A Chave Pix do tipo CPF deve ser idêntica ao seu CPF cadastrado (${data.userCpf}). Chaves de outro titular não são permitidas.`);
+        return;
+      }
+    }
+
     setSavingPix(true);
     try {
       const res = await fetch("/api/affiliates/update-pix", {
@@ -94,16 +108,19 @@ export default function AfiliadoDashboardPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pixKeyType: pixType, pixKey }),
       });
-      if (res.ok) {
-        setPixSuccess("Chave Pix atualizada com sucesso!");
-        fetchAffiliateData();
-        setTimeout(() => {
-          setPixSuccess("");
-          setShowPixModal(false);
-        }, 1500);
+      const resJson = await res.json();
+      if (!res.ok) {
+        setPixError(resJson.error || "Erro ao atualizar chave Pix.");
+        return;
       }
+      setPixSuccess("Chave Pix atualizada com sucesso!");
+      fetchAffiliateData();
+      setTimeout(() => {
+        setPixSuccess("");
+        setShowPixModal(false);
+      }, 1500);
     } catch {
-      alert("Erro ao atualizar chave Pix.");
+      setPixError("Erro ao comunicar com o servidor.");
     } finally {
       setSavingPix(false);
     }
@@ -163,9 +180,21 @@ export default function AfiliadoDashboardPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <div className="text-left sm:text-right text-[11px] text-slate-500 font-medium">
+              Titular: <strong className="text-slate-800">{data.userName}</strong>
+              {data.userCpf && (
+                <span className="block text-[10px] text-slate-500 font-mono">
+                  CPF: {data.userCpf}
+                </span>
+              )}
+            </div>
             <button
-              onClick={() => setShowPixModal(true)}
+              onClick={() => {
+                setPixError("");
+                setPixSuccess("");
+                setShowPixModal(true);
+              }}
               className="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-bold text-xs py-2.5 px-4 rounded-xl shadow-xs transition flex items-center gap-2 cursor-pointer"
             >
               <Zap className="w-4 h-4 text-emerald-600" />
@@ -440,6 +469,21 @@ export default function AfiliadoDashboardPage() {
               Informe a chave Pix onde deseja receber suas comissões de R$ 10,00.
             </p>
 
+            {/* Aviso de mesma titularidade obrigatória */}
+            <div className="mb-4 p-3 rounded-xl bg-amber-50 border border-amber-300 text-amber-950 text-xs font-semibold flex items-start gap-2">
+              <ShieldAlert className="w-4 h-4 text-amber-700 flex-shrink-0 mt-0.5" />
+              <span>
+                <strong>Regra Obrigatória:</strong> A conta e chave Pix devem pertencer obrigatoriamente a você: <strong>{data?.userName}</strong>{data?.userCpf ? ` (CPF: ${data.userCpf})` : ""}. Chaves de outro titular <u>não são válidas</u>.
+              </span>
+            </div>
+
+            {pixError && (
+              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-bold flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
+                <span>{pixError}</span>
+              </div>
+            )}
+
             {pixSuccess && (
               <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
@@ -454,10 +498,16 @@ export default function AfiliadoDashboardPage() {
                 </label>
                 <select
                   value={pixType}
-                  onChange={(e) => setPixType(e.target.value)}
+                  onChange={(e) => {
+                    const newType = e.target.value;
+                    setPixType(newType);
+                    if (newType === "CPF" && data?.userCpf) {
+                      setPixKey(data.userCpf);
+                    }
+                  }}
                   className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs bg-white focus:border-emerald-600 outline-none font-medium"
                 >
-                  <option value="CPF">CPF</option>
+                  <option value="CPF">CPF (Mesmo do Titular)</option>
                   <option value="EMAIL">E-mail</option>
                   <option value="TELEFONE">Telefone</option>
                   <option value="ALEATORIA">Chave Aleatória</option>
@@ -475,6 +525,11 @@ export default function AfiliadoDashboardPage() {
                   onChange={(e) => setPixKey(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-mono font-bold focus:border-emerald-600 outline-none"
                 />
+                {pixType === "CPF" && data?.userCpf && (
+                  <span className="text-[10px] text-emerald-700 font-semibold block mt-1">
+                    ✓ Preenchida com seu CPF ({data.userCpf}).
+                  </span>
+                )}
               </div>
 
               <div className="flex gap-2 pt-2">

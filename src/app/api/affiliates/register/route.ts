@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, signToken } from "@/lib/auth";
 
@@ -19,13 +19,35 @@ function generateReferralCode(name: string): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, password, phone, pixKeyType, pixKey } = body;
+    const { name, email, password, phone, cpf, pixKeyType, pixKey } = body;
 
-    if (!name || !email || !password || !pixKey) {
+    if (!name || !email || !password || !pixKey || !cpf) {
       return NextResponse.json(
-        { error: "Nome, e-mail, senha e Chave Pix são obrigatórios." },
+        { error: "Nome, CPF, e-mail, senha e Chave Pix são obrigatórios." },
         { status: 400 }
       );
+    }
+
+    const cleanCpfDigits = cpf.replace(/\D/g, "");
+    if (cleanCpfDigits.length !== 11) {
+      return NextResponse.json(
+        { error: "Por favor, informe um CPF válido com 11 dígitos." },
+        { status: 400 }
+      );
+    }
+
+    const formattedCpf = `${cleanCpfDigits.slice(0, 3)}.${cleanCpfDigits.slice(3, 6)}.${cleanCpfDigits.slice(6, 9)}-${cleanCpfDigits.slice(9, 11)}`;
+
+    // Validação de Titularidade: se a chave Pix for do tipo CPF, deve ser exatamente o mesmo CPF cadastrado
+    const normalizedPixType = pixKeyType || "CPF";
+    if (normalizedPixType === "CPF") {
+      const cleanPixDigits = pixKey.replace(/\D/g, "");
+      if (cleanPixDigits !== cleanCpfDigits) {
+        return NextResponse.json(
+          { error: "A Chave Pix do tipo CPF deve ser idêntica ao CPF cadastrado. Chave de outro titular não é permitida." },
+          { status: 400 }
+        );
+      }
     }
 
     const cleanEmail = email.toLowerCase().trim();
@@ -39,6 +61,15 @@ export async function POST(request: Request) {
     if (existingUser) {
       // Se já tem usuário mas não tem perfil de afiliado, adiciona
       if (!existingUser.affiliateProfile) {
+        // Atualiza CPF do usuário se ainda não estiver salvo
+        if (!existingUser.cpf) {
+          await prisma.user.update({
+            where: { id: existingUser.id },
+            data: { cpf: formattedCpf },
+          });
+          existingUser.cpf = formattedCpf;
+        }
+
         let code = generateReferralCode(existingUser.name);
         while (await prisma.affiliate.findUnique({ where: { referralCode: code } })) {
           code = generateReferralCode(existingUser.name);
@@ -48,7 +79,7 @@ export async function POST(request: Request) {
           data: {
             userId: existingUser.id,
             referralCode: code,
-            pixKeyType: pixKeyType || "CPF",
+            pixKeyType: normalizedPixType,
             pixKey: pixKey.trim(),
           },
         });
@@ -94,6 +125,7 @@ export async function POST(request: Request) {
         email: cleanEmail,
         passwordHash,
         phone: phone ? phone.trim() : null,
+        cpf: formattedCpf,
         role: "CLIENT",
       },
     });
@@ -108,7 +140,7 @@ export async function POST(request: Request) {
       data: {
         userId: user.id,
         referralCode: code,
-        pixKeyType: pixKeyType || "CPF",
+        pixKeyType: normalizedPixType,
         pixKey: pixKey.trim(),
       },
     });
