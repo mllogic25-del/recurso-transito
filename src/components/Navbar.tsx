@@ -53,18 +53,17 @@ export default function Navbar() {
     <header className="bg-white/95 backdrop-blur-md text-zinc-900 border-b border-zinc-200/80 sticky top-0 z-50 no-print transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 sm:h-22 items-center py-2">
-          {/* Logo Estilo Bold & Big */}
-          <Link href="/" className="flex items-center gap-3.5 group">
+          <Link href="/" className="flex items-center gap-3 sm:gap-3.5 group flex-shrink-0">
             <img
               src="/samuca.png"
               alt="AutoRecurso - Samuca"
               className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-emerald-400 shadow-md group-hover:scale-105 transition-all duration-200 object-cover bg-white flex-shrink-0"
             />
-            <div className="flex flex-col">
-              <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-zinc-400 leading-none">
+            <div className="flex flex-col whitespace-nowrap">
+              <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] text-zinc-400 leading-none">
                 Recursos de Trânsito
               </span>
-              <span className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-950 leading-none mt-1">
+              <span className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight text-zinc-950 leading-none mt-1">
                 auto<span className="text-blue-600">recurso</span>
               </span>
             </div>

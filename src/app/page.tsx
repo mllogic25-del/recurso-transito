@@ -280,26 +280,16 @@ export default function HomePage() {
             <div className="absolute bottom-0 left-0 w-56 h-56 bg-indigo-500/10 rounded-full blur-2xl -ml-10 -mb-10 pointer-events-none" />
 
             <div className="relative z-10">
-              <div className="flex items-center justify-between gap-4 mb-6">
-                <div className="flex items-center gap-3.5">
-                  <img
-                    src="/samuca.png"
-                    alt="AutoRecurso - Samuca"
-                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 sm:border-3 border-emerald-400 shadow-xl object-cover bg-white flex-shrink-0"
-                  />
-                  <div className="flex flex-col">
-                    <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-zinc-400 leading-none">
-                      Recursos de Trânsito
-                    </span>
-                    <span className="text-2xl sm:text-3xl font-black tracking-tight text-white leading-none mt-1">
-                      auto<span className="text-blue-400">recurso</span>
-                    </span>
-                  </div>
-                </div>
-                <span className="bg-white/10 text-zinc-200 text-[11px] font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-white/15 backdrop-blur-md">
-                  Processo 100% Online
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+                <span className="bg-emerald-500/20 text-emerald-300 text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-emerald-400/30 backdrop-blur-md flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  Inteligência Artificial + Revisão Técnica
+                </span>
+                <span className="bg-white/10 text-zinc-300 text-[11px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full border border-white/15 backdrop-blur-md whitespace-nowrap">
+                  100% Online
                 </span>
               </div>
+
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1]">
                 <span className="text-white">auto</span>
                 <span className="text-blue-400">recurso</span>
@@ -308,29 +298,43 @@ export default function HomePage() {
                   para todas as multas de trânsito
                 </span>
               </h1>
-              <p className="text-zinc-400 text-xs sm:text-sm mt-4 max-w-md leading-relaxed font-medium">
+              <p className="text-zinc-400 text-xs sm:text-sm mt-3 max-w-lg leading-relaxed font-medium">
                 Elaboramos sua petição fundamentada no Código de Trânsito Brasileiro e nas Resoluções vigentes do CONTRAN. Rápido, seguro e sem sair de casa.
               </p>
             </div>
 
-            {/* Destaque do Mascote Samuca Oficial */}
-            <div className="my-6 p-4 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-md flex items-center gap-4 relative z-10">
-              <img
-                src="/samuca.png"
-                alt="Samuca - Defesa de Autuações de Trânsito"
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-3 border-emerald-400 shadow-2xl object-cover bg-white flex-shrink-0"
-              />
-              <div className="text-xs text-zinc-300">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="font-black text-white text-sm">Samuca IA</span>
-                  <span className="text-[10px] bg-emerald-500/30 text-emerald-300 font-extrabold px-2 py-0.5 rounded-full border border-emerald-400/40 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    Online no WhatsApp
+            {/* Destaque Grande do Mascote Samuca Oficial - 100% Legível e Nítido */}
+            <div className="my-6 p-5 sm:p-6 rounded-3xl bg-white/10 border border-white/15 backdrop-blur-md flex flex-col sm:flex-row items-center gap-6 relative z-10 shadow-2xl">
+              <div className="relative flex-shrink-0">
+                <img
+                  src="/samuca.png"
+                  alt="Samuca - Defesa de Autuações de Trânsito"
+                  className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-emerald-400 shadow-2xl object-cover bg-white"
+                />
+                <span className="absolute bottom-0 right-0 bg-emerald-500 text-zinc-950 text-[10px] font-black px-2.5 py-0.5 rounded-full border-2 border-zinc-950 shadow-md flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-950 animate-pulse" />
+                  ONLINE
+                </span>
+              </div>
+              <div className="text-center sm:text-left flex-1">
+                <div className="flex items-center justify-center sm:justify-start gap-2 mb-1.5">
+                  <span className="font-black text-white text-lg sm:text-xl">Samuca Oficial</span>
+                  <span className="text-[10px] sm:text-xs bg-emerald-500/30 text-emerald-300 font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-400/40">
+                    Defesa de Multas
                   </span>
                 </div>
-                <p className="text-zinc-200 leading-relaxed font-medium">
-                  "Oi! Eu analiso sua multa, leio seus documentos e tiro dúvidas de trânsito em tempo real pelo WhatsApp!"
+                <p className="text-zinc-200 text-xs sm:text-sm leading-relaxed font-medium">
+                  "Oi! Eu analiso sua multa, identifico erros no Auto de Infração e tiro dúvidas de trânsito em tempo real pelo WhatsApp!"
                 </p>
+                <div className="mt-3.5">
+                  <button
+                    onClick={() => openWhatsapp("Olá, Samuca! Gostaria de uma análise para recorrer de uma multa.")}
+                    className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-lg transition transform hover:scale-105"
+                  >
+                    <WhatsAppIcon className="w-4 h-4" />
+                    Chamar Samuca no WhatsApp
+                  </button>
+                </div>
               </div>
             </div>
 
