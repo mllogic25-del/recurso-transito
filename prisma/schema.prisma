@@ -139,3 +139,10 @@ model Commission {
   // Garante que o indicador recebe no máximo uma comissão por cliente indicado
   @@unique([affiliateId, referredUserId])
 }
+
+// Armazenamento persistente das sessões e chaves do WhatsApp (Baileys) na nuvem/PostgreSQL
+model WhatsappSession {
+  id        String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}

@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/prisma-prepare.js",
     "build": "prisma generate && prisma db push && next build",
     "start": "node start.js",
     "lint": "next lint",
     "whatsapp": "tsx src/bot/whatsapp.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "node scripts/prisma-prepare.js && prisma generate"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

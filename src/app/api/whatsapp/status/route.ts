@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { spawn } from "child_process";
 import { getCurrentUser } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 // Mantém referência do processo do bot na memória global do Node
 declare global {
@@ -39,6 +40,18 @@ function startBotProcess() {
 
 export async function GET() {
   try {
+    // 1. Tenta buscar primeiro do Banco de Dados (mais confiável na nuvem/Render)
+    try {
+      const dbStatus = await prisma.whatsappSession.findUnique({
+        where: { id: "samuca_STATUS" },
+      });
+      if (dbStatus && dbStatus.value) {
+        const data = JSON.parse(dbStatus.value);
+        return NextResponse.json(data);
+      }
+    } catch (_) {}
+
+    // 2. Fallback: arquivo local whatsapp-status.json
     const statusFile = path.resolve(process.cwd(), "public", "whatsapp-status.json");
 
     if (fs.existsSync(statusFile)) {

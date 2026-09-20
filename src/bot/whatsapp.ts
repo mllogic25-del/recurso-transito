@@ -1,6 +1,5 @@
 import makeWASocket, {
   DisconnectReason,
-  useMultiFileAuthState,
   fetchLatestBaileysVersion,
   downloadMediaMessage,
 } from "@whiskeysockets/baileys";
@@ -10,6 +9,8 @@ import pino from "pino";
 import path from "path";
 import * as dotenv from "dotenv";
 import { generateSamucaResponse } from "./ai-service";
+import { usePrismaAuthState } from "./prisma-auth";
+import { prisma } from "../lib/prisma";
 
 dotenv.config();
 
@@ -24,11 +25,28 @@ async function startBot() {
     console.warn("=======================================================\n");
   }
 
-  const authFolder = path.resolve(process.cwd(), "auth_whatsapp_samuca");
-  const { state, saveCreds } = await useMultiFileAuthState(authFolder);
+  const { state, saveCreds, clearState } = await usePrismaAuthState("samuca");
   const { version, isLatest } = await fetchLatestBaileysVersion();
 
   console.log(`[Samuca WhatsApp] Iniciando com versão Baileys v${version.join(".")} (Última: ${isLatest})`);
+
+  const updateStatus = async (status: "STARTING" | "QR_READY" | "CONNECTED" | "DISCONNECTED", qrDataUrl: string | null = null) => {
+    const payload = { status, qr: qrDataUrl, updatedAt: new Date().toISOString() };
+    try {
+      await prisma.whatsappSession.upsert({
+        where: { id: "samuca_STATUS" },
+        create: { id: "samuca_STATUS", value: JSON.stringify(payload) },
+        update: { value: JSON.stringify(payload) },
+      });
+    } catch (_) {}
+
+    try {
+      const fs = await import("fs");
+      const publicDir = path.resolve(process.cwd(), "public");
+      if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
+      fs.writeFileSync(path.join(publicDir, "whatsapp-status.json"), JSON.stringify(payload));
+    } catch (_) {}
+  };
 
   const sock = makeWASocket({
     version,
@@ -52,15 +70,9 @@ async function startBot() {
       qrcode.generate(qr, { small: true });
 
       try {
-        const fs = await import("fs");
         const QRCode = (await import("qrcode")).default;
         const dataUrl = await QRCode.toDataURL(qr, { margin: 2, scale: 8 });
-        const publicDir = path.resolve(process.cwd(), "public");
-        if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
-        fs.writeFileSync(
-          path.join(publicDir, "whatsapp-status.json"),
-          JSON.stringify({ status: "QR_READY", qr: dataUrl, updatedAt: new Date().toISOString() })
-        );
+        await updateStatus("QR_READY", dataUrl);
       } catch (qrErr) {
         console.error("Erro ao salvar status QR:", qrErr);
       }
@@ -71,24 +83,14 @@ async function startBot() {
       const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
       console.log(`[Samuca WhatsApp] Conexão encerrada. Motivo: ${statusCode}.`);
 
-      try {
-        const fs = await import("fs");
-        const publicDir = path.resolve(process.cwd(), "public");
-        fs.writeFileSync(
-          path.join(publicDir, "whatsapp-status.json"),
-          JSON.stringify({ status: "DISCONNECTED", qr: null, updatedAt: new Date().toISOString() })
-        );
-      } catch (_) {}
+      await updateStatus("DISCONNECTED", null);
 
       if (shouldReconnect) {
         console.log("[Samuca WhatsApp] Reconectando em 3 segundos...");
         setTimeout(startBot, 3000);
       } else {
         console.log("[Samuca WhatsApp] Sessão desconectada ou expirada. Gerando novo QR Code...");
-        const fs = await import("fs");
-        if (fs.existsSync(authFolder)) {
-          fs.rmSync(authFolder, { recursive: true, force: true });
-        }
+        await clearState();
         setTimeout(startBot, 2000);
       }
     } else if (connection === "open") {
@@ -97,14 +99,7 @@ async function startBot() {
       console.log("Envie uma mensagem do seu celular pessoal para testar!");
       console.log("=======================================================\n");
 
-      try {
-        const fs = await import("fs");
-        const publicDir = path.resolve(process.cwd(), "public");
-        fs.writeFileSync(
-          path.join(publicDir, "whatsapp-status.json"),
-          JSON.stringify({ status: "CONNECTED", qr: null, updatedAt: new Date().toISOString() })
-        );
-      } catch (_) {}
+      await updateStatus("CONNECTED", null);
     }
   });
 

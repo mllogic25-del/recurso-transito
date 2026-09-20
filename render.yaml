@@ -8,8 +8,7 @@ services:
   - type: web
     name: autorecurso
     runtime: node
-    plan: free
-    buildCommand: npm install && npx prisma generate && npx prisma db push && npx next build
+    buildCommand: node scripts/prisma-prepare.js && npm install && npx prisma generate && npx prisma db push && npx next build
     startCommand: node start.js
     envVars:
       - key: DATABASE_URL
