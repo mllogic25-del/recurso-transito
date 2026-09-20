@@ -127,9 +127,11 @@ function CadastroForm() {
             <div className="mb-6">
               <div className="flex items-center justify-between gap-3 mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-zinc-950 flex items-center justify-center text-white shadow-md">
-                    <ShieldCheck className="w-5 h-5 text-blue-400" />
-                  </div>
+                  <img
+                    src="/samuca.png"
+                    alt="AutoRecurso - Samuca"
+                    className="w-10 h-10 rounded-full border border-emerald-400 shadow-md object-cover bg-white flex-shrink-0"
+                  />
                   <div className="flex flex-col">
                     <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 leading-none">
                       Recursos de Trânsito

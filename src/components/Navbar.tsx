@@ -55,9 +55,11 @@ export default function Navbar() {
         <div className="flex justify-between h-20 items-center">
           {/* Logo Estilo Bold & Big */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-2xl bg-zinc-950 flex items-center justify-center text-white shadow-md shadow-zinc-950/15 group-hover:scale-105 group-hover:bg-blue-600 transition-all duration-200">
-              <ShieldCheck className="w-6 h-6 text-blue-400 group-hover:text-white transition-colors" />
-            </div>
+            <img
+              src="/samuca.png"
+              alt="AutoRecurso - Samuca"
+              className="w-12 h-12 rounded-full border-2 border-emerald-400 shadow-md group-hover:scale-105 transition-all duration-200 object-cover bg-white flex-shrink-0"
+            />
             <div className="flex flex-col">
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 leading-none">
                 Recursos de Trânsito

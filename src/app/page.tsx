@@ -282,9 +282,11 @@ export default function HomePage() {
             <div className="relative z-10">
               <div className="flex items-center justify-between gap-4 mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-2xl bg-zinc-950/80 border border-zinc-700/80 flex items-center justify-center text-white shadow-lg">
-                    <ShieldCheck className="w-6 h-6 text-blue-400" />
-                  </div>
+                  <img
+                    src="/samuca.png"
+                    alt="AutoRecurso - Samuca"
+                    className="w-12 h-12 rounded-full border-2 border-emerald-400 shadow-lg object-cover bg-white flex-shrink-0"
+                  />
                   <div className="flex flex-col">
                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 leading-none">
                       Recursos de Trânsito
@@ -982,9 +984,11 @@ export default function HomePage() {
       <footer id="contato" className="mt-auto bg-zinc-950 text-zinc-400 py-12 px-4 sm:px-8 border-t border-zinc-800">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-white shadow-md">
-              <ShieldCheck className="w-5 h-5 text-blue-400" />
-            </div>
+            <img
+              src="/samuca.png"
+              alt="AutoRecurso - Samuca"
+              className="w-10 h-10 rounded-full border border-emerald-400 shadow-md object-cover bg-white flex-shrink-0"
+            />
             <div className="flex flex-col">
               <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 leading-none">
                 Recursos de Trânsito
