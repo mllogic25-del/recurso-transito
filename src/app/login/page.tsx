@@ -69,19 +69,19 @@ function LoginForm() {
             <div className="absolute top-0 right-0 w-60 h-60 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative z-10">
-              <div className="flex items-center gap-4 mb-6">
+              <div className="flex items-center gap-3 mb-6">
                 <img
-                  src="/samuca.png"
-                  alt="Samuca"
-                  className="w-20 h-20 rounded-full border-3 border-emerald-500 shadow-xl object-cover bg-white flex-shrink-0"
+                  src="/logo-icon.png"
+                  alt="AutoRecurso"
+                  className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl border border-amber-500/40 shadow-md object-cover bg-slate-950 flex-shrink-0"
                 />
-                <div>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-300">
-                    Samuca Assistente
+                <div className="flex flex-col whitespace-nowrap">
+                  <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-950 uppercase leading-none">
+                    Auto<span className="text-amber-500">Recurso</span>
                   </span>
-                  <h2 className="text-2xl font-black text-slate-950 mt-1">
-                    auto<span className="text-blue-600">recurso</span>
-                  </h2>
+                  <span className="text-[10px] tracking-[0.2em] text-emerald-700 uppercase font-bold mt-1 leading-none">
+                    Defesas &amp; Recursos de Trânsito
+                  </span>
                 </div>
               </div>
 
@@ -124,18 +124,18 @@ function LoginForm() {
           <div className="lg:col-span-7 bg-white rounded-3xl shadow-xl border-2 border-amber-400/80 p-8 sm:p-10 flex flex-col justify-center">
             <div className="mb-7">
               <div className="flex items-center justify-between gap-3 mb-4">
-                <div className="flex items-center gap-3.5">
+                <div className="flex items-center gap-3">
                   <img
                     src="/logo-icon.png"
-                    alt="AutoRecurso - Recursos de Trânsito"
+                    alt="AutoRecurso"
                     className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl border border-amber-500/40 shadow-md object-cover bg-slate-950 flex-shrink-0"
                   />
-                  <div className="flex flex-col">
-                    <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-slate-400 leading-none">
-                      Recursos de Trânsito
+                  <div className="flex flex-col whitespace-nowrap">
+                    <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-950 uppercase leading-none">
+                      Auto<span className="text-amber-500">Recurso</span>
                     </span>
-                    <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-950 leading-none mt-1">
-                      auto<span className="text-blue-600">recurso</span>
+                    <span className="text-[10px] tracking-[0.2em] text-emerald-700 uppercase font-bold mt-1 leading-none">
+                      Defesas &amp; Recursos de Trânsito
                     </span>
                   </div>
                 </div>

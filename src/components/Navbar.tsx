@@ -60,11 +60,11 @@ export default function Navbar() {
               className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl border border-amber-500/40 shadow-md shadow-amber-950/20 group-hover:scale-105 transition-all duration-200 object-cover bg-slate-950 flex-shrink-0"
             />
             <div className="flex flex-col whitespace-nowrap">
-              <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] text-zinc-400 leading-none">
-                Recursos de Trânsito
+              <span className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight text-slate-950 uppercase leading-none">
+                Auto<span className="text-amber-500">Recurso</span>
               </span>
-              <span className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight text-zinc-950 leading-none mt-1">
-                auto<span className="text-blue-600">recurso</span>
+              <span className="text-[10px] sm:text-xs tracking-[0.15em] sm:tracking-[0.2em] text-emerald-700 uppercase font-bold mt-1 leading-none">
+                Defesas &amp; Recursos de Trânsito
               </span>
             </div>
           </Link>
