@@ -108,14 +108,8 @@ async function startBot() {
       const HEARTBEAT_INTERVAL = 5 * 60 * 1000; // 5 minutos
       const heartbeatTimer = setInterval(async () => {
         try {
-          // Verifica se o socket ainda está aberto antes de atualizar
-          if (sock.ws?.readyState === 1 /* WebSocket.OPEN */) {
-            await updateStatus("CONNECTED", null);
-            console.log("[Samuca Heartbeat] ✅ Status atualizado no banco de dados.");
-          } else {
-            console.warn("[Samuca Heartbeat] ⚠️  WebSocket não está aberto. Encerrando heartbeat.");
-            clearInterval(heartbeatTimer);
-          }
+          await updateStatus("CONNECTED", null);
+          console.log("[Samuca Heartbeat] ✅ Status atualizado no banco de dados.");
         } catch (hbErr) {
           console.error("[Samuca Heartbeat] Erro ao atualizar status:", hbErr);
         }
