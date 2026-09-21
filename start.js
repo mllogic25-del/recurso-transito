@@ -116,48 +116,51 @@ function startBot(reason = "startup") {
 // 3. WATCHDOG PERIÓDICO — verifica a cada 60s se o bot responde
 //    + detecta conexão "zumbi" (processo vivo mas WhatsApp morto)
 // ============================================================
-const { Client } = require("pg"); // disponível no Render (PostgreSQL)
+const http = require("http"); // módulo nativo do Node.js — sem dependências extras
+
+// Consulta o status do bot via API HTTP local (sem precisar de pg direto)
+function fetchBotStatus() {
+  return new Promise((resolve) => {
+    const req = http.get(
+      `http://localhost:${port}/api/whatsapp/status`,
+      { timeout: 5000 },
+      (res) => {
+        let body = "";
+        res.on("data", (chunk) => (body += chunk));
+        res.on("end", () => {
+          try { resolve(JSON.parse(body)); }
+          catch (_) { resolve(null); }
+        });
+      }
+    );
+    req.on("error", () => resolve(null));
+    req.on("timeout", () => { req.destroy(); resolve(null); });
+  });
+}
 
 async function checkStaleConnection() {
   // Só checa conexão zumbi se o processo estiver vivo
   if (!botProcess || botProcess.killed) return false;
 
-  // Tenta consultar o banco de dados (DATABASE_URL disponível no Render)
-  const dbUrl = process.env.DATABASE_URL;
-  if (!dbUrl) return false; // ambiente local sem DB externo — pula
-
-  let client;
   try {
-    client = new Client({ connectionString: dbUrl, ssl: { rejectUnauthorized: false } });
-    await client.connect();
-
-    const result = await client.query(
-      `SELECT value FROM "WhatsappSession" WHERE id = $1 LIMIT 1`,
-      ["samuca_STATUS"]
-    );
-
-    if (result.rows.length === 0) return false;
-
-    const data = JSON.parse(result.rows[0].value);
-    if (data.status !== "CONNECTED") return false; // não é zumbi, está desconectado normalmente
+    const data = await fetchBotStatus();
+    if (!data || data.status !== "CONNECTED") return false;
 
     const lastUpdate = new Date(data.updatedAt).getTime();
-    const staleLimitMs = 12 * 60 * 1000; // 12 minutos (heartbeat é a cada 5, margem de 2x)
+    const staleLimitMs = 12 * 60 * 1000; // 12 min (heartbeat bate a cada 5, margem 2x)
     const isStale = (Date.now() - lastUpdate) > staleLimitMs;
 
     if (isStale) {
       const minutesOld = Math.floor((Date.now() - lastUpdate) / 60000);
-      console.warn(`[Samuca Watchdog] 🧟 CONEXÃO ZUMBI detectada! Status CONNECTED há ${minutesOld} minutos sem atualização. Matando processo...`);
+      console.warn(`[Samuca Watchdog] 🧟 CONEXÃO ZUMBI detectada! CONNECTED há ${minutesOld} min sem heartbeat. Reiniciando...`);
       return true;
     }
 
     console.log(`[Samuca Watchdog] ✅ Heartbeat OK — último update há ${Math.floor((Date.now() - lastUpdate) / 1000)}s`);
     return false;
   } catch (err) {
-    console.warn("[Samuca Watchdog] Não foi possível verificar stale no DB:", err.message);
+    console.warn("[Samuca Watchdog] Erro ao verificar stale:", err.message);
     return false;
-  } finally {
-    try { if (client) await client.end(); } catch (_) {}
   }
 }
 
