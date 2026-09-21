@@ -114,9 +114,55 @@ function startBot(reason = "startup") {
 
 // ============================================================
 // 3. WATCHDOG PERIÓDICO — verifica a cada 60s se o bot responde
+//    + detecta conexão "zumbi" (processo vivo mas WhatsApp morto)
 // ============================================================
+const { Client } = require("pg"); // disponível no Render (PostgreSQL)
+
+async function checkStaleConnection() {
+  // Só checa conexão zumbi se o processo estiver vivo
+  if (!botProcess || botProcess.killed) return false;
+
+  // Tenta consultar o banco de dados (DATABASE_URL disponível no Render)
+  const dbUrl = process.env.DATABASE_URL;
+  if (!dbUrl) return false; // ambiente local sem DB externo — pula
+
+  let client;
+  try {
+    client = new Client({ connectionString: dbUrl, ssl: { rejectUnauthorized: false } });
+    await client.connect();
+
+    const result = await client.query(
+      `SELECT value FROM "WhatsappSession" WHERE id = $1 LIMIT 1`,
+      ["samuca_STATUS"]
+    );
+
+    if (result.rows.length === 0) return false;
+
+    const data = JSON.parse(result.rows[0].value);
+    if (data.status !== "CONNECTED") return false; // não é zumbi, está desconectado normalmente
+
+    const lastUpdate = new Date(data.updatedAt).getTime();
+    const staleLimitMs = 12 * 60 * 1000; // 12 minutos (heartbeat é a cada 5, margem de 2x)
+    const isStale = (Date.now() - lastUpdate) > staleLimitMs;
+
+    if (isStale) {
+      const minutesOld = Math.floor((Date.now() - lastUpdate) / 60000);
+      console.warn(`[Samuca Watchdog] 🧟 CONEXÃO ZUMBI detectada! Status CONNECTED há ${minutesOld} minutos sem atualização. Matando processo...`);
+      return true;
+    }
+
+    console.log(`[Samuca Watchdog] ✅ Heartbeat OK — último update há ${Math.floor((Date.now() - lastUpdate) / 1000)}s`);
+    return false;
+  } catch (err) {
+    console.warn("[Samuca Watchdog] Não foi possível verificar stale no DB:", err.message);
+    return false;
+  } finally {
+    try { if (client) await client.end(); } catch (_) {}
+  }
+}
+
 function startWatchdog() {
-  setInterval(() => {
+  setInterval(async () => {
     const processAlive = botProcess && !botProcess.killed;
 
     if (!processAlive) {
@@ -125,15 +171,26 @@ function startWatchdog() {
       return;
     }
 
-    // Testa se o processo realmente responde
+    // Testa se o processo do OS ainda responde (sinal 0 = não mata, só verifica)
     try {
       process.kill(botProcess.pid, 0);
-      console.log(`[Samuca Watchdog] ✅ Verificação OK — Bot ativo (PID: ${botProcess.pid})`);
     } catch (_) {
       console.warn(`[Samuca Watchdog] 🔍 Processo PID ${botProcess.pid} não respondeu. Reiniciando...`);
       botProcess = null;
       isBotRunning = false;
       startBot("watchdog-process-dead");
+      return;
+    }
+
+    // Verifica conexão zumbi (processo vivo mas WhatsApp silenciosamente morto)
+    const isZombie = await checkStaleConnection();
+    if (isZombie) {
+      if (botProcess && !botProcess.killed) {
+        botProcess.kill("SIGTERM");
+      }
+      botProcess = null;
+      isBotRunning = false;
+      setTimeout(() => startBot("watchdog-zombie-kill"), BOT_RESTART_DELAY_MS);
     }
   }, WATCHDOG_INTERVAL_MS);
 }

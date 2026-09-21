@@ -100,6 +100,34 @@ async function startBot() {
       console.log("=======================================================\n");
 
       await updateStatus("CONNECTED", null);
+
+      // ─── HEARTBEAT ─────────────────────────────────────────────────────────
+      // Atualiza o status a cada 5 minutos enquanto conectado.
+      // Isso permite que o watchdog externo detecte conexões "zumbi"
+      // (processo vivo mas WhatsApp silenciosamente desconectado).
+      const HEARTBEAT_INTERVAL = 5 * 60 * 1000; // 5 minutos
+      const heartbeatTimer = setInterval(async () => {
+        try {
+          // Verifica se o socket ainda está aberto antes de atualizar
+          if (sock.ws?.readyState === 1 /* WebSocket.OPEN */) {
+            await updateStatus("CONNECTED", null);
+            console.log("[Samuca Heartbeat] ✅ Status atualizado no banco de dados.");
+          } else {
+            console.warn("[Samuca Heartbeat] ⚠️  WebSocket não está aberto. Encerrando heartbeat.");
+            clearInterval(heartbeatTimer);
+          }
+        } catch (hbErr) {
+          console.error("[Samuca Heartbeat] Erro ao atualizar status:", hbErr);
+        }
+      }, HEARTBEAT_INTERVAL);
+
+      // Limpa o heartbeat quando a conexão fechar (evita memory leak)
+      sock.ev.on("connection.update", (upd) => {
+        if (upd.connection === "close") {
+          clearInterval(heartbeatTimer);
+          console.log("[Samuca Heartbeat] Heartbeat encerrado (conexão fechada).");
+        }
+      });
     }
   });
 
