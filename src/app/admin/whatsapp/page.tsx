@@ -50,6 +50,7 @@ export default function AdminWhatsAppPage() {
   const isQrReady = statusData.status === "QR_READY" && statusData.qr;
 
   const [starting, setStarting] = useState(false);
+  const [resetting, setResetting] = useState(false);
 
   const handleStartBot = async () => {
     setStarting(true);
@@ -60,6 +61,22 @@ export default function AdminWhatsAppPage() {
       console.error("Erro ao iniciar bot:", err);
     } finally {
       setTimeout(() => setStarting(false), 2500);
+    }
+  };
+
+  const handleResetSession = async () => {
+    if (!confirm("Isso vai desconectar o Samuca e gerar um novo QR Code para reconexão. Confirmar?")) return;
+    setResetting(true);
+    try {
+      // 1. Apaga a sessão do banco
+      await fetch("/api/whatsapp/reset", { method: "DELETE" });
+      // 2. Reinicia o processo do bot para gerar novo QR
+      await fetch("/api/whatsapp/status", { method: "POST" });
+      setTimeout(fetchStatus, 3000);
+    } catch (err) {
+      console.error("Erro ao resetar sessão:", err);
+    } finally {
+      setTimeout(() => setResetting(false), 3500);
     }
   };
 
@@ -117,6 +134,19 @@ export default function AdminWhatsAppPage() {
               <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 max-w-md mx-auto text-xs text-slate-500 flex items-center justify-center gap-2">
                 <Smartphone className="w-4 h-4 text-emerald-600 shrink-0" />
                 Conexão ativa e sincronizada 24h na nuvem
+              </div>
+              <div className="mt-6 pt-5 border-t border-slate-100">
+                <p className="text-xs text-slate-400 mb-3">
+                  Se o Samuca está aparecendo como online mas <strong className="text-slate-500">não está respondendo</strong> no WhatsApp, clique abaixo para forçar uma reconexão completa.
+                </p>
+                <button
+                  onClick={handleResetSession}
+                  disabled={resetting}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-xl text-xs font-bold transition disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${resetting ? "animate-spin" : ""}`} />
+                  {resetting ? "Resetando..." : "Resetar Sessão e Gerar Novo QR"}
+                </button>
               </div>
             </div>
           ) : isQrReady ? (
