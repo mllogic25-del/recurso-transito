@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
@@ -20,6 +20,7 @@ import {
   Phone,
   HelpCircle,
   CreditCard,
+  PauseCircle,
 } from "lucide-react";
 
 export default function AfiliadosPage() {
@@ -37,6 +38,20 @@ export default function AfiliadosPage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [checkingStatus, setCheckingStatus] = useState(true);
+  const [isProgramActive, setIsProgramActive] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/settings/affiliate")
+      .then((res) => (res.ok ? res.json() : { active: true }))
+      .then((data) => {
+        if (typeof data.active === "boolean") {
+          setIsProgramActive(data.active);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setCheckingStatus(false));
+  }, []);
 
   const formatCpf = (value: string) => {
     const digits = value.replace(/\D/g, "").slice(0, 11);
@@ -112,6 +127,42 @@ export default function AfiliadosPage() {
       setLoading(false);
     }
   };
+
+  if (!checkingStatus && !isProgramActive) {
+    return (
+      <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800">
+        <Navbar />
+        <main className="flex-1 max-w-2xl mx-auto w-full px-4 sm:px-6 py-20 flex flex-col items-center justify-center text-center">
+          <div className="w-20 h-20 rounded-3xl bg-amber-100 border border-amber-200 text-amber-700 flex items-center justify-center mb-6 shadow-sm">
+            <PauseCircle className="w-10 h-10" />
+          </div>
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900 mb-4 border border-amber-200">
+            ADESÕES PAUSADAS
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mb-3 leading-tight">
+            Programa de Afiliados Temporariamente Suspenso
+          </h1>
+          <p className="text-slate-600 text-sm max-w-lg mb-8 leading-relaxed">
+            O programa <strong className="text-slate-800">Indique & Ganhe</strong> está temporariamente suspenso para novas adesões e cadastros de parceiros. Caso você já possua um cadastro ativo, pode fazer login normalmente para consultar seu histórico.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+            <Link
+              href="/"
+              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-sm"
+            >
+              Voltar à Página Inicial
+            </Link>
+            <Link
+              href="/login"
+              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-800 text-xs font-bold border border-slate-300 transition shadow-2xs"
+            >
+              Já sou Afiliado (Fazer Login)
+            </Link>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800">

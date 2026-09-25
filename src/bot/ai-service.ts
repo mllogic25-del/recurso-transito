@@ -1,6 +1,7 @@
 import { lookupAppealStatus, formatAppealHumanStatus } from "../lib/appeal-lookup";
+import { isAffiliateProgramActive } from "../lib/settings";
 
-const SYSTEM_PROMPT = `
+const BASE_SYSTEM_PROMPT = `
 Você é o Samuca, consultor especialista em recursos de multas e direito de trânsito da AutoRecurso.
 Marca oficial: 🛡️ *AutoRecurso - Recursos de Trânsito*.
 Seu objetivo é atender clientes no WhatsApp de forma 100% humanizada, atenciosa, empática, objetiva e muito honesta e transparente. Ao se apresentar em um primeiro contato, use a assinatura/identificação da marca: "🛡️ *AutoRecurso - Recursos de Trânsito*".
@@ -58,6 +59,11 @@ COMO CONDUZIR A CONVERSA NO WHATSAPP:
 14. Transbordo Humano:
    - Se o cliente pedir para falar com uma pessoa da equipe, diga: "Tranquilo! Já avisei nossa equipe e um dos nossos especialistas vai te chamar aqui em instantes, só um minutinho!".
 15. Estilo de escrita: Use linguagem brasileira autêntica, calorosa e educada ("Opa, tudo bem?", "Tranquilo!", "Entendi perfeitamente", "Show de bola", "Fica em paz que a gente te ajuda"). Evite poluição de emojis e nunca mande textões compridos.
+`;
+
+function getSystemPrompt(affiliateActive: boolean): string {
+  if (affiliateActive) {
+    return `${BASE_SYSTEM_PROMPT}
 16. PROGRAMA INDIQUE E GANHE (R$ 10 NO PIX - AVISE E EXPLIQUE AS REGRAS):
    - AVISE PROATIVAMENTE AO CLIENTE:
      * Ao conversar com o cliente (após tirar dúvidas da multa dele ou ao orientar sobre os passos do recurso), mencione com entusiasmo e naturalidade que ele pode ganhar dinheiro indicando:
@@ -74,6 +80,19 @@ COMO CONDUZIR A CONVERSA NO WHATSAPP:
      * Se a mensagem contiver "[Indicação: CODIGO]", confirme com carinho: "Show de bola! Vi que você veio indicado pelo código [CODIGO]. Vamos cuidar do seu caso com prioridade!".
      * Se ele disser quem indicou ou o código: "Perfeito! Já registrei aqui a indicação com sucesso no seu atendimento."
 `;
+  }
+
+  // Se o programa de afiliados estiver suspenso pelo administrador:
+  return `${BASE_SYSTEM_PROMPT}
+16. PROGRAMA INDIQUE E GANHE SUSPENSO (ATENÇÃO TOTAL):
+   - O programa de parceiros e indicações (afiliados) está TEMPORARIAMENTE SUSPENSO para novas adesões.
+   - NUNCA mencione, NUNCA ofereça e NÃO fale proativamente sobre Indique & Ganhe ou sobre ganhar R$ 10 no Pix para nenhum cliente.
+   - Se o cliente perguntar expressamente sobre indicação, parceria, afiliados ou como ganhar R$ 10 indicando amigos, responda com gentileza e educação:
+     "Opa! O nosso programa de parceiros Indique & Ganhe está temporariamente pausado no momento para novas adesões. Mas se você ou algum amigo precisar recorrer de multas ou proteger a CNH, estamos 100% à disposição para analisar seu caso e fazer a melhor defesa!".
+   - Se o cliente já veio com um código de indicação anterior, apenas confirme com carinho: "Show de bola! Já registrei sua indicação aqui com carinho e vamos cuidar do seu recurso com prioridade máxima!".
+`;
+}
+
 
 interface ChatMessage {
   role: "user" | "model";
@@ -179,6 +198,10 @@ export async function generateSamucaResponse(
       },
     ];
 
+    // Verifica se o programa de afiliados está ativo ou suspenso para ajustar as instruções do Samuca
+    const affiliateActive = await isAffiliateProgramActive();
+    const activeSystemPrompt = getSystemPrompt(affiliateActive);
+
     // Modelos oficiais validados e ativos na API do Google com tolerância a picos de demanda
     const candidateModels = [
       "gemini-2.5-flash",
@@ -199,7 +222,7 @@ export async function generateSamucaResponse(
           },
           body: JSON.stringify({
             system_instruction: {
-              parts: [{ text: SYSTEM_PROMPT }],
+              parts: [{ text: activeSystemPrompt }],
             },
             contents: newContents,
             generationConfig: {

@@ -146,3 +146,10 @@ model WhatsappSession {
   value     String
   updatedAt DateTime @updatedAt
 }
+
+// Configurações globais do sistema (ex: suspensão do programa de afiliados)
+model SystemSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}

@@ -21,6 +21,7 @@ import {
   ArrowUpRight,
   TrendingUp,
   Bot,
+  PauseCircle,
 } from "lucide-react";
 import { calculateDeadlineInfo } from "@/lib/deadlineUtils";
 
@@ -56,6 +57,8 @@ export default function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [paymentFilter, setPaymentFilter] = useState("ALL");
+  const [affiliateActive, setAffiliateActive] = useState<boolean>(true);
+  const [togglingAffiliate, setTogglingAffiliate] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -68,7 +71,47 @@ export default function AdminDashboard() {
       });
 
     loadAppeals();
+    loadAffiliateStatus();
   }, [router]);
+
+  const loadAffiliateStatus = () => {
+    fetch("/api/settings/affiliate")
+      .then((res) => res.json())
+      .then((data) => {
+        if (typeof data.active === "boolean") {
+          setAffiliateActive(data.active);
+        }
+      })
+      .catch(() => {});
+  };
+
+  const handleToggleAffiliate = async () => {
+    const nextState = !affiliateActive;
+    const msg = nextState
+      ? "Deseja REATIVAR o programa de afiliados?\n\nA página de cadastro voltará a ficar disponível, os links aparecerão no site e o Samuca voltará a divulgar o programa no WhatsApp."
+      : "Deseja SUSPENDER o programa de afiliados?\n\nA página de cadastro será bloqueada, todos os botões/links serão ocultados do site e o Samuca no WhatsApp NÃO oferecerá mais afiliação.";
+    
+    if (!confirm(msg)) return;
+
+    setTogglingAffiliate(true);
+    try {
+      const res = await fetch("/api/settings/affiliate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ active: nextState }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setAffiliateActive(data.active);
+      } else {
+        alert(data.error || "Erro ao alterar status do programa de afiliados.");
+      }
+    } catch {
+      alert("Erro ao comunicar com o servidor.");
+    } finally {
+      setTogglingAffiliate(false);
+    }
+  };
 
   const loadAppeals = () => {
     setLoading(true);
@@ -134,7 +177,35 @@ export default function AdminDashboard() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Botão de Suspender/Ativar Afiliados */}
+            <button
+              onClick={handleToggleAffiliate}
+              disabled={togglingAffiliate}
+              className={`inline-flex items-center gap-2 text-xs font-black px-4 py-2.5 rounded-xl border transition shadow-xs cursor-pointer disabled:opacity-50 ${
+                affiliateActive
+                  ? "bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-700 border-slate-300 hover:border-rose-300"
+                  : "bg-rose-600 hover:bg-emerald-600 text-white border-rose-700 hover:border-emerald-700 animate-pulse"
+              }`}
+              title={
+                affiliateActive
+                  ? "Clique para suspender o programa de afiliados"
+                  : "Clique para reativar o programa de afiliados"
+              }
+            >
+              {affiliateActive ? (
+                <>
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span>Afiliados: Ativo (Suspender)</span>
+                </>
+              ) : (
+                <>
+                  <PauseCircle className="w-4 h-4 text-white" />
+                  <span>Afiliados: SUSPENSO (Reativar)</span>
+                </>
+              )}
+            </button>
+
             <Link
               href="/admin/comissoes"
               className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-xs transition"
@@ -157,6 +228,35 @@ export default function AdminDashboard() {
             </Link>
           </div>
         </div>
+
+        {/* Banner Informativo quando o Programa de Afiliados estiver SUSPENSO */}
+        {!affiliateActive && (
+          <div className="mb-6 p-4 rounded-2xl bg-rose-50 border-2 border-rose-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
+                <PauseCircle className="w-6 h-6" />
+              </div>
+              <div>
+                <h4 className="text-sm font-black text-rose-950 flex items-center gap-2">
+                  <span>Programa de Afiliados está SUSPENSO</span>
+                  <span className="text-[10px] font-bold bg-rose-200 text-rose-900 px-2 py-0.5 rounded-full">
+                    Adesões Bloqueadas
+                  </span>
+                </h4>
+                <p className="text-xs text-rose-700 mt-0.5">
+                  A página /afiliados está bloqueada para novos cadastros, os botões foram ocultados da tela inicial e da barra de navegação, e o Samuca no WhatsApp não está oferecendo afiliação.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={handleToggleAffiliate}
+              disabled={togglingAffiliate}
+              className="self-start sm:self-auto px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-xs shrink-0 cursor-pointer"
+            >
+              Reativar Programa Agora
+            </button>
+          </div>
+        )}
 
         {/* Cards de Métricas */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">

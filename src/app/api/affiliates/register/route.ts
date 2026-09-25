@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, signToken } from "@/lib/auth";
+import { isAffiliateProgramActive } from "@/lib/settings";
 
 // Gera um código de indicação amigável e único (ex: MARCOS7K2)
 function generateReferralCode(name: string): string {
@@ -18,6 +19,15 @@ function generateReferralCode(name: string): string {
 
 export async function POST(request: Request) {
   try {
+    // Verifica se o programa de afiliados está suspenso
+    const programActive = await isAffiliateProgramActive();
+    if (!programActive) {
+      return NextResponse.json(
+        { error: "O programa de afiliados está temporariamente suspenso para novas adesões." },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const { name, email, password, phone, cpf, pixKeyType, pixKey } = body;
 

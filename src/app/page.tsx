@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -26,6 +26,18 @@ export default function AutoRecursoLandingPage() {
   const [numeroAIT, setNumeroAIT] = useState("");
   const [orgao, setOrgao] = useState("DETRAN");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [isAffiliateActive, setIsAffiliateActive] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/settings/affiliate")
+      .then((res) => (res.ok ? res.json() : { active: true }))
+      .then((data) => {
+        if (typeof data.active === "boolean") {
+          setIsAffiliateActive(data.active);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -189,14 +201,16 @@ export default function AutoRecursoLandingPage() {
 
           {/* Ações / Botões no Topo */}
           <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-            {/* Botão Chamativo Indique e Ganhe */}
-            <Link
-              href="/afiliados"
-              className="text-xs font-black text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 px-3.5 py-2.5 rounded-xl shadow-md shadow-emerald-600/20 border border-emerald-500/40 flex items-center gap-1.5 transition-all transform hover:scale-105 cursor-pointer whitespace-nowrap"
-            >
-              <Coins className="w-4 h-4 text-amber-300 shrink-0" />
-              <span>Indique &amp; Ganhe R$ 10</span>
-            </Link>
+            {/* Botão Chamativo Indique e Ganhe (Oculto se suspenso) */}
+            {isAffiliateActive && (
+              <Link
+                href="/afiliados"
+                className="text-xs font-black text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 px-3.5 py-2.5 rounded-xl shadow-md shadow-emerald-600/20 border border-emerald-500/40 flex items-center gap-1.5 transition-all transform hover:scale-105 cursor-pointer whitespace-nowrap"
+              >
+                <Coins className="w-4 h-4 text-amber-300 shrink-0" />
+                <span>Indique &amp; Ganhe R$ 10</span>
+              </Link>
+            )}
 
             <Link
               href="/login"
@@ -334,8 +348,9 @@ export default function AutoRecursoLandingPage() {
         </div>
       </section>
 
-      {/* 4. MEGA PAINEL CHAMATIVO: INDIQUE & GANHE R$ 10,00 NO PIX (SHOWSTOPPER CLARO) */}
-      <section id="indique-ganhe" className="py-12 px-6 max-w-6xl mx-auto scroll-mt-24 relative z-20">
+      {/* 4. MEGA PAINEL CHAMATIVO: INDIQUE & GANHE R$ 10,00 NO PIX (SHOWSTOPPER CLARO) - Oculto se suspenso */}
+      {isAffiliateActive && (
+        <section id="indique-ganhe" className="py-12 px-6 max-w-6xl mx-auto scroll-mt-24 relative z-20">
         <div className="relative rounded-3xl p-8 sm:p-12 overflow-hidden border-2 border-emerald-500/60 bg-gradient-to-br from-white via-emerald-50/70 to-teal-50 shadow-2xl shadow-emerald-900/10">
           {/* Efeitos de iluminação interna suave */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-400/15 rounded-full blur-3xl pointer-events-none"></div>
@@ -436,6 +451,7 @@ export default function AutoRecursoLandingPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* 5. METODOLOGIA / COMO FUNCIONA */}
       <section id="como-funciona" className="py-20 border-t border-slate-200 bg-white px-6 scroll-mt-20">
@@ -579,9 +595,11 @@ export default function AutoRecursoLandingPage() {
             <Link href="/fale-conosco" className="hover:text-amber-300 transition">
               Fale Conosco
             </Link>
-            <Link href="/afiliados" className="text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1">
-              💰 Programa de Afiliados (R$ 10)
-            </Link>
+            {isAffiliateActive && (
+              <Link href="/afiliados" className="text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1">
+                💰 Programa de Afiliados (R$ 10)
+              </Link>
+            )}
             <Link href="/login" className="hover:text-amber-300 transition">
               Área do Cliente
             </Link>

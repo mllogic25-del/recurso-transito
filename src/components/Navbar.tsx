@@ -25,6 +25,7 @@ export default function Navbar() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isAffiliateActive, setIsAffiliateActive] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -39,6 +40,15 @@ export default function Navbar() {
       })
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
+
+    fetch("/api/settings/affiliate")
+      .then((res) => (res.ok ? res.json() : { active: true }))
+      .then((data) => {
+        if (typeof data.active === "boolean") {
+          setIsAffiliateActive(data.active);
+        }
+      })
+      .catch(() => {});
   }, [pathname]);
 
   const handleLogout = async () => {
@@ -102,14 +112,16 @@ export default function Navbar() {
 
           {/* Área de Autenticação / Painel */}
           <div className="hidden md:flex items-center gap-3">
-            {/* Botão Chamativo Indique e Ganhe para Todos */}
-            <Link
-              href="/afiliados"
-              className="text-xs font-black text-white bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 px-4 py-2.5 rounded-xl shadow-md shadow-emerald-600/25 border border-emerald-400/40 flex items-center gap-1.5 transition-all transform hover:scale-105 cursor-pointer"
-            >
-              <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
-              <span>💰 Indique & Ganhe R$ 10</span>
-            </Link>
+            {/* Botão Chamativo Indique e Ganhe para Todos (Oculto se suspenso) */}
+            {isAffiliateActive && (
+              <Link
+                href="/afiliados"
+                className="text-xs font-black text-white bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 px-4 py-2.5 rounded-xl shadow-md shadow-emerald-600/25 border border-emerald-400/40 flex items-center gap-1.5 transition-all transform hover:scale-105 cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
+                <span>💰 Indique & Ganhe R$ 10</span>
+              </Link>
+            )}
 
             {user ? (
               <div className="flex items-center gap-3">
@@ -281,13 +293,15 @@ export default function Navbar() {
                     >
                       Meus Recursos
                     </Link>
-                    <Link
-                      href="/afiliados"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block w-full py-2 text-center text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl"
-                    >
-                      💰 Indique & Ganhe R$ 10
-                    </Link>
+                    {isAffiliateActive && (
+                      <Link
+                        href="/afiliados"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block w-full py-2 text-center text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl"
+                      >
+                        💰 Indique & Ganhe R$ 10
+                      </Link>
+                    )}
                   </>
                 )}
                 <button
