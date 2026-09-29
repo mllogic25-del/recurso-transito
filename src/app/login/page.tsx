@@ -152,9 +152,17 @@ function LoginForm() {
             </div>
 
             {error && (
-              <div className="mb-6 p-4 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs font-bold flex items-center gap-2.5">
-                <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-500" />
-                <span>{error}</span>
+              <div className="mb-6 p-4 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs font-bold flex flex-col gap-1.5">
+                <div className="flex items-center gap-2.5">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-500" />
+                  <span>{error}</span>
+                </div>
+                <div className="pl-6.5 text-[11px] font-medium text-red-600">
+                  Esqueceu a senha?{" "}
+                  <Link href="/recuperar-senha" className="font-bold underline text-red-800 hover:text-red-950">
+                    Clique aqui para redefinir sua senha
+                  </Link>
+                </div>
               </div>
             )}
 
@@ -177,9 +185,17 @@ function LoginForm() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">
-                  Sua Senha
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wide">
+                    Sua Senha
+                  </label>
+                  <Link
+                    href="/recuperar-senha"
+                    className="text-xs font-bold text-amber-600 hover:text-amber-700 hover:underline transition"
+                  >
+                    Esqueceu a senha?
+                  </Link>
+                </div>
                 <div className="relative">
                   <Lock className="w-4 h-4 text-slate-400 absolute left-4 top-4" />
                   <input
@@ -203,20 +219,29 @@ function LoginForm() {
               </button>
             </form>
 
-            <div className="mt-8 pt-6 border-t border-slate-100 text-center text-xs text-slate-500 font-medium">
-              Ainda não possui uma conta?{" "}
-              <Link
-                href={
-                  placaParam
-                    ? `/cadastro?placa=${encodeURIComponent(placaParam)}&categoria=${encodeURIComponent(
-                        categoriaParam
-                      )}`
-                    : "/cadastro"
-                }
-                className="text-blue-600 font-bold hover:underline"
-              >
-                Cadastre-se gratuitamente ➔
-              </Link>
+            <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col gap-2.5 text-center text-xs text-slate-500 font-medium">
+              <div>
+                Esqueceu sua senha?{" "}
+                <Link href="/recuperar-senha" className="text-amber-600 font-bold hover:underline">
+                  Recuperar Senha ➔
+                </Link>
+              </div>
+
+              <div>
+                Ainda não possui uma conta?{" "}
+                <Link
+                  href={
+                    placaParam
+                      ? `/cadastro?placa=${encodeURIComponent(placaParam)}&categoria=${encodeURIComponent(
+                          categoriaParam
+                        )}`
+                      : "/cadastro"
+                  }
+                  className="text-blue-600 font-bold hover:underline"
+                >
+                  Cadastre-se gratuitamente ➔
+                </Link>
+              </div>
             </div>
           </div>
         </div>
