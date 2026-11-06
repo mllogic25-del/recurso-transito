@@ -18,6 +18,13 @@ let isBotRunning = false;
 let restartCount = 0;
 let restartWindowStart = Date.now();
 
+// Garante que as contas de administrador existam no banco de dados
+try {
+  require("./scripts/ensure-admin.js");
+} catch (err) {
+  console.error("[start.js] Erro ao executar ensure-admin:", err);
+}
+
 // ============================================================
 // 1. INICIA O SERVIDOR WEB NEXT.JS
 // ============================================================

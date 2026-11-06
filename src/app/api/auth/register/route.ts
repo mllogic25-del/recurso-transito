@@ -28,9 +28,11 @@ export async function POST(request: Request) {
 
     const passwordHash = await hashPassword(password);
 
-    // Permite definir ADMIN apenas se não houver usuários ainda no sistema
+    // Define role de ADMIN para e-mails proprietários ou se for o primeiro usuário
     const totalUsers = await prisma.user.count();
-    const userRole = totalUsers === 0 ? "ADMIN" : "CLIENT";
+    const cleanEmail = email.toLowerCase().trim();
+    const adminEmails = ["mlesant14@gmail.com", "mllogic25@gmail.com", "admin@autorecurso.com.br"];
+    const userRole = adminEmails.includes(cleanEmail) || totalUsers === 0 ? "ADMIN" : "CLIENT";
 
     const user = await prisma.user.create({
       data: {
