@@ -21,6 +21,7 @@ import {
   CreditCard,
   Mail,
   DollarSign,
+  MessageCircle,
 } from "lucide-react";
 
 interface AppealDetail {
@@ -327,7 +328,21 @@ export default function AdminEditarRecursoPage() {
 
               <div className="space-y-2 text-xs text-slate-600">
                 <p><strong>Valor do Serviço:</strong> R$ {appeal.paymentAmount.toFixed(2)}</p>
-                <p><strong>Forma:</strong> Pix</p>
+                <p><strong>Forma:</strong> Pix / Hotmart</p>
+                {appeal.user.phone && (
+                  <p className="flex items-center gap-1.5">
+                    <strong>WhatsApp:</strong>
+                    <a
+                      href={`https://wa.me/${appeal.user.phone.replace(/\D/g, "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-emerald-700 font-bold hover:underline"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                      {appeal.user.phone} (Chamar no Zap)
+                    </a>
+                  </p>
+                )}
                 <p><strong>E-mail de Notificação:</strong> {appeal.user.email}</p>
                 {appeal.sentToEmail && (
                   <p className="text-emerald-700 font-semibold flex items-center gap-1">

@@ -11,6 +11,7 @@ import * as dotenv from "dotenv";
 import { generateSamucaResponse } from "./ai-service";
 import { usePrismaAuthState } from "./prisma-auth";
 import { prisma } from "../lib/prisma";
+import { processWhatsAppIncomingCase } from "./whatsapp-ingestion";
 
 dotenv.config();
 
@@ -239,6 +240,12 @@ async function startBot() {
         const totalFiles = batch.mediaFiles.length;
 
         console.log(`\n📦 Processando lote de [${remoteJid.replace("@s.whatsapp.net", "")}]: ${totalFiles} arquivo(s), texto: "${combinedText}"`);
+
+        // Salva as fotos, PDFs e mensagens recebidas no banco de dados para o Painel Administrativo
+        const pushName = batch.lastMsg?.pushName;
+        processWhatsAppIncomingCase(remoteJid, pushName, combinedText, batch.mediaFiles).catch((ingestErr) => {
+          console.error("[whatsapp.ts] Erro ao salvar documentos do WhatsApp no Painel:", ingestErr);
+        });
 
         try {
           // 1. Simula presença "Digitando..."

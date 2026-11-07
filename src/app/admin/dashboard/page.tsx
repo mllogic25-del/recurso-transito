@@ -22,6 +22,7 @@ import {
   TrendingUp,
   Bot,
   PauseCircle,
+  MessageCircle,
 } from "lucide-react";
 import { calculateDeadlineInfo } from "@/lib/deadlineUtils";
 
@@ -421,7 +422,20 @@ export default function AdminDashboard() {
 
                         <td className="px-6 py-4">
                           <p className="font-bold text-slate-900 text-xs">{item.user.name}</p>
-                          <p className="text-[11px] text-slate-400">{item.user.email}</p>
+                          {item.user.phone ? (
+                            <a
+                              href={`https://wa.me/${item.user.phone.replace(/\D/g, "")}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 hover:text-emerald-800 hover:underline mt-0.5"
+                              title="Conversar com o cliente no WhatsApp"
+                            >
+                              <MessageCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                              <span>{item.user.phone}</span>
+                            </a>
+                          ) : (
+                            <p className="text-[11px] text-slate-400">{item.user.email}</p>
+                          )}
                         </td>
 
                         <td className="px-6 py-4 whitespace-nowrap">
