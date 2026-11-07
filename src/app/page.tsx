@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -8,11 +8,6 @@ import {
   ArrowRight,
   ShieldCheck,
   CheckCircle2,
-  Coins,
-  Share2,
-  QrCode,
-  DollarSign,
-  TrendingUp,
   FileText,
   AlertTriangle,
   Flame,
@@ -26,18 +21,6 @@ export default function AutoRecursoLandingPage() {
   const [numeroAIT, setNumeroAIT] = useState("");
   const [orgao, setOrgao] = useState("DETRAN");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [isAffiliateActive, setIsAffiliateActive] = useState(true);
-
-  useEffect(() => {
-    fetch("/api/settings/affiliate")
-      .then((res) => (res.ok ? res.json() : { active: true }))
-      .then((data) => {
-        if (typeof data.active === "boolean") {
-          setIsAffiliateActive(data.active);
-        }
-      })
-      .catch(() => {});
-  }, []);
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -84,11 +67,6 @@ export default function AutoRecursoLandingPage() {
       pergunta: "E se o prazo da notificação já tiver expirado?",
       resposta:
         "Se o prazo tiver sido ultrapassado por falta de envio ou falha de entrega pelo órgão, o sistema estrutura a tese preliminar de decadência ou nulidade por inobservância do Artigo 281 do CTB e Súmula 312 do STJ.",
-    },
-    {
-      pergunta: "Como funciona o Indique & Ganhe e o repasse no Pix?",
-      resposta:
-        "Ao se cadastrar como parceiro, você gera seu link exclusivo. A cada indicado que emitir e pagar um recurso, você recebe R$ 10,00 no Pix em até 72 horas. Importante: a chave Pix informada deve ser obrigatoriamente da mesma titularidade (mesmo Nome e CPF) do seu cadastro. Chaves de outro titular não são válidas.",
     },
   ];
 
@@ -201,20 +179,9 @@ export default function AutoRecursoLandingPage() {
 
           {/* Ações / Botões no Topo */}
           <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-            {/* Botão Chamativo Indique e Ganhe (Oculto se suspenso) */}
-            {isAffiliateActive && (
-              <Link
-                href="/afiliados"
-                className="text-xs font-black text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 px-3.5 py-2.5 rounded-xl shadow-md shadow-emerald-600/20 border border-emerald-500/40 flex items-center gap-1.5 transition-all transform hover:scale-105 cursor-pointer whitespace-nowrap"
-              >
-                <Coins className="w-4 h-4 text-amber-300 shrink-0" />
-                <span>Indique &amp; Ganhe R$ 10</span>
-              </Link>
-            )}
-
             <Link
               href="/login"
-              className="hidden sm:inline-block text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-950 px-2.5 py-2 transition whitespace-nowrap"
+              className="text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-950 px-2.5 py-2 transition whitespace-nowrap"
             >
               Entrar
             </Link>
@@ -347,111 +314,6 @@ export default function AutoRecursoLandingPage() {
           </form>
         </div>
       </section>
-
-      {/* 4. MEGA PAINEL CHAMATIVO: INDIQUE & GANHE R$ 10,00 NO PIX (SHOWSTOPPER CLARO) - Oculto se suspenso */}
-      {isAffiliateActive && (
-        <section id="indique-ganhe" className="py-12 px-6 max-w-6xl mx-auto scroll-mt-24 relative z-20">
-        <div className="relative rounded-3xl p-8 sm:p-12 overflow-hidden border-2 border-emerald-500/60 bg-gradient-to-br from-white via-emerald-50/70 to-teal-50 shadow-2xl shadow-emerald-900/10">
-          {/* Efeitos de iluminação interna suave */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-400/15 rounded-full blur-3xl pointer-events-none"></div>
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-amber-400/15 rounded-full blur-3xl pointer-events-none"></div>
-          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl pointer-events-none"></div>
-
-          <div className="relative z-10">
-            {/* Header do Painel */}
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-8 border-b border-emerald-200/80">
-              <div>
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/80 border border-emerald-300 text-emerald-800 text-xs font-black tracking-wider mb-3 shadow-xs">
-                  <Sparkles className="w-3.5 h-3.5 text-emerald-600 animate-spin" />
-                  PROGRAMA DE AFILIADOS EXCLUSIVO
-                </div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 leading-tight">
-                  Indique e Ganhe{" "}
-                  <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 bg-clip-text text-transparent underline decoration-emerald-400 decoration-wavy">
-                    R$ 10,00 no PIX
-                  </span>{" "}
-                  por indicação!
-                </h2>
-                <p className="text-slate-600 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed font-medium">
-                  Conhece amigos, familiares ou motoristas de aplicativo com multas? Compartilhe seu link exclusivo. A
-                  cada defesa gerada (R$ 30), <strong className="text-emerald-700 font-black">você recebe R$ 10,00 no Pix em até 72 horas</strong> após a confirmação.
-                  Sem limite de indicações!
-                </p>
-              </div>
-
-              {/* Card de Simulação Rápida */}
-              <div className="bg-white/95 backdrop-blur-md border border-emerald-300 rounded-2xl p-5 shrink-0 w-full lg:w-auto shadow-md text-center">
-                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
-                  Exemplo de Lucro
-                </span>
-                <div className="flex items-center justify-center gap-3 font-black">
-                  <div className="bg-emerald-50 px-3.5 py-2.5 rounded-xl border border-emerald-200">
-                    <span className="text-xs block text-slate-500 font-semibold">10 Amigos</span>
-                    <span className="text-lg text-amber-600 font-black">R$ 100 Pix</span>
-                  </div>
-                  <div className="bg-emerald-50 px-3.5 py-2.5 rounded-xl border border-emerald-200">
-                    <span className="text-xs block text-slate-500 font-semibold">50 Amigos</span>
-                    <span className="text-lg text-emerald-700 font-black">R$ 500 Pix</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 3 Passos Rápidos com Cores Vivas */}
-            <div className="grid md:grid-cols-3 gap-6 my-8">
-              <div className="bg-white/90 border border-blue-200 hover:border-blue-400 rounded-2xl p-6 transition-all duration-300 group shadow-sm hover:shadow-md">
-                <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-black text-xl mb-4 border border-blue-200 group-hover:scale-110 transition">
-                  <Share2 className="w-6 h-6" />
-                </div>
-                <span className="text-xs font-bold text-blue-600 uppercase tracking-wider block mb-1">Passo 1</span>
-                <h3 className="text-base font-bold text-slate-900 mb-2">Pegue seu Link Único</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Cadastre-se com seu Nome, CPF e chave Pix de mesma titularidade para gerar seu link exclusivo.
-                </p>
-              </div>
-
-              <div className="bg-white/90 border border-purple-200 hover:border-purple-400 rounded-2xl p-6 transition-all duration-300 group shadow-sm hover:shadow-md">
-                <div className="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-black text-xl mb-4 border border-purple-200 group-hover:scale-110 transition">
-                  <QrCode className="w-6 h-6" />
-                </div>
-                <span className="text-xs font-bold text-purple-600 uppercase tracking-wider block mb-1">Passo 2</span>
-                <h3 className="text-base font-bold text-slate-900 mb-2">Compartilhe no WhatsApp</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Envie para amigos, grupos de motoristas, táxi, Uber ou redes sociais com um toque.
-                </p>
-              </div>
-
-              <div className="bg-white/90 border border-emerald-300 hover:border-emerald-500 rounded-2xl p-6 transition-all duration-300 group shadow-sm hover:shadow-md">
-                <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-black text-xl mb-4 border border-emerald-200 group-hover:scale-110 transition">
-                  <DollarSign className="w-6 h-6" />
-                </div>
-                <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block mb-1">Passo 3</span>
-                <h3 className="text-base font-bold text-slate-900 mb-2">Receba R$ 10 no Pix</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  A cada cliente que contratar o recurso, R$ 10,00 caem no seu Pix em até 72h (conta no mesmo nome e CPF do cadastro)!
-                </p>
-              </div>
-            </div>
-
-            {/* Chamada para Ação Vibrante */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
-              <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>100% gratuito • A chave Pix deve ser no mesmo nome e CPF do cadastro</span>
-              </div>
-
-              <Link
-                href="/afiliados"
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white hover:from-emerald-500 hover:to-teal-500 shadow-xl shadow-emerald-600/25 hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <span>Quero Começar a Indicar e Lucrar Agora</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-      )}
 
       {/* 5. METODOLOGIA / COMO FUNCIONA */}
       <section id="como-funciona" className="py-20 border-t border-slate-200 bg-white px-6 scroll-mt-20">
@@ -595,11 +457,6 @@ export default function AutoRecursoLandingPage() {
             <Link href="/fale-conosco" className="hover:text-amber-300 transition">
               Fale Conosco
             </Link>
-            {isAffiliateActive && (
-              <Link href="/afiliados" className="text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1">
-                💰 Programa de Afiliados (R$ 10)
-              </Link>
-            )}
             <Link href="/login" className="hover:text-amber-300 transition">
               Área do Cliente
             </Link>

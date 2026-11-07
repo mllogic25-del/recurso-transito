@@ -109,7 +109,7 @@ function LoginForm() {
                   <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 font-bold">
                     <Check className="w-3.5 h-3.5" />
                   </div>
-                  <span className="font-semibold text-slate-800">Programa de afiliados com R$ 10 no Pix</span>
+                  <span className="font-semibold text-slate-800">Defesas técnicas com fundamentação no CTB</span>
                 </div>
               </div>
             </div>

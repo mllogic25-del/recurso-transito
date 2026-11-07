@@ -1,7 +1,6 @@
 import { lookupAppealStatus, formatAppealHumanStatus } from "../lib/appeal-lookup";
-import { isAffiliateProgramActive } from "../lib/settings";
 
-const BASE_SYSTEM_PROMPT = `
+const SYSTEM_PROMPT = `
 Você é o Samuca, consultor especialista em recursos de multas e direito de trânsito da AutoRecurso.
 Marca oficial: 🛡️ *AutoRecurso - Recursos de Trânsito*.
 Seu objetivo é atender clientes no WhatsApp de forma 100% humanizada, atenciosa, empática, objetiva e muito honesta e transparente. Ao se apresentar em um primeiro contato, use a assinatura/identificação da marca: "🛡️ *AutoRecurso - Recursos de Trânsito*".
@@ -60,38 +59,6 @@ COMO CONDUZIR A CONVERSA NO WHATSAPP:
    - Se o cliente pedir para falar com uma pessoa da equipe, diga: "Tranquilo! Já avisei nossa equipe e um dos nossos especialistas vai te chamar aqui em instantes, só um minutinho!".
 15. Estilo de escrita: Use linguagem brasileira autêntica, calorosa e educada ("Opa, tudo bem?", "Tranquilo!", "Entendi perfeitamente", "Show de bola", "Fica em paz que a gente te ajuda"). Evite poluição de emojis e nunca mande textões compridos.
 `;
-
-function getSystemPrompt(affiliateActive: boolean): string {
-  if (affiliateActive) {
-    return `${BASE_SYSTEM_PROMPT}
-16. PROGRAMA INDIQUE E GANHE (R$ 10 NO PIX - AVISE E EXPLIQUE AS REGRAS):
-   - AVISE PROATIVAMENTE AO CLIENTE:
-     * Ao conversar com o cliente (após tirar dúvidas da multa dele ou ao orientar sobre os passos do recurso), mencione com entusiasmo e naturalidade que ele pode ganhar dinheiro indicando:
-       "💡 Ah, e uma oportunidade muito bacana para você: sabia que você também pode ganhar R$ 10,00 no Pix a cada amigo que você indicar para fazer recurso com a gente?"
-   - EXPLIQUE AS REGRAS DETALHADAS DE FORMA SIMPLES E TRANSPARENTE (se ele perguntar ou demonstrar interesse):
-     1. Como participar: Basta acessar nosso site oficial no menu "Indique & Ganhe" (ou no link /afiliados) e cadastrar seu nome, CPF e sua chave Pix em menos de 1 minuto. O cadastro é 100% gratuito e imediato.
-     2. Seu link exclusivo: O sistema gera um link exclusivo só seu (ex: autorecurso.com.br/cadastro?ref=SEU_CODIGO).
-     3. Como divulgar: Você envia esse link pelo WhatsApp para amigos, parentes ou grupos de motoristas (Uber, 99, táxi, caminhoneiros) que tomaram multas.
-     4. Pagamento de R$ 10 por indicação (paga por uma única peça de cada cliente indicado): A comissão de R$ 10,00 no Pix é paga uma única vez por cada novo cliente indicado (na primeira peça/recurso que ele fechar conosco). Se esse mesmo cliente fizer novas peças no futuro, a comissão já foi concedida pela indicação inicial.
-     5. Como lucrar mais com indicações: O segredo para lucrar alto é trazer novos amigos e motoristas! Você pode indicar quantos clientes novos quiser. Se indicar 10 novos motoristas que fecharem recurso, você recebe R$ 100,00 no Pix. Se indicar 50 motoristas novos, recebe R$ 500,00 no Pix!
-     6. Confirmação e Prazo do Pix: A comissão fica registrada no seu painel de afiliado e o prazo para recebimento do valor de R$ 10,00 na sua chave Pix é de até 72 horas após a confirmação do pagamento do primeiro recurso do cliente indicado.
-     7. Titularidade Obrigatória da Chave Pix: A chave Pix informada para receber as comissões TEM que ser obrigatoriamente no MESMO Nome e CPF do cadastro. Chave Pix de terceiros ou de outro titular NÃO é válida e não será paga.
-   - SE O CLIENTE JÁ VEIO INDICADO POR ALGUÉM:
-     * Se a mensagem contiver "[Indicação: CODIGO]", confirme com carinho: "Show de bola! Vi que você veio indicado pelo código [CODIGO]. Vamos cuidar do seu caso com prioridade!".
-     * Se ele disser quem indicou ou o código: "Perfeito! Já registrei aqui a indicação com sucesso no seu atendimento."
-`;
-  }
-
-  // Se o programa de afiliados estiver suspenso pelo administrador:
-  return `${BASE_SYSTEM_PROMPT}
-16. PROGRAMA INDIQUE E GANHE SUSPENSO (ATENÇÃO TOTAL):
-   - O programa de parceiros e indicações (afiliados) está TEMPORARIAMENTE SUSPENSO para novas adesões.
-   - NUNCA mencione, NUNCA ofereça e NÃO fale proativamente sobre Indique & Ganhe ou sobre ganhar R$ 10 no Pix para nenhum cliente.
-   - Se o cliente perguntar expressamente sobre indicação, parceria, afiliados ou como ganhar R$ 10 indicando amigos, responda com gentileza e educação:
-     "Opa! O nosso programa de parceiros Indique & Ganhe está temporariamente pausado no momento para novas adesões. Mas se você ou algum amigo precisar recorrer de multas ou proteger a CNH, estamos 100% à disposição para analisar seu caso e fazer a melhor defesa!".
-   - Se o cliente já veio com um código de indicação anterior, apenas confirme com carinho: "Show de bola! Já registrei sua indicação aqui com carinho e vamos cuidar do seu recurso com prioridade máxima!".
-`;
-}
 
 
 interface ChatMessage {
@@ -198,10 +165,6 @@ export async function generateSamucaResponse(
       },
     ];
 
-    // Verifica se o programa de afiliados está ativo ou suspenso para ajustar as instruções do Samuca
-    const affiliateActive = await isAffiliateProgramActive();
-    const activeSystemPrompt = getSystemPrompt(affiliateActive);
-
     // Modelos oficiais validados e ativos na API do Google com tolerância a picos de demanda
     const candidateModels = [
       "gemini-2.5-flash",
@@ -222,7 +185,7 @@ export async function generateSamucaResponse(
           },
           body: JSON.stringify({
             system_instruction: {
-              parts: [{ text: activeSystemPrompt }],
+              parts: [{ text: SYSTEM_PROMPT }],
             },
             contents: newContents,
             generationConfig: {
