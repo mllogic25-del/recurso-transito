@@ -124,7 +124,7 @@ async function startBot() {
         setTimeout(startBot, 1500);
       }
     } catch (_) {}
-  }, 2500);
+  }, 4000);
 
   sock.ev.on("creds.update", saveCreds);
 
@@ -204,7 +204,37 @@ async function startBot() {
     }
   });
 
-  // Buffer inteligente de loteamento para mensagens e mídias (permite envio de 1 por 1 ou vários de uma vez)
+  // Helper para desempacotar mensagens do WhatsApp de qualquer invólucro
+  // (suporta mensagens normais, temporárias/efêmeras, visualização única, legendas e respostas citadas)
+  function unwrapMessage(msg: any): { unwrapped: any; text: string } {
+    let m = msg.message;
+    if (!m) return { unwrapped: null, text: "" };
+
+    if (m.ephemeralMessage?.message) m = m.ephemeralMessage.message;
+    if (m.viewOnceMessage?.message) m = m.viewOnceMessage.message;
+    if (m.viewOnceMessageV2?.message) m = m.viewOnceMessageV2.message;
+    if (m.documentWithCaptionMessage?.message) m = m.documentWithCaptionMessage.message;
+    if (m.editedMessage?.message?.protocolMessage?.editedMessage) {
+      m = m.editedMessage.message.protocolMessage.editedMessage;
+    }
+
+    let text = "";
+    if (typeof m.conversation === "string" && m.conversation.trim()) {
+      text = m.conversation.trim();
+    } else if (typeof m.extendedTextMessage?.text === "string" && m.extendedTextMessage.text.trim()) {
+      text = m.extendedTextMessage.text.trim();
+    } else if (typeof m.imageMessage?.caption === "string" && m.imageMessage.caption.trim()) {
+      text = m.imageMessage.caption.trim();
+    } else if (typeof m.documentMessage?.caption === "string" && m.documentMessage.caption.trim()) {
+      text = m.documentMessage.caption.trim();
+    } else if (typeof m.videoMessage?.caption === "string" && m.videoMessage.caption.trim()) {
+      text = m.videoMessage.caption.trim();
+    }
+
+    return { unwrapped: m, text };
+  }
+
+  // Buffer inteligente de loteamento para mensagens e mídias
   interface UserBatchQueue {
     texts: string[];
     mediaFiles: Array<{ buffer: Buffer; mimeType: string }>;
@@ -215,8 +245,7 @@ async function startBot() {
   const userBatchQueues = new Map<string, UserBatchQueue>();
 
   sock.ev.on("messages.upsert", async ({ messages, type }) => {
-    if (type !== "notify") return;
-
+    // Processa mensagens 'notify' e 'append' para nunca perder mensagens durante sincronização
     for (const msg of messages) {
       // Ignora mensagens enviadas pelo próprio robô
       if (msg.key.fromMe) continue;
@@ -227,71 +256,56 @@ async function startBot() {
       // Ignora status do WhatsApp e mensagens de grupos
       if (remoteJid === "status@broadcast" || remoteJid.endsWith("@g.us")) continue;
 
-      let messageText = "";
+      const { unwrapped, text: extractedText } = unwrapMessage(msg);
+      if (!unwrapped) continue;
+
+      let messageText = extractedText;
       let mediaBuffer: Buffer | null = null;
       let mimeType: string | null = null;
 
+      const synthMsg = { key: msg.key, message: unwrapped };
+
       // 1. Identifica se é Imagem
-      if (msg.message?.imageMessage) {
-        messageText = msg.message.imageMessage.caption || "";
-        mimeType = msg.message.imageMessage.mimetype || "image/jpeg";
+      if (unwrapped.imageMessage) {
+        mimeType = unwrapped.imageMessage.mimetype || "image/jpeg";
         try {
-          mediaBuffer = (await downloadMediaMessage(msg, "buffer", {})) as Buffer;
+          mediaBuffer = (await downloadMediaMessage(synthMsg, "buffer", {})) as Buffer;
           console.log(`📷 Foto recebida de [${remoteJid.replace("@s.whatsapp.net", "")}] (${mimeType})`);
         } catch (downloadErr) {
           console.error("Erro ao baixar imagem:", downloadErr);
         }
       }
       // 2. Identifica se é Documento / PDF
-      else if (msg.message?.documentMessage) {
-        messageText = msg.message.documentMessage.caption || "";
-        mimeType = msg.message.documentMessage.mimetype || "application/pdf";
+      else if (unwrapped.documentMessage) {
+        mimeType = unwrapped.documentMessage.mimetype || "application/pdf";
         try {
-          mediaBuffer = (await downloadMediaMessage(msg, "buffer", {})) as Buffer;
-          console.log(`📄 Documento recebido de [${remoteJid.replace("@s.whatsapp.net", "")}] (${mimeType})`);
-        } catch (downloadErr) {
-          console.error("Erro ao baixar documento:", downloadErr);
-        }
-      }
-      // 2.1. Documento com legenda (documentWithCaptionMessage)
-      else if (msg.message?.documentWithCaptionMessage?.message?.documentMessage) {
-        const doc = msg.message.documentWithCaptionMessage.message.documentMessage;
-        messageText = doc.caption || "";
-        mimeType = doc.mimetype || "application/pdf";
-        try {
-          mediaBuffer = (await downloadMediaMessage(msg, "buffer", {})) as Buffer;
+          mediaBuffer = (await downloadMediaMessage(synthMsg, "buffer", {})) as Buffer;
           console.log(`📄 Documento recebido de [${remoteJid.replace("@s.whatsapp.net", "")}] (${mimeType})`);
         } catch (downloadErr) {
           console.error("Erro ao baixar documento:", downloadErr);
         }
       }
       // 3. Identifica se é Áudio / Mensagem de voz
-      else if (msg.message?.audioMessage) {
-        mimeType = msg.message.audioMessage.mimetype || "audio/ogg";
+      else if (unwrapped.audioMessage) {
+        mimeType = unwrapped.audioMessage.mimetype || "audio/ogg";
         try {
-          mediaBuffer = (await downloadMediaMessage(msg, "buffer", {})) as Buffer;
+          mediaBuffer = (await downloadMediaMessage(synthMsg, "buffer", {})) as Buffer;
           console.log(`🎤 Áudio recebido de [${remoteJid.replace("@s.whatsapp.net", "")}] (${mimeType})`);
         } catch (downloadErr) {
           console.error("Erro ao baixar áudio:", downloadErr);
         }
       }
-      // 4. Mensagem de Texto Comum
-      else {
-        messageText =
-          msg.message?.conversation ||
-          msg.message?.extendedTextMessage?.text ||
-          "";
-      }
 
-      // Se não tem nem texto nem arquivo baixado, ignora
+      // Se não tem texto nem arquivo baixado, ignora
       if (!messageText.trim() && !mediaBuffer) continue;
 
+      console.log(`📥 Mensagem de [${remoteJid.replace("@s.whatsapp.net", "")}]: "${messageText.trim() || `[Arquivo ${mimeType}]`}"`);
+
       try {
-        // Marca como lida imediatamente
         await sock.readMessages([msg.key]);
       } catch (_) {}
 
-      // Gerencia loteamento inteligente (espera até 3.5 segundos por novas fotos do mesmo cliente)
+      // Gerencia loteamento inteligente (espera até 3 segundos caso envie fotos ou mensagens em sequência)
       let existingBatch = userBatchQueues.get(remoteJid);
       if (existingBatch) {
         clearTimeout(existingBatch.timer);
@@ -308,7 +322,7 @@ async function startBot() {
         userBatchQueues.set(remoteJid, existingBatch);
       }
 
-      // Reinicia o temporizador do lote
+      // Dispara o processamento do lote
       existingBatch.timer = setTimeout(async () => {
         const batch = userBatchQueues.get(remoteJid);
         userBatchQueues.delete(remoteJid);
@@ -327,26 +341,46 @@ async function startBot() {
 
         try {
           // 1. Simula presença "Digitando..."
-          await sock.sendPresenceUpdate("composing", remoteJid);
+          try {
+            await sock.sendPresenceUpdate("composing", remoteJid);
+          } catch (_) {}
 
           // 2. Delay humanizado
-          await new Promise((resolve) => setTimeout(resolve, 2000));
+          await new Promise((resolve) => setTimeout(resolve, 1500));
 
           // 3. Gera a resposta única inteligente para o lote de documentos
           let reply = "Opa! Estou analisando aqui com calma, me dá só 1 minutinho!";
           if (GEMINI_API_KEY) {
-            reply = await generateSamucaResponse(remoteJid, combinedText, GEMINI_API_KEY, batch.mediaFiles);
+            try {
+              reply = await generateSamucaResponse(remoteJid, combinedText, GEMINI_API_KEY, batch.mediaFiles);
+            } catch (aiErr) {
+              console.error("[whatsapp.ts] Erro ao gerar resposta na IA:", aiErr);
+            }
           }
 
-          // 4. Para de digitar e envia a resposta citando a última mensagem
-          await sock.sendPresenceUpdate("paused", remoteJid);
-          await sock.sendMessage(remoteJid, { text: reply }, { quoted: batch.lastMsg });
+          // 4. Para de digitar
+          try {
+            await sock.sendPresenceUpdate("paused", remoteJid);
+          } catch (_) {}
 
-          console.log(`🤖 Samuca respondeu lote: "${reply}"\n`);
+          // 5. Envia a resposta com fallback seguro (tenta citar; se falhar, envia direto)
+          try {
+            await sock.sendMessage(remoteJid, { text: reply }, { quoted: batch.lastMsg });
+          } catch (quoteErr) {
+            console.warn("[whatsapp.ts] Falha ao enviar com citação, enviando mensagem direta:", quoteErr);
+            await sock.sendMessage(remoteJid, { text: reply });
+          }
+
+          console.log(`🤖 Samuca respondeu para [${remoteJid.replace("@s.whatsapp.net", "")}]: "${reply.substring(0, 80)}..."\n`);
         } catch (err) {
           console.error("Erro ao processar lote e responder mensagem:", err);
+          try {
+            await sock.sendMessage(remoteJid, {
+              text: "Opa, recebi sua mensagem! Me dá só um minutinho que estou organizando seus dados aqui.",
+            });
+          } catch (_) {}
         }
-      }, 3500);
+      }, 3000);
     }
   });
 }
