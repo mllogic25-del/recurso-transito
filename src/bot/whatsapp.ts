@@ -209,8 +209,13 @@ async function startBot() {
             try {
               const payload = JSON.parse(item.value);
               const cleanDigits = (payload.phone || "").replace(/\D/g, "");
-              if (cleanDigits) {
-                const jid = `${cleanDigits}@s.whatsapp.net`;
+              const formattedPhone = cleanDigits.startsWith("55")
+                ? cleanDigits
+                : cleanDigits.length >= 10 && cleanDigits.length <= 11
+                ? `55${cleanDigits}`
+                : cleanDigits;
+              if (formattedPhone) {
+                const jid = `${formattedPhone}@s.whatsapp.net`;
                 await sock.sendMessage(jid, { text: payload.text });
                 console.log(`[WhatsApp Outbox] ✅ Mensagem automática enviada para ${jid}`);
               }
