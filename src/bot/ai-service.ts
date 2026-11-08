@@ -1,4 +1,5 @@
 import { lookupAppealStatus, formatAppealHumanStatus } from "../lib/appeal-lookup";
+import { prisma } from "../lib/prisma";
 
 const SYSTEM_PROMPT = `
 Você é o Samuca, consultor especialista em recursos de multas e direito de trânsito da AutoRecurso.
@@ -113,9 +114,31 @@ export async function generateSamucaResponse(
       if (appealFound) {
         systemContextExtra = `\n\n[SISTEMA - RECURSO ENCONTRADO NO BANCO DE DADOS]:\n${formatAppealHumanStatus(
           appealFound
-        )}\nInstrução: Informe este status com clareza, empatia e entusiasmo para o cliente! Diga o protocolo e a placa dele.`;
+        )}\nInstrução: Informe este status com clareza, empatia e entusiasmo para o cliente! Diga o protocolo e a placa dele e informe que ele pode acompanhar em https://recurso-transito.onrender.com/acompanhar?protocolo=${appealFound.protocol}`;
       }
     }
+
+    // Se o cliente já tem um pedido aberto, injeta o protocolo para que o link Hotmart contenha ?sck=
+    try {
+      const rawUserDigits = userPhone.replace(/\D/g, "");
+      if (rawUserDigits) {
+        const clientAppeal = await prisma.appealRequest.findFirst({
+          where: {
+            user: {
+              OR: [
+                { phone: rawUserDigits },
+                { phone: rawUserDigits.startsWith("55") ? rawUserDigits.slice(2) : `55${rawUserDigits}` },
+              ],
+            },
+          },
+          orderBy: { createdAt: "desc" },
+        });
+
+        if (clientAppeal) {
+          systemContextExtra += `\n[SISTEMA - PEDIDO DO CLIENTE]: Protocolo: ${clientAppeal.protocol}, Placa: ${clientAppeal.plate}, Pagamento: ${clientAppeal.paymentStatus}. Ao fornecer o link de pagamento Hotmart, envie com o protocolo de rastreamento: https://pay.hotmart.com/W107769558Q?sck=${clientAppeal.protocol}`;
+        }
+      }
+    } catch (_) {}
 
     const currentParts: any[] = [];
 

@@ -195,10 +195,39 @@ async function startBot() {
         }
       }, HEARTBEAT_INTERVAL);
 
+      // ─── FILA DE MENSAGENS DE SAÍDA (OUTBOX) ──────────────────────────────
+      // Envia confirmações de pagamento da Hotmart e mensagens disparadas pelo sistema
+      const outboxTimer = setInterval(async () => {
+        try {
+          const pending = await prisma.whatsappSession.findMany({
+            where: { id: { startsWith: "outbox_" } },
+            take: 3,
+            orderBy: { updatedAt: "asc" },
+          });
+
+          for (const item of pending) {
+            try {
+              const payload = JSON.parse(item.value);
+              const cleanDigits = (payload.phone || "").replace(/\D/g, "");
+              if (cleanDigits) {
+                const jid = `${cleanDigits}@s.whatsapp.net`;
+                await sock.sendMessage(jid, { text: payload.text });
+                console.log(`[WhatsApp Outbox] ✅ Mensagem automática enviada para ${jid}`);
+              }
+              await prisma.whatsappSession.delete({ where: { id: item.id } }).catch(() => {});
+            } catch (sendErr) {
+              console.error(`[WhatsApp Outbox] Falha ao enviar ${item.id}:`, sendErr);
+              await prisma.whatsappSession.delete({ where: { id: item.id } }).catch(() => {});
+            }
+          }
+        } catch (_) {}
+      }, 3000);
+
       sock.ev.on("connection.update", (upd) => {
         if (upd.connection === "close") {
           clearInterval(heartbeatTimer);
           clearInterval(actionCheckTimer);
+          clearInterval(outboxTimer);
         }
       });
     }

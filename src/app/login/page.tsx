@@ -192,8 +192,11 @@ function LoginForm() {
               </button>
             </form>
 
-            <div className="mt-8 pt-6 border-t border-slate-100 text-center text-xs text-slate-400 font-medium">
-              AutoRecurso • Todos os direitos reservados. Uso restrito e monitorado.
+            <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 font-medium">
+              <Link href="/acompanhar" className="text-blue-600 hover:text-blue-800 font-bold transition flex items-center gap-1">
+                🔍 É motorista/cliente? Acompanhe seu recurso
+              </Link>
+              <span className="text-slate-400">AutoRecurso v2.0 • Uso Restrito</span>
             </div>
           </div>
         </div>

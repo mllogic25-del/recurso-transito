@@ -74,11 +74,19 @@ export async function processWhatsAppIncomingCase(
       });
       console.log(`[WhatsApp Ingestion] Novo cliente criado no banco: ${user.name} (${user.phone})`);
     } else {
-      // Atualiza nome ou telefone se disponível
+      const updateData: any = {};
       if (pushName && user.name.startsWith("Cliente Zap")) {
+        updateData.name = pushName.trim();
+      }
+      // Se o cliente informou o e-mail real agora, atualiza no cadastro
+      if (extractedEmail && user.email.includes("@whatsapp.autorecurso.com.br")) {
+        updateData.email = extractedEmail;
+        console.log(`[WhatsApp Ingestion] Atualizando e-mail real do cliente ${user.phone}: ${extractedEmail}`);
+      }
+      if (Object.keys(updateData).length > 0) {
         user = await prisma.user.update({
           where: { id: user.id },
-          data: { name: pushName.trim() },
+          data: updateData,
         });
       }
     }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { processReferralCommission } from "@/lib/commissionUtils";
+import { queueWhatsAppMessage } from "@/lib/whatsapp-queue";
 
 export async function POST(
   request: Request,
@@ -34,12 +35,38 @@ export async function POST(
         where: { id: params.id },
         data: {
           paymentStatus: "PAID",
+          status: appeal.status === "PENDING" ? "PROCESSING" : appeal.status,
           paymentConfirmedAt: new Date(),
         },
+        include: { user: true },
       });
 
       // Dispara a comissão de R$ 10,00 se o usuário tiver sido indicado
       await processReferralCommission(appeal.userId, appeal.id);
+
+      // Dispara confirmação automática no WhatsApp do cliente (72 horas)
+      if (updated.user?.phone) {
+        const clientDisplayName = updated.user.name || "Cliente";
+        const whatsappText =
+`🎉 *PAGAMENTO CONFIRMADO COM SUCESSO!*
+
+Olá, *${clientDisplayName}*! Confirmamos o recebimento do seu pagamento de R$ 30,00 referente à elaboração da sua defesa técnica de trânsito.
+
+🚗 *Veículo:* Placa *${updated.plate || "Em conferência"}*
+📋 *Protocolo:* *${updated.protocol}*
+⏱️ *Prazo de Confecção:* Até 72 horas úteis nossa equipe de especialistas concluirá e revisará a sua peça personalizada.
+
+📲 *Como você receberá o documento:*
+Assim que a petição for concluída e aprovada, enviaremos o arquivo diretamente aqui no seu WhatsApp e também para o seu e-mail (${updated.user.email})!
+
+Você também pode consultar o status em tempo real e baixar sua defesa pelo portal:
+👉 https://recurso-transito.onrender.com/acompanhar?protocolo=${updated.protocol}
+
+Qualquer dúvida, estamos à sua disposição aqui mesmo no WhatsApp!
+🛡️ *AutoRecurso - Recursos de Trânsito*`;
+
+        await queueWhatsAppMessage(updated.user.phone, whatsappText);
+      }
 
       return NextResponse.json({ success: true, appeal: updated });
     }
