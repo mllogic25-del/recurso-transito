@@ -203,6 +203,17 @@ export default function AdminEditarRecursoPage() {
   const isReleased = status === "READY";
   const isPaid = paymentStatus === "PAID";
 
+  const clientPhoneDigits = (appeal.user.phone || "").replace(/\D/g, "");
+  const formattedZapPhone = clientPhoneDigits.startsWith("55")
+    ? clientPhoneDigits
+    : `55${clientPhoneDigits}`;
+  const zapMessage = encodeURIComponent(
+    `Olá ${appeal.user.name}! Tudo bem?\n\nA sua defesa técnica personalizada da AutoRecurso para o veículo placa *${appeal.plate}* (Auto de Infração: *${appeal.aitNumber}*, Protocolo: *${appeal.protocol}*) foi concluída e aprovada com sucesso pela nossa equipe!\n\nSegue a sua peça pronta para protocolo. Qualquer dúvida estamos à disposição!`
+  );
+  const clientZapUrl = clientPhoneDigits.length >= 8
+    ? `https://wa.me/${formattedZapPhone}?text=${zapMessage}`
+    : null;
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-100">
       <Navbar />
@@ -259,7 +270,7 @@ export default function AdminEditarRecursoPage() {
               Salvar Rascunho
             </button>
 
-            {/* Botão Principal: Liberar e Enviar por E-mail */}
+            {/* Botão Principal: Liberar Defesa */}
             <button
               onClick={() => saveAppeal("READY")}
               disabled={saving}
@@ -268,6 +279,20 @@ export default function AdminEditarRecursoPage() {
               <Send className="w-3.5 h-3.5" />
               {saving ? "Salvando..." : isReleased ? "Atualizar & Manter Liberado" : "Liberar Defesa"}
             </button>
+
+            {/* Enviar Defesa no WhatsApp do Cliente */}
+            {clientZapUrl && (
+              <a
+                href={clientZapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-300 text-xs font-black rounded-lg shadow-xs transition"
+                title="Abrir WhatsApp com a mensagem pronta de envio da defesa"
+              >
+                <MessageCircle className="w-4 h-4 text-emerald-600" />
+                <span>Enviar no WhatsApp</span>
+              </a>
+            )}
 
             <a
               href={`/api/appeals/${appeal.id}/docx`}
@@ -445,7 +470,19 @@ export default function AdminEditarRecursoPage() {
                 <p><strong>E-mail:</strong> {appeal.user.email}</p>
                 <p><strong>CPF:</strong> {appeal.user.cpf || "Não informado"}</p>
                 <p><strong>CNH:</strong> {appeal.user.cnh || "Não informada"}</p>
-                <p><strong>Telefone:</strong> {appeal.user.phone || "Não informado"}</p>
+                <div className="flex items-center justify-between pt-1">
+                  <p><strong>Telefone:</strong> {appeal.user.phone || "Não informado"}</p>
+                  {clientZapUrl && (
+                    <a
+                      href={clientZapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] font-black text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded-lg"
+                    >
+                      <MessageCircle className="w-3 h-3 text-emerald-600" /> WhatsApp
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
 
