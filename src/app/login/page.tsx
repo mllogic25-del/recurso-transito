@@ -1,17 +1,24 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import { LogIn, AlertCircle, ArrowRight, ShieldCheck, Check, Mail, Lock } from "lucide-react";
+import {
+  LogIn,
+  AlertCircle,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
+  Mail,
+  Lock,
+  Bot,
+  FileText,
+  Clock,
+} from "lucide-react";
 
 function LoginForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const placaParam = searchParams.get("placa") || "";
-  const categoriaParam = searchParams.get("categoria") || "";
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -32,22 +39,13 @@ function LoginForm() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Falha ao entrar no sistema.");
+        setError(data.error || "Credenciais inválidas. Verifique seu e-mail e senha.");
         setLoading(false);
         return;
       }
 
-      if (data.user.role === "ADMIN") {
-        router.push("/admin/dashboard");
-      } else if (placaParam) {
-        router.push(
-          `/cliente/novo?placa=${encodeURIComponent(placaParam)}&categoria=${encodeURIComponent(
-            categoriaParam
-          )}`
-        );
-      } else {
-        router.push("/cliente/dashboard");
-      }
+      // Login efetuado: direciona imediatamente para o Painel Administrativo
+      router.push("/admin/dashboard");
     } catch {
       setError("Erro de conexão ao servidor. Tente novamente.");
       setLoading(false);
@@ -55,121 +53,96 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-100 text-slate-900 relative">
-      {/* Luzes Ambientais de Fundo Suaves */}
-      <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-blue-400/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-40 right-10 w-[400px] h-[400px] bg-amber-400/10 rounded-full blur-[130px] pointer-events-none" />
+    <div className="min-h-screen flex flex-col bg-slate-900 text-slate-100 relative">
+      {/* Luzes de ambientação corporativa escura */}
+      <div className="absolute top-0 left-1/3 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-[450px] h-[450px] bg-amber-500/10 rounded-full blur-[150px] pointer-events-none" />
 
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8 py-12 relative z-10">
-        <div className="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-          {/* Coluna Esquerda - Identidade Visual com Samuca */}
-          <div className="lg:col-span-5 bg-gradient-to-br from-white via-slate-50 to-blue-50/50 rounded-3xl p-8 sm:p-10 text-slate-900 flex flex-col justify-between shadow-xl border border-slate-200/90 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-60 h-60 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-
+        <div className="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          {/* Coluna Esquerda - Apresentação Corporativa do Sistema */}
+          <div className="lg:col-span-5 bg-slate-800/80 backdrop-blur-md rounded-3xl p-8 sm:p-10 text-white flex flex-col justify-between shadow-2xl border border-slate-700/80 relative overflow-hidden">
             <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3.5 mb-6">
                 <img
                   src="/logo-icon.png"
                   alt="AutoRecurso"
-                  className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl border border-amber-500/40 shadow-md object-cover bg-slate-950 flex-shrink-0"
+                  className="w-12 h-12 rounded-xl border border-amber-400/50 shadow-md object-cover bg-slate-950 flex-shrink-0"
                 />
                 <div className="flex flex-col whitespace-nowrap">
-                  <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-950 uppercase leading-none">
-                    Auto<span className="text-amber-500">Recurso</span>
+                  <span className="text-2xl font-black tracking-tight text-white uppercase leading-none">
+                    Auto<span className="text-amber-400">Recurso</span>
                   </span>
-                  <span className="text-[10px] tracking-[0.2em] text-emerald-700 uppercase font-bold mt-1 leading-none">
-                    Defesas &amp; Recursos de Trânsito
+                  <span className="text-[10px] tracking-[0.2em] text-emerald-400 uppercase font-bold mt-1 leading-none">
+                    Sistema Administrativo
                   </span>
                 </div>
               </div>
 
-              <h3 className="text-2xl font-black text-slate-950 tracking-tight leading-snug mb-3">
-                Bem-vindo de volta ao seu portal de recursos.
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
-                Acompanhe o andamento das suas defesas, consulte prazos e baixe suas peças fundamentadas prontas para protocolo.
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/15 border border-blue-400/30 text-blue-300 text-[11px] font-bold tracking-wide mb-4">
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+                Módulo de Gestão Operacional
+              </div>
+
+              <h2 className="text-2xl font-black text-white tracking-tight leading-snug mb-3">
+                Painel de Controle e Elaboração de Defesas
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                Acesso restrito para administração de atendimentos, conferência de documentos recebidos pelo WhatsApp e controle da fila técnica.
               </p>
 
-              <div className="mt-8 space-y-3 pt-6 border-t border-slate-200 text-xs text-slate-700">
-                <div className="flex items-center gap-2.5 bg-white/80 p-2.5 rounded-xl border border-slate-200/80 shadow-xs">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 font-bold">
-                    <Check className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="font-semibold text-slate-800">Petições prontas em PDF e Word (.docx)</span>
+              <div className="mt-8 space-y-3 pt-6 border-t border-slate-700/80 text-xs text-slate-200">
+                <div className="flex items-center gap-2.5 bg-slate-900/60 p-3 rounded-xl border border-slate-700/60">
+                  <Bot className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span className="font-semibold text-slate-200">Integração WhatsApp &amp; Samuca IA</span>
                 </div>
-                <div className="flex items-center gap-2.5 bg-white/80 p-2.5 rounded-xl border border-slate-200/80 shadow-xs">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 font-bold">
-                    <Check className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="font-semibold text-slate-800">Atendimento integrado pelo WhatsApp</span>
+                <div className="flex items-center gap-2.5 bg-slate-900/60 p-3 rounded-xl border border-slate-700/60">
+                  <FileText className="w-4 h-4 text-amber-400 shrink-0" />
+                  <span className="font-semibold text-slate-200">Recepção de Notificações, CRLV e CNH</span>
                 </div>
-                <div className="flex items-center gap-2.5 bg-white/80 p-2.5 rounded-xl border border-slate-200/80 shadow-xs">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 font-bold">
-                    <Check className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="font-semibold text-slate-800">Defesas técnicas com fundamentação no CTB</span>
+                <div className="flex items-center gap-2.5 bg-slate-900/60 p-3 rounded-xl border border-slate-700/60">
+                  <Clock className="w-4 h-4 text-blue-400 shrink-0" />
+                  <span className="font-semibold text-slate-200">Gestão de Prazos do CTB e JARI</span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-8 pt-4 border-t border-slate-200 relative z-10 flex items-center gap-2 text-[11px] text-slate-500 font-medium">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Ambiente criptografado e seguro</span>
+            <div className="mt-8 pt-4 border-t border-slate-700/80 relative z-10 flex items-center gap-2 text-[11px] text-slate-400 font-medium">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>Ambiente Administrativo Seguro</span>
             </div>
           </div>
 
-          {/* Coluna Direita - Formulário de Login Bold & Big */}
-          <div className="lg:col-span-7 bg-white rounded-3xl shadow-xl border-2 border-amber-400/80 p-8 sm:p-10 flex flex-col justify-center">
-            <div className="mb-7">
-              <div className="flex items-center justify-between gap-3 mb-4">
-                <div className="flex items-center gap-3">
-                  <img
-                    src="/logo-icon.png"
-                    alt="AutoRecurso"
-                    className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl border border-amber-500/40 shadow-md object-cover bg-slate-950 flex-shrink-0"
-                  />
-                  <div className="flex flex-col whitespace-nowrap">
-                    <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-950 uppercase leading-none">
-                      Auto<span className="text-amber-500">Recurso</span>
-                    </span>
-                    <span className="text-[10px] tracking-[0.2em] text-emerald-700 uppercase font-bold mt-1 leading-none">
-                      Defesas &amp; Recursos de Trânsito
-                    </span>
-                  </div>
-                </div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 inline-block">
-                  Acesso Seguro
+          {/* Coluna Direita - Formulário de Login Executivo */}
+          <div className="lg:col-span-7 bg-white rounded-3xl shadow-2xl border-2 border-slate-200 p-8 sm:p-10 flex flex-col justify-center">
+            <div className="mb-6">
+              <div className="flex items-center justify-between gap-3 mb-2">
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200 inline-block">
+                  Acesso Restrito
                 </span>
+                <span className="text-xs text-slate-400 font-semibold">v2.0 Admin</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight">
-                Acesse sua Conta
+                Entrar no Sistema
               </h1>
               <p className="text-slate-500 text-xs sm:text-sm mt-1">
-                Entre com seu e-mail e senha cadastrados no sistema.
+                Informe as credenciais de administrador para acessar o painel de gestão.
               </p>
             </div>
 
             {error && (
-              <div className="mb-6 p-4 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs font-bold flex flex-col gap-1.5">
-                <div className="flex items-center gap-2.5">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-500" />
-                  <span>{error}</span>
-                </div>
-                <div className="pl-6.5 text-[11px] font-medium text-red-600">
-                  Esqueceu a senha?{" "}
-                  <Link href="/recuperar-senha" className="font-bold underline text-red-800 hover:text-red-950">
-                    Clique aqui para redefinir sua senha
-                  </Link>
-                </div>
+              <div className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold flex items-center gap-2.5">
+                <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-500" />
+                <span>{error}</span>
               </div>
             )}
 
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">
-                  Seu E-mail
+                  E-mail do Administrador
                 </label>
                 <div className="relative">
                   <Mail className="w-4 h-4 text-slate-400 absolute left-4 top-4" />
@@ -178,7 +151,7 @@ function LoginForm() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="seu.email@exemplo.com"
+                    placeholder="admin@autorecurso.com.br"
                     className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-slate-300 text-sm focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-400/20 outline-none transition bg-slate-50 text-slate-950 font-medium placeholder-slate-400"
                   />
                 </div>
@@ -187,7 +160,7 @@ function LoginForm() {
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wide">
-                    Sua Senha
+                    Senha de Acesso
                   </label>
                   <Link
                     href="/recuperar-senha"
@@ -212,36 +185,15 @@ function LoginForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full mt-2 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 hover:from-amber-300 hover:to-yellow-300 font-black py-4 px-6 rounded-xl shadow-xl shadow-amber-400/25 text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 disabled:opacity-50 transform hover:scale-[1.01] cursor-pointer"
+                className="w-full mt-2 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 hover:from-slate-900 hover:to-slate-800 text-white font-black py-4 px-6 rounded-xl shadow-xl shadow-slate-950/20 text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 disabled:opacity-50 transform hover:scale-[1.01] cursor-pointer border border-slate-800"
               >
-                <span>{loading ? "Verificando credenciais..." : "Entrar no Sistema"}</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>{loading ? "Verificando credenciais..." : "Acessar Painel do Administrador"}</span>
+                <ArrowRight className="w-4 h-4 text-amber-400" />
               </button>
             </form>
 
-            <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col gap-2.5 text-center text-xs text-slate-500 font-medium">
-              <div>
-                Esqueceu sua senha?{" "}
-                <Link href="/recuperar-senha" className="text-amber-600 font-bold hover:underline">
-                  Recuperar Senha ➔
-                </Link>
-              </div>
-
-              <div>
-                Ainda não possui uma conta?{" "}
-                <Link
-                  href={
-                    placaParam
-                      ? `/cadastro?placa=${encodeURIComponent(placaParam)}&categoria=${encodeURIComponent(
-                          categoriaParam
-                        )}`
-                      : "/cadastro"
-                  }
-                  className="text-blue-600 font-bold hover:underline"
-                >
-                  Cadastre-se gratuitamente ➔
-                </Link>
-              </div>
+            <div className="mt-8 pt-6 border-t border-slate-100 text-center text-xs text-slate-400 font-medium">
+              AutoRecurso • Todos os direitos reservados. Uso restrito e monitorado.
             </div>
           </div>
         </div>
@@ -254,8 +206,8 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-zinc-50 flex items-center justify-center text-zinc-400 font-black">
-          Carregando...
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400 font-bold">
+          Carregando portal administrativo...
         </div>
       }
     >
