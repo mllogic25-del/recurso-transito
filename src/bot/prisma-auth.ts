@@ -101,15 +101,20 @@ export async function usePrismaAuthState(sessionKey: string = "samuca") {
           return data;
         },
         set: async (data: any) => {
-          const tasks: Promise<void>[] = [];
+          const tasks: (() => Promise<void>)[] = [];
           for (const category in data) {
             for (const id in data[category]) {
               const value = data[category][id];
               const key = `${category}-${id}`;
-              tasks.push(value ? writeData(key, value) : removeData(key));
+              tasks.push(() => (value ? writeData(key, value) : removeData(key)));
             }
           }
-          await Promise.all(tasks);
+          // Processa em lotes de 10 para evitar sobrecarga no pool de conexões do Prisma
+          const BATCH_SIZE = 10;
+          for (let i = 0; i < tasks.length; i += BATCH_SIZE) {
+            const batch = tasks.slice(i, i + BATCH_SIZE);
+            await Promise.all(batch.map((fn) => fn()));
+          }
         },
       },
     },

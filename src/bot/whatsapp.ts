@@ -2,6 +2,7 @@ import makeWASocket, {
   DisconnectReason,
   fetchLatestBaileysVersion,
   downloadMediaMessage,
+  Browsers,
 } from "@whiskeysockets/baileys";
 import { Boom } from "@hapi/boom";
 import qrcode from "qrcode-terminal";
@@ -17,7 +18,31 @@ dotenv.config();
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 
+let currentSock: any = null;
+let reconnectTimer: NodeJS.Timeout | null = null;
+let isStarting = false;
+
 async function startBot() {
+  if (isStarting) {
+    console.log("[Samuca WhatsApp] Inicialização já em andamento, ignorando chamada concorrente.");
+    return;
+  }
+  isStarting = true;
+
+  if (reconnectTimer) {
+    clearTimeout(reconnectTimer);
+    reconnectTimer = null;
+  }
+
+  // Encerra socket anterior limpo para evitar múltiplas conexões concorrentes
+  if (currentSock) {
+    try {
+      (currentSock.ev as any).removeAllListeners?.();
+      currentSock.ws?.close();
+    } catch (_) {}
+    currentSock = null;
+  }
+
   if (!GEMINI_API_KEY) {
     console.warn("\n=======================================================");
     console.warn("⚠️  ATENÇÃO: Chave GEMINI_API_KEY não foi encontrada no .env!");
@@ -54,7 +79,20 @@ async function startBot() {
     logger: pino({ level: "silent" }), // Silencia logs internos para manter o terminal limpo
     printQRInTerminal: false,
     auth: state,
+    browser: Browsers.macOS("Desktop"),
+    syncFullHistory: false,
+    markOnlineOnConnect: false,
+    keepAliveIntervalMs: 25000,
+    connectTimeoutMs: 60000,
+    defaultQueryTimeoutMs: 60000,
+    retryRequestDelayMs: 2000,
+    maxMsgRetryCount: 5,
+    generateHighQualityLinkPreview: false,
+    emitOwnEvents: false,
   });
+
+  currentSock = sock;
+  isStarting = false;
 
   sock.ev.on("creds.update", saveCreds);
 
@@ -81,18 +119,30 @@ async function startBot() {
 
     if (connection === "close") {
       const statusCode = (lastDisconnect?.error as Boom)?.output?.statusCode;
-      const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
+      const isLoggedOut = statusCode === DisconnectReason.loggedOut;
+      const shouldReconnect = !isLoggedOut;
       console.log(`[Samuca WhatsApp] Conexão encerrada. Motivo: ${statusCode}.`);
 
       await updateStatus("DISCONNECTED", null);
 
+      if (currentSock === sock) {
+        try {
+          (sock.ev as any).removeAllListeners?.();
+          sock.ws?.close();
+        } catch (_) {}
+        currentSock = null;
+      }
+
       if (shouldReconnect) {
-        console.log("[Samuca WhatsApp] Reconectando em 3 segundos...");
-        setTimeout(startBot, 3000);
+        const delay = statusCode === DisconnectReason.restartRequired ? 1500 : 3500;
+        console.log(`[Samuca WhatsApp] Reconectando de forma estável em ${delay / 1000}s...`);
+        if (reconnectTimer) clearTimeout(reconnectTimer);
+        reconnectTimer = setTimeout(startBot, delay);
       } else {
-        console.log("[Samuca WhatsApp] Sessão desconectada ou expirada. Gerando novo QR Code...");
+        console.log("[Samuca WhatsApp] Sessão desconectada pelo celular (Logout real). Gerando novo QR Code...");
         await clearState();
-        setTimeout(startBot, 2000);
+        if (reconnectTimer) clearTimeout(reconnectTimer);
+        reconnectTimer = setTimeout(startBot, 2500);
       }
     } else if (connection === "open") {
       console.log("\n=======================================================");
@@ -103,24 +153,19 @@ async function startBot() {
       await updateStatus("CONNECTED", null);
 
       // ─── HEARTBEAT ─────────────────────────────────────────────────────────
-      // Atualiza o status a cada 5 minutos enquanto conectado.
-      // Isso permite que o watchdog externo detecte conexões "zumbi"
-      // (processo vivo mas WhatsApp silenciosamente desconectado).
-      const HEARTBEAT_INTERVAL = 5 * 60 * 1000; // 5 minutos
+      // Atualiza o status a cada 3 minutos enquanto conectado.
+      const HEARTBEAT_INTERVAL = 3 * 60 * 1000;
       const heartbeatTimer = setInterval(async () => {
         try {
           await updateStatus("CONNECTED", null);
-          console.log("[Samuca Heartbeat] ✅ Status atualizado no banco de dados.");
         } catch (hbErr) {
           console.error("[Samuca Heartbeat] Erro ao atualizar status:", hbErr);
         }
       }, HEARTBEAT_INTERVAL);
 
-      // Limpa o heartbeat quando a conexão fechar (evita memory leak)
       sock.ev.on("connection.update", (upd) => {
         if (upd.connection === "close") {
           clearInterval(heartbeatTimer);
-          console.log("[Samuca Heartbeat] Heartbeat encerrado (conexão fechada).");
         }
       });
     }

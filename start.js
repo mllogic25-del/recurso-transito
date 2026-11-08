@@ -173,7 +173,8 @@ async function checkStaleConnection() {
 
 function startWatchdog() {
   setInterval(async () => {
-    const processAlive = botProcess && !botProcess.killed;
+    // Processo ativo se a referência existe, não foi finalizado e exitCode ainda é null
+    const processAlive = botProcess && !botProcess.killed && botProcess.exitCode === null;
 
     if (!processAlive) {
       console.warn(`[Samuca Watchdog] 🔍 Verificação: bot NÃO está rodando. Reiniciando...`);
@@ -181,18 +182,7 @@ function startWatchdog() {
       return;
     }
 
-    // Testa se o processo do OS ainda responde (sinal 0 = não mata, só verifica)
-    try {
-      process.kill(botProcess.pid, 0);
-    } catch (_) {
-      console.warn(`[Samuca Watchdog] 🔍 Processo PID ${botProcess.pid} não respondeu. Reiniciando...`);
-      botProcess = null;
-      isBotRunning = false;
-      startBot("watchdog-process-dead");
-      return;
-    }
-
-    // Verifica conexão zumbi (processo vivo mas WhatsApp silenciosamente morto)
+    // Verifica conexão zumbi (processo vivo mas WhatsApp silenciosamente morto por mais de 12 min)
     const isZombie = await checkStaleConnection();
     if (isZombie) {
       if (botProcess && !botProcess.killed) {
