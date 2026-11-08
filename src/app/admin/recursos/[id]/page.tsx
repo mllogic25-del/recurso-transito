@@ -24,6 +24,8 @@ import {
   BookmarkPlus,
   Trash2,
   RotateCcw,
+  Calendar,
+  FileCheck,
 } from "lucide-react";
 
 interface AppealDetail {
@@ -200,7 +202,7 @@ export default function AdminEditarRecursoPage() {
         throw new Error(data.error || "Falha ao enviar mensagem.");
       }
 
-      setSuccessMsg("Mensagem enviada para a fila de WhatsApp do cliente com sucesso!");
+      setSuccessMsg("Mensagem enviada com sucesso para a fila do WhatsApp do cliente!");
       loadAppeal();
     } catch (err: any) {
       setErrorMsg(err.message || "Erro ao enviar mensagem pelo bot.");
@@ -274,7 +276,7 @@ export default function AdminEditarRecursoPage() {
   };
 
   const handleClearAppealArguments = async () => {
-    if (!confirm("Deseja limpar os argumentos e relato deste recurso?")) return;
+    if (!confirm("Deseja limpar os argumentos deste recurso?")) return;
 
     setActionLoading(true);
     try {
@@ -360,7 +362,7 @@ export default function AdminEditarRecursoPage() {
       }
 
       if (targetStatus === "READY") {
-        setSuccessMsg("Recurso liberado com sucesso!");
+        setSuccessMsg("Defesa aprovada e liberada com sucesso!");
       } else {
         setSuccessMsg("Alterações salvas com sucesso!");
       }
@@ -381,7 +383,7 @@ export default function AdminEditarRecursoPage() {
       });
       if (res.ok) {
         setPaymentStatus("PAID");
-        setSuccessMsg("Pagamento confirmado!");
+        setSuccessMsg("Pagamento Pix confirmado!");
         loadAppeal();
       }
     } catch {
@@ -391,10 +393,10 @@ export default function AdminEditarRecursoPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col bg-slate-50">
+      <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
         <Navbar />
         <div className="flex-1 flex items-center justify-center">
-          <Clock className="w-6 h-6 animate-spin text-slate-400" />
+          <Clock className="w-8 h-8 animate-spin text-indigo-400" />
         </div>
       </div>
     );
@@ -402,10 +404,10 @@ export default function AdminEditarRecursoPage() {
 
   if (!appeal) {
     return (
-      <div className="min-h-screen flex flex-col bg-slate-50">
+      <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center p-4">
-          <p className="text-slate-500 font-medium">Recurso não encontrado.</p>
+          <p className="text-rose-400 font-medium">Recurso não encontrado.</p>
         </div>
       </div>
     );
@@ -422,39 +424,53 @@ export default function AdminEditarRecursoPage() {
     clientPhoneDigits.length >= 8
       ? `https://wa.me/${formattedZapPhone}?text=${encodeURIComponent(
           customZapMessage ||
-            `Olá ${appeal.user.name}! Tudo bem?\n\nA sua defesa técnica da AutoRecurso referente à placa *${appeal.plate}* (Protocolo: *${appeal.protocol}*) está concluída. Acesse: ${typeof window !== "undefined" ? window.location.origin : ""}/acompanhar?protocolo=${appeal.protocol}`
+            `Olá ${appeal.user.name}! Tudo bem?\n\nA sua defesa técnica da AutoRecurso para o veículo placa *${appeal.plate}* (Protocolo: *${appeal.protocol}*) está concluída. Acesse: ${typeof window !== "undefined" ? window.location.origin : ""}/acompanhar?protocolo=${appeal.protocol}`
         )}`
       : null;
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800">
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
       <Navbar />
 
-      {/* BARRA SUPERIOR LIMPA */}
-      <div className="bg-white border-b border-slate-200 py-3 px-4 sm:px-8 sticky top-20 z-40 no-print">
+      {/* BARRA SUPERIOR ESCURA COM BOTÕES GRADIENTES */}
+      <div className="bg-slate-900/95 border-b border-slate-800 py-3.5 px-4 sm:px-8 sticky top-20 z-40 no-print backdrop-blur-md shadow-xl">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <Link
               href="/admin/dashboard"
-              className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition"
+              className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition"
               title="Voltar ao Painel"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-5 h-5" />
             </Link>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-base font-bold text-slate-900 font-mono">
+                <span className="font-mono text-base font-black text-indigo-300 bg-indigo-950/80 px-2.5 py-0.5 rounded-lg border border-indigo-500/40">
                   {appeal.protocol}
-                </h1>
-                <span className="text-xs text-slate-500">
-                  {isPaid ? "• Pago" : "• Aguardando Pagamento"}
                 </span>
-                <span className="text-xs text-slate-500">
-                  {isReleased ? "• Liberado" : "• Pendente"}
+                <span
+                  className={`text-xs px-2.5 py-0.5 rounded-full font-bold ${
+                    isPaid
+                      ? "bg-emerald-950/60 text-emerald-300 border border-emerald-500/40"
+                      : "bg-amber-950/60 text-amber-300 border border-amber-500/40"
+                  }`}
+                >
+                  {isPaid ? "✓ Pago" : "⏳ Aguardando Pix"}
+                </span>
+                <span
+                  className={`text-xs px-2.5 py-0.5 rounded-full font-bold ${
+                    isReleased
+                      ? "bg-blue-950/60 text-blue-300 border border-blue-500/40"
+                      : "bg-slate-800 text-slate-300 border border-slate-700"
+                  }`}
+                >
+                  {isReleased ? "✓ Defesa Liberada" : "Pendente"}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500">
-                {appeal.user.name} | Placa: {appeal.plate} | AIT: {appeal.aitNumber}
+              <p className="text-xs text-slate-400 mt-1">
+                Cliente: <strong className="text-white">{appeal.user.name}</strong> • Placa:{" "}
+                <strong className="text-white">{appeal.plate}</strong> • AIT:{" "}
+                <strong className="text-white">{appeal.aitNumber}</strong>
               </p>
             </div>
           </div>
@@ -463,7 +479,7 @@ export default function AdminEditarRecursoPage() {
             <button
               onClick={() => saveAppeal("PROCESSING")}
               disabled={saving}
-              className="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg transition disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-slate-700 transition disabled:opacity-50"
             >
               <Save className="w-3.5 h-3.5" />
               Salvar Rascunho
@@ -472,24 +488,24 @@ export default function AdminEditarRecursoPage() {
             <button
               onClick={() => saveAppeal("READY")}
               disabled={saving}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-black rounded-xl shadow-lg shadow-indigo-600/30 transition disabled:opacity-50"
             >
               <Send className="w-3.5 h-3.5" />
-              {saving ? "Salvando..." : isReleased ? "Atualizar" : "Liberar Defesa"}
+              {saving ? "Salvando..." : isReleased ? "Atualizar & Manter Liberado" : "Aprovar & Liberar Defesa"}
             </button>
 
             <a
               href={`/api/appeals/${appeal.id}/docx`}
               download
-              className="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-medium rounded-lg transition"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold rounded-xl transition"
             >
-              <FileDown className="w-3.5 h-3.5" />
+              <FileDown className="w-3.5 h-3.5 text-indigo-400" />
               Word (DOCX)
             </a>
 
             <button
               onClick={() => window.print()}
-              className="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-medium rounded-lg transition"
+              className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl transition"
             >
               <Printer className="w-3.5 h-3.5" />
               Imprimir
@@ -498,90 +514,96 @@ export default function AdminEditarRecursoPage() {
         </div>
       </div>
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 space-y-5">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-8 space-y-6">
         {/* FEEDBACK */}
         {successMsg && (
-          <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+          <div className="p-4 rounded-2xl bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 text-xs font-bold flex items-center gap-2 shadow-lg">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             {successMsg}
           </div>
         )}
         {errorMsg && (
-          <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs font-semibold flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+          <div className="p-4 rounded-2xl bg-rose-950/60 border border-rose-500/50 text-rose-300 text-xs font-bold flex items-center gap-2 shadow-lg">
+            <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
             {errorMsg}
           </div>
         )}
 
-        {/* ROTINAS & ENVIO DE MENSAGENS NO WHATSAPP (VISUAL LIMPO E SEM GRADIENTE) */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-2">
-            <div>
-              <h2 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                <MessageCircle className="w-4 h-4 text-slate-700" />
-                Rotinas de Mensagens no WhatsApp
-              </h2>
-              <p className="text-xs text-slate-500">
-                Envie orientações de protocolo e checklist com tags dinâmicas preenchidas.
-              </p>
+        {/* ========================================================= */}
+        {/* CENTRAL DE ROTINAS & ENVIO DE MENSAGENS NO WHATSAPP       */}
+        {/* ========================================================= */}
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/30 p-6 shadow-2xl backdrop-blur-md space-y-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-800 pb-3 gap-2">
+            <div className="flex items-center gap-2.5">
+              <span className="p-2 bg-emerald-500/20 text-emerald-400 rounded-xl border border-emerald-500/30">
+                <MessageCircle className="w-5 h-5" />
+              </span>
+              <div>
+                <h2 className="text-base font-black text-white">
+                  Central de Rotinas & Notificações WhatsApp
+                </h2>
+                <p className="text-xs text-slate-400">
+                  Selecione uma rotina pronta com tags preenchidas e envie ao cliente pelo robô ou no WhatsApp Web.
+                </p>
+              </div>
             </div>
-            <span className="text-xs text-slate-500">
-              WhatsApp Cliente: <strong className="text-slate-800">{appeal.user.phone || "Não informado"}</strong>
+            <span className="text-xs text-emerald-300 font-bold bg-emerald-950/80 px-3 py-1 rounded-xl border border-emerald-500/40">
+              Zap Cliente: {appeal.user.phone || "Não informado"}
             </span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Lista de Rotinas */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            {/* Seletor de Rotinas */}
             <div className="lg:col-span-1 space-y-2">
-              <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-indigo-300 block">
                 Escolha uma Rotina Salva:
               </label>
 
-              <div className="space-y-1.5 max-h-56 overflow-y-auto">
+              <div className="space-y-1.5 max-h-60 overflow-y-auto pr-1">
                 {templates.map((tpl) => (
                   <button
                     key={tpl.id}
                     type="button"
                     onClick={() => handleSelectTemplate(tpl.id)}
-                    className={`w-full text-left p-2.5 rounded-xl text-xs transition border ${
+                    className={`w-full text-left p-3 rounded-2xl text-xs font-semibold transition border ${
                       selectedTemplateId === tpl.id
-                        ? "bg-slate-900 text-white border-slate-900"
-                        : "bg-slate-50 hover:bg-slate-100 text-slate-800 border-slate-200"
+                        ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-indigo-400 shadow-lg shadow-indigo-600/30"
+                        : "bg-slate-950/80 hover:bg-slate-800 text-slate-300 border-slate-800"
                     }`}
                   >
-                    <p className="font-semibold truncate">{tpl.title}</p>
-                    <p className={`text-[10px] mt-0.5 ${selectedTemplateId === tpl.id ? "text-slate-300" : "text-slate-400"}`}>
-                      {tpl.category}
+                    <p className="font-bold truncate">{tpl.title}</p>
+                    <p className={`text-[10px] mt-0.5 ${selectedTemplateId === tpl.id ? "text-indigo-200" : "text-slate-500"}`}>
+                      {tpl.category} {tpl.isDefault ? "• Padrão" : ""}
                     </p>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Caixa de Texto e Envio */}
-            <div className="lg:col-span-2 space-y-2 flex flex-col justify-between">
+            {/* Mensagem e Envio */}
+            <div className="lg:col-span-2 space-y-3 flex flex-col justify-between">
               <div>
-                <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">
-                  Mensagem (Editável antes de enviar):
+                <label className="text-[11px] font-bold uppercase tracking-wider text-indigo-300 block mb-1">
+                  Mensagem Pronta para Envio (Você pode editar antes de enviar):
                 </label>
                 <textarea
-                  rows={6}
+                  rows={7}
                   value={customZapMessage}
                   onChange={(e) => setCustomZapMessage(e.target.value)}
-                  placeholder="Selecione uma rotina ao lado ou digite a mensagem de orientação que deseja enviar..."
-                  className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs outline-none focus:bg-white focus:border-slate-400 leading-relaxed font-sans"
+                  placeholder="Selecione uma rotina ao lado ou digite a mensagem de orientações que deseja enviar..."
+                  className="w-full p-3.5 bg-slate-950 rounded-2xl border border-slate-800 text-xs text-slate-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none leading-relaxed font-sans"
                 />
               </div>
 
-              <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+              <div className="flex flex-wrap items-center justify-between gap-2.5 pt-1">
                 <button
                   type="button"
                   onClick={() => setShowSaveRoutineModal(true)}
                   disabled={!customZapMessage.trim()}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg transition disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-slate-700 transition disabled:opacity-50"
                 >
-                  <BookmarkPlus className="w-3.5 h-3.5" />
-                  Salvar como Nova Rotina
+                  <BookmarkPlus className="w-3.5 h-3.5 text-amber-400" />
+                  + Salvar como Nova Rotina
                 </button>
 
                 <div className="flex items-center gap-2">
@@ -590,7 +612,7 @@ export default function AdminEditarRecursoPage() {
                       href={directZapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg transition"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-emerald-300 text-xs font-bold rounded-xl border border-emerald-500/30 transition"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                       Abrir no Web
@@ -601,10 +623,10 @@ export default function AdminEditarRecursoPage() {
                     type="button"
                     onClick={handleSendAutomaticZap}
                     disabled={sendingZap || !customZapMessage.trim() || !appeal.user.phone}
-                    className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition disabled:opacity-50"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-black rounded-xl shadow-lg shadow-emerald-950/40 transition disabled:opacity-50"
                   >
-                    <Send className="w-3.5 h-3.5" />
-                    {sendingZap ? "Enviando..." : "Enviar pelo Bot"}
+                    <Send className="w-4 h-4" />
+                    {sendingZap ? "Enviando..." : "🚀 Enviar pelo Samuca Bot (Automático)"}
                   </button>
                 </div>
               </div>
@@ -612,28 +634,29 @@ export default function AdminEditarRecursoPage() {
           </div>
         </div>
 
-        {/* Modal Salvar Rotina */}
+        {/* Modal Salvar Nova Rotina */}
         {showSaveRoutineModal && (
-          <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl p-5 max-w-md w-full shadow-xl border border-slate-200 space-y-3">
-              <h3 className="text-sm font-bold text-slate-900">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-800 space-y-4">
+              <h3 className="text-base font-extrabold text-white flex items-center gap-2">
+                <BookmarkPlus className="w-5 h-5 text-indigo-400" />
                 Salvar Mensagem como Nova Rotina
               </h3>
-              <p className="text-xs text-slate-500">
-                Dê um título para reutilizar esta orientação em outros atendimentos.
+              <p className="text-xs text-slate-400">
+                Dê um título para reutilizar esta mensagem de orientações nos próximos clientes.
               </p>
               <input
                 type="text"
                 value={newRoutineTitle}
                 onChange={(e) => setNewRoutineTitle(e.target.value)}
                 placeholder="Ex: Instruções de Protocolo na JARI"
-                className="w-full p-2 rounded-lg border border-slate-200 text-xs outline-none"
+                className="w-full p-2.5 rounded-xl border border-slate-800 bg-slate-950 text-xs text-white outline-none focus:border-indigo-500"
               />
               <div className="flex justify-end gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowSaveRoutineModal(false)}
-                  className="px-3 py-1.5 bg-slate-100 text-slate-700 text-xs font-medium rounded-lg"
+                  className="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-bold rounded-xl"
                 >
                   Cancelar
                 </button>
@@ -641,86 +664,115 @@ export default function AdminEditarRecursoPage() {
                   type="button"
                   onClick={handleSaveAsNewRoutine}
                   disabled={savingRoutine || !newRoutineTitle.trim()}
-                  className="px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-lg"
+                  className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold rounded-xl shadow-lg"
                 >
-                  {savingRoutine ? "Salvando..." : "Salvar"}
+                  {savingRoutine ? "Salvando..." : "Salvar Rotina"}
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* GRID PRINCIPAL */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          {/* Coluna Esquerda: Informações e Limpeza */}
-          <div className="lg:col-span-1 space-y-4">
-            {/* Box Pagamento */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                <span className="text-xs font-bold text-slate-900">Pagamento</span>
-                <span className="text-xs font-semibold text-slate-600">
-                  {isPaid ? "✓ Confirmado" : "Pendente"}
+        {/* GRID DE INFORMAÇÕES & EDITOR */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* COLUNA ESQUERDA: DADOS DO CLIENTE, VEÍCULO E AÇÕES */}
+          <div className="lg:col-span-1 space-y-5">
+            {/* Card Pagamento */}
+            <div className="rounded-3xl bg-slate-900/90 border border-slate-800 p-5 shadow-xl space-y-3">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                  <CreditCard className="w-4 h-4 text-indigo-400" />
+                  Pagamento Pix
+                </span>
+                <span
+                  className={`text-xs px-2.5 py-0.5 rounded-full font-bold ${
+                    isPaid
+                      ? "bg-emerald-950/80 text-emerald-300 border border-emerald-500/40"
+                      : "bg-amber-950/80 text-amber-300 border border-amber-500/40"
+                  }`}
+                >
+                  {isPaid ? "✓ PAGO" : "PENDENTE"}
                 </span>
               </div>
-              <p className="text-xs text-slate-600">Valor: R$ {appeal.paymentAmount.toFixed(2)}</p>
+              <p className="text-sm font-black text-white">
+                Valor do Serviço: R$ {appeal.paymentAmount.toFixed(2)}
+              </p>
               {!isPaid && (
                 <button
                   onClick={confirmPayment}
-                  className="w-full py-1.5 px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition"
+                  className="w-full py-2 px-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-black rounded-xl transition shadow-lg shadow-emerald-950/50"
                 >
-                  Confirmar Pagamento Manualmente
+                  Confirmar Pagamento Pix Manualmente
                 </button>
               )}
             </div>
 
-            {/* Box Documentos */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
-              <span className="text-xs font-bold text-slate-900 block border-b border-slate-100 pb-2">
-                Anexos ({appeal.documents.length})
-              </span>
+            {/* Card Documentos Anexados */}
+            <div className="rounded-3xl bg-slate-900/90 border border-slate-800 p-5 shadow-xl space-y-3">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                  <FileCheck className="w-4 h-4 text-blue-400" />
+                  Documentos Anexados ({appeal.documents.length})
+                </span>
+              </div>
               {appeal.documents.length === 0 ? (
-                <p className="text-xs text-slate-400">Nenhum documento anexado.</p>
+                <p className="text-xs text-slate-500 italic">Nenhum documento anexado.</p>
               ) : (
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   {appeal.documents.map((doc) => (
                     <a
                       key={doc.id}
                       href={doc.fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-between p-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-100 text-xs text-slate-800"
+                      className="flex items-center justify-between p-2.5 rounded-xl bg-slate-950 border border-slate-800/80 hover:border-indigo-500/40 text-xs text-slate-200 transition group"
                     >
-                      <span className="truncate">{doc.title}</span>
-                      <ExternalLink className="w-3 h-3 text-slate-400 shrink-0 ml-1" />
+                      <span className="truncate group-hover:text-indigo-300 font-semibold">{doc.title}</span>
+                      <ExternalLink className="w-3.5 h-3.5 text-slate-500 shrink-0 ml-1 group-hover:text-indigo-400" />
                     </a>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Box Dados Infração */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-4 space-y-1.5 text-xs text-slate-600">
-              <span className="text-xs font-bold text-slate-900 block border-b border-slate-100 pb-2">
-                Infração & Veículo
+            {/* Card Veículo & Infração */}
+            <div className="rounded-3xl bg-slate-900/90 border border-slate-800 p-5 shadow-xl space-y-2 text-xs text-slate-300">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5 border-b border-slate-800 pb-2">
+                <Car className="w-4 h-4 text-purple-400" />
+                Dados do Veículo & Infração
               </span>
-              <p>AIT: {appeal.aitNumber}</p>
-              <p>Órgão: {appeal.authority}</p>
-              <p>Placa: {appeal.plate}</p>
-              <p>Artigo: {appeal.ctbArticle}</p>
-              <p>Data: {appeal.infractionDate}</p>
+              <p><strong>Placa:</strong> <span className="font-mono text-white font-bold">{appeal.plate}</span></p>
+              <p><strong>AIT:</strong> {appeal.aitNumber}</p>
+              <p><strong>Órgão:</strong> {appeal.authority}</p>
+              <p><strong>Artigo CTB:</strong> {appeal.ctbArticle}</p>
+              <p><strong>Data/Hora:</strong> {appeal.infractionDate} {appeal.infractionTime ? `às ${appeal.infractionTime}` : ""}</p>
+              <p><strong>Local:</strong> {appeal.infractionLocation}</p>
             </div>
 
-            {/* Box Ações de Gestão e Limpeza */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
-              <span className="text-xs font-bold text-slate-900 block border-b border-slate-100 pb-2">
-                Ações de Histórico
+            {/* Card Cliente */}
+            <div className="rounded-3xl bg-slate-900/90 border border-slate-800 p-5 shadow-xl space-y-2 text-xs text-slate-300">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5 border-b border-slate-800 pb-2">
+                <User className="w-4 h-4 text-indigo-400" />
+                Dados do Cliente
               </span>
-              <div className="space-y-1.5">
+              <p><strong>Nome:</strong> {appeal.user.name}</p>
+              <p><strong>E-mail:</strong> {appeal.user.email}</p>
+              <p><strong>Telefone:</strong> {appeal.user.phone || "Não informado"}</p>
+              <p><strong>CPF:</strong> {appeal.user.cpf || "Não informado"}</p>
+            </div>
+
+            {/* Card Gestão de Histórico */}
+            <div className="rounded-3xl bg-rose-950/20 border border-rose-500/30 p-5 shadow-xl space-y-2.5">
+              <span className="text-xs font-bold uppercase tracking-wider text-rose-400 flex items-center gap-1.5 border-b border-rose-500/20 pb-2">
+                <RotateCcw className="w-4 h-4 text-rose-400" />
+                Zerar & Excluir Testes
+              </span>
+              <div className="space-y-1.5 pt-1">
                 <button
                   type="button"
                   onClick={handleClearBotMemory}
                   disabled={actionLoading || !appeal.user.phone}
-                  className="w-full py-1.5 px-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs rounded-lg transition text-left"
+                  className="w-full py-2 px-3 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-semibold rounded-xl transition text-left"
                 >
                   🧹 Zerar Memória do Bot Samuca
                 </button>
@@ -728,7 +780,7 @@ export default function AdminEditarRecursoPage() {
                   type="button"
                   onClick={handleClearAppealArguments}
                   disabled={actionLoading}
-                  className="w-full py-1.5 px-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs rounded-lg transition text-left"
+                  className="w-full py-2 px-3 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-semibold rounded-xl transition text-left"
                 >
                   🔄 Zerar Argumentos deste Recurso
                 </button>
@@ -736,7 +788,7 @@ export default function AdminEditarRecursoPage() {
                   type="button"
                   onClick={handleDeleteTestAppeal}
                   disabled={actionLoading}
-                  className="w-full py-1.5 px-2 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-xs font-medium rounded-lg transition text-left"
+                  className="w-full py-2 px-3 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white text-xs font-black rounded-xl transition text-left shadow-lg shadow-rose-950/40"
                 >
                   🗑️ Excluir este Recurso de Teste
                 </button>
@@ -744,22 +796,25 @@ export default function AdminEditarRecursoPage() {
             </div>
           </div>
 
-          {/* Coluna Direita: Editor de Texto da Petição */}
+          {/* COLUNA DIREITA: EDITOR COMPLETO DA PEÇA RECURSAL */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                <span className="text-xs font-bold text-slate-900">
-                  Petição de Defesa (Texto Jurídico)
-                </span>
-                <span className="text-[11px] text-slate-400">
+            <div className="rounded-3xl bg-slate-900/90 border border-slate-800 p-6 shadow-xl space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-indigo-400" />
+                  <h3 className="text-sm font-bold text-white">
+                    Petição Jurídica de Defesa
+                  </h3>
+                </div>
+                <span className="text-xs text-slate-400">
                   Editável antes de liberar ao cliente
                 </span>
               </div>
               <textarea
                 value={documentContent}
                 onChange={(e) => setDocumentContent(e.target.value)}
-                rows={22}
-                className="w-full p-3 font-mono text-xs text-slate-900 bg-slate-50 rounded-xl border border-slate-200 focus:bg-white outline-none leading-relaxed resize-y"
+                rows={24}
+                className="w-full p-4 font-mono text-xs text-slate-200 bg-slate-950 rounded-2xl border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none leading-relaxed resize-y"
               />
             </div>
           </div>
