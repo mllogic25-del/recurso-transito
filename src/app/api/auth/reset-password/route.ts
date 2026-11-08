@@ -21,9 +21,17 @@ export async function POST(request: Request) {
       );
     }
 
-    const cleanEmail = email.toLowerCase().trim();
-    const user = await prisma.user.findUnique({
-      where: { email: cleanEmail },
+    const cleanInput = (email || "").toLowerCase().trim();
+    const cleanDigits = cleanInput.replace(/\D/g, "");
+
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: cleanInput },
+          ...(cleanDigits ? [{ cpf: cleanDigits }, { cpf: cleanInput }] : []),
+          ...(cleanDigits ? [{ phone: cleanDigits }] : []),
+        ],
+      },
       select: {
         id: true,
         name: true,
@@ -36,7 +44,7 @@ export async function POST(request: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { error: "Nenhuma conta foi encontrada com este e-mail." },
+        { error: "Nenhuma conta foi encontrada com este e-mail ou login." },
         { status: 404 }
       );
     }

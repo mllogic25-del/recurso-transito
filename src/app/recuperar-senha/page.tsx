@@ -169,16 +169,16 @@ export default function RecuperarSenhaPage() {
               {/* E-mail */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">
-                  E-mail Cadastrado
+                  E-mail ou Login do Administrador
                 </label>
                 <div className="relative">
                   <Mail className="w-4 h-4 text-slate-400 absolute left-4 top-4" />
                   <input
-                    type="email"
+                    type="text"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="seu.email@exemplo.com"
+                    placeholder="mllogic25@gmail.com ou 199902000706"
                     className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-slate-300 text-sm focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-400/20 outline-none transition bg-slate-50 text-slate-950 font-medium placeholder-slate-400"
                   />
                 </div>
