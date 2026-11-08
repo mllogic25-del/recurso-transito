@@ -5,17 +5,26 @@ import { comparePassword, signToken } from "@/lib/auth";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, password } = body;
+    const { password } = body;
+    const identifier = (body.email || body.login || "").toLowerCase().trim();
+    const cleanDigits = identifier.replace(/\D/g, "");
 
-    if (!email || !password) {
+    if (!identifier || !password) {
       return NextResponse.json(
-        { error: "E-mail e senha são obrigatórios." },
+        { error: "Usuário/E-mail e senha são obrigatórios." },
         { status: 400 }
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: email.toLowerCase().trim() },
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: identifier },
+          { email: `${identifier}@autorecurso.com.br` },
+          ...(cleanDigits ? [{ cpf: cleanDigits }, { cpf: identifier }] : []),
+          ...(cleanDigits ? [{ phone: cleanDigits }] : []),
+        ],
+      },
     });
 
     if (!user) {
