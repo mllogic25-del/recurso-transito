@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { queueWhatsAppMessage } from "@/lib/whatsapp-queue";
 
 export const dynamic = "force-dynamic";
 
@@ -93,7 +94,27 @@ export async function PUT(
         sentToEmail: isBecomingReady ? true : appeal.sentToEmail,
         emailSentAt: isBecomingReady ? new Date() : appeal.emailSentAt,
       },
+      include: { user: true },
     });
+
+    // Se o recurso foi liberado/aprovado (status READY), dispara notificação com link de download no WhatsApp do cliente
+    if (status === "READY" && updated.user?.phone) {
+      const clientName = updated.user.name || "Cliente";
+      const readyZapText =
+`🎉 *SUA DEFESA TÉCNICA ESTÁ PRONTA!*
+
+Olá, *${clientName}*! A sua defesa técnica personalizada da AutoRecurso para o veículo placa *${updated.plate}* (Auto de Infração: *${updated.aitNumber}*, Protocolo: *${updated.protocol}*) foi concluída e revisada com sucesso pela nossa equipe de especialistas!
+
+📄 *Como baixar a sua petição:*
+Você já pode baixar o arquivo Word (.docx) formatado para imprimir e protocolar pelo link oficial:
+👉 https://recurso-transito.onrender.com/acompanhar?protocolo=${updated.protocol}
+
+Basta assinar a petição e protocolar no órgão de trânsito. Qualquer dúvida, estamos à sua disposição aqui mesmo no WhatsApp!
+🛡️ *AutoRecurso - Recursos de Trânsito*`;
+
+      await queueWhatsAppMessage(updated.user.phone, readyZapText);
+      console.log(`[Appeal Ready] Mensagem de recurso pronto enfileirada no WhatsApp para ${updated.user.phone}`);
+    }
 
     return NextResponse.json({ success: true, appeal: updated });
   } catch (error: any) {
