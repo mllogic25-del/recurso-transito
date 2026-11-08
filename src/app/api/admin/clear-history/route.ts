@@ -7,41 +7,48 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { type, phone, appealId } = body;
 
+    // 1. ZERA MEMÓRIA DO BOT SAMUCA
     if (type === "BOT_MEMORY") {
       const result = clearChatHistory(phone);
       return NextResponse.json({
         success: true,
         message: phone
-          ? `Histórico de memória do Samuca limpo para o telefone informado.`
-          : `Toda a memória temporária do Samuca foi reiniciada com sucesso (${result.cleared} conversas limpas).`,
+          ? `Histórico de conversa do bot limpo para ${phone}.`
+          : `Toda a memória do Samuca foi zerada com sucesso (${result.cleared} conversas limpas).`,
       });
     }
 
-    if (type === "APPEAL_HISTORY") {
-      if (!appealId) {
-        return NextResponse.json({ error: "appealId é obrigatório" }, { status: 400 });
-      }
-
-      await prisma.appealRequest.update({
-        where: { id: appealId },
-        data: {
-          defenseArguments: "",
-          adminNotes: "Histórico de argumentos zerado pelo painel administrativo.",
-        },
+    // 2. ZERA TODOS OS RECURSOS E HISTÓRICOS DE TESTE (LIMPEZA TOTAL DO BANCO)
+    if (type === "CLEAR_ALL_APPEALS") {
+      // Deleta anexos
+      await prisma.appealDocument.deleteMany({});
+      // Deleta comissões ligadas a recursos
+      await prisma.commission.deleteMany({});
+      // Deleta todos os recursos
+      const deletedAppeals = await prisma.appealRequest.deleteMany({});
+      // Limpa fila de mensagens outbox do WhatsApp
+      await prisma.whatsappSession.deleteMany({
+        where: { id: { startsWith: "outbox_" } },
       });
+      // Zera memória do bot
+      clearChatHistory();
 
       return NextResponse.json({
         success: true,
-        message: "Histórico de argumentos do recurso zerado com sucesso.",
+        message: `Histórico completamente zerado! ${deletedAppeals.count} recursos de teste removidos do sistema.`,
       });
     }
 
+    // 3. EXCLUI UM RECURSO ESPECÍFICO
     if (type === "DELETE_APPEAL") {
       if (!appealId) {
         return NextResponse.json({ error: "appealId é obrigatório" }, { status: 400 });
       }
 
-      // Remove documentos vinculados e depois o recurso
+      await prisma.commission.deleteMany({
+        where: { appealRequestId: appealId },
+      });
+
       await prisma.appealDocument.deleteMany({
         where: { appealRequestId: appealId },
       });
@@ -53,6 +60,26 @@ export async function POST(req: Request) {
       return NextResponse.json({
         success: true,
         message: "Recurso excluído com sucesso do banco de dados.",
+      });
+    }
+
+    // 4. ZERA ARGUMENTOS DE UM RECURSO
+    if (type === "APPEAL_HISTORY") {
+      if (!appealId) {
+        return NextResponse.json({ error: "appealId é obrigatório" }, { status: 400 });
+      }
+
+      await prisma.appealRequest.update({
+        where: { id: appealId },
+        data: {
+          defenseArguments: "",
+          adminNotes: "Histórico de argumentos zerado.",
+        },
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: "Histórico de argumentos do recurso zerado com sucesso.",
       });
     }
 
