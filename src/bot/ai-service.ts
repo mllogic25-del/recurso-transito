@@ -69,6 +69,30 @@ interface ChatMessage {
 
 const chatHistories = new Map<string, ChatMessage[]>();
 
+/**
+ * Zera o histórico de memória do Samuca Bot.
+ * Se informado phone, limpa apenas a memória deste número;
+ * caso contrário, limpa todo o histórico em memória.
+ */
+export function clearChatHistory(phone?: string): { cleared: number } {
+  if (phone) {
+    const raw = phone.replace(/\D/g, "");
+    let count = 0;
+    for (const key of Array.from(chatHistories.keys())) {
+      const cleanKey = key.replace(/\D/g, "");
+      if (cleanKey.includes(raw) || (raw.length >= 8 && cleanKey.includes(raw.slice(-8)))) {
+        chatHistories.delete(key);
+        count++;
+      }
+    }
+    return { cleared: count };
+  } else {
+    const total = chatHistories.size;
+    chatHistories.clear();
+    return { cleared: total };
+  }
+}
+
 export async function generateSamucaResponse(
   userPhone: string,
   userMessage: string,

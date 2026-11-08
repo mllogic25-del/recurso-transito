@@ -1,5 +1,5 @@
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -151,5 +151,16 @@ model WhatsappSession {
 model SystemSetting {
   key       String   @id
   value     String
+  updatedAt DateTime @updatedAt
+}
+
+// Modelos de mensagens e rotinas pré-definidas para envio no WhatsApp
+model WhatsAppTemplate {
+  id        String   @id @default(cuid())
+  title     String
+  category  String   @default("ORIENTACOES") // ORIENTACOES, PROTOCOLO, DOCUMENTOS, GERAL
+  content   String
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
