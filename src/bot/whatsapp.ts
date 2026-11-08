@@ -94,6 +94,38 @@ async function startBot() {
   currentSock = sock;
   isStarting = false;
 
+  // Monitor de comandos do painel admin (ex: Desconectar / Logout)
+  const actionCheckTimer = setInterval(async () => {
+    try {
+      const action = await prisma.whatsappSession.findUnique({
+        where: { id: "samuca_ACTION" },
+      });
+      if (action?.value === "LOGOUT") {
+        console.log("[Samuca WhatsApp] 🛑 Comando de LOGOUT recebido do painel administrativo!");
+        clearInterval(actionCheckTimer);
+        await prisma.whatsappSession.delete({
+          where: { id: "samuca_ACTION" },
+        }).catch(() => {});
+
+        if (currentSock) {
+          try {
+            await currentSock.logout();
+          } catch (_) {
+            try {
+              currentSock.ws?.close();
+            } catch (_) {}
+          }
+          currentSock = null;
+        }
+
+        await clearState();
+        await updateStatus("DISCONNECTED", null);
+        console.log("[Samuca WhatsApp] Sessão encerrada com sucesso. Gerando novo QR Code...");
+        setTimeout(startBot, 1500);
+      }
+    } catch (_) {}
+  }, 2500);
+
   sock.ev.on("creds.update", saveCreds);
 
   sock.ev.on("connection.update", async (update) => {
@@ -166,6 +198,7 @@ async function startBot() {
       sock.ev.on("connection.update", (upd) => {
         if (upd.connection === "close") {
           clearInterval(heartbeatTimer);
+          clearInterval(actionCheckTimer);
         }
       });
     }

@@ -131,6 +131,15 @@ export async function usePrismaAuthState(sessionKey: string = "samuca") {
       } catch (err) {
         console.error("[PrismaAuth] Erro ao limpar sessão do banco:", err);
       }
+
+      // Remove a pasta local antiga para não reimportar as credenciais antigas
+      const localFolder = path.resolve(process.cwd(), "auth_whatsapp_samuca");
+      if (fs.existsSync(localFolder)) {
+        try {
+          fs.rmSync(localFolder, { recursive: true, force: true });
+          console.log("[PrismaAuth] 🗑️ Pasta local auth_whatsapp_samuca removida.");
+        } catch (_) {}
+      }
     },
   };
 }

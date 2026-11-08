@@ -68,15 +68,14 @@ export default function AdminWhatsAppPage() {
     if (!confirm("Isso vai desconectar o Samuca e gerar um novo QR Code para reconexão. Confirmar?")) return;
     setResetting(true);
     try {
-      // 1. Apaga a sessão do banco
+      // 1. Apaga a sessão do banco e sinaliza logout para o robô
       await fetch("/api/whatsapp/reset", { method: "DELETE" });
-      // 2. Reinicia o processo do bot para gerar novo QR
-      await fetch("/api/whatsapp/status", { method: "POST" });
-      setTimeout(fetchStatus, 3000);
+      setStatusData({ status: "DISCONNECTED", qr: null });
+      setTimeout(fetchStatus, 2000);
     } catch (err) {
       console.error("Erro ao resetar sessão:", err);
     } finally {
-      setTimeout(() => setResetting(false), 3500);
+      setTimeout(() => setResetting(false), 2500);
     }
   };
 
