@@ -90,7 +90,7 @@ export default function AdminEditarRecursoPage() {
 
   const loadAppeal = () => {
     if (!params.id) return;
-    fetch(`/api/appeals/${params.id}`)
+    fetch(`/api/appeals/${params.id}`, { cache: "no-store" })
       .then((res) => {
         if (!res.ok) throw new Error("Erro ao carregar dados do recurso.");
         return res.json();

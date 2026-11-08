@@ -60,44 +60,55 @@ export default function AdminDashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("/api/auth/me")
+    fetch("/api/auth/me", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (!data?.user || data.user.role !== "ADMIN") {
           router.push("/login");
         }
-      });
+      })
+      .catch(() => router.push("/login"));
 
     loadAppeals();
   }, [router]);
 
   const loadAppeals = () => {
     setLoading(true);
-    fetch("/api/appeals")
+    fetch("/api/appeals", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
-        if (data?.appeals) {
+        if (data?.appeals && Array.isArray(data.appeals)) {
           setAppeals(data.appeals);
         }
       })
+      .catch((err) => console.error("Erro ao carregar recursos:", err))
       .finally(() => setLoading(false));
   };
 
-  // Filtros
+  // Filtros à prova de falhas (null-safe)
   const filteredAppeals = appeals.filter((a) => {
+    if (!a) return false;
     const matchesStatus = statusFilter === "ALL" || a.status === statusFilter;
     const matchesPayment =
       paymentFilter === "ALL" ||
       (paymentFilter === "PAID" && a.paymentStatus === "PAID") ||
       (paymentFilter === "PENDING" && a.paymentStatus !== "PAID");
 
-    const term = searchTerm.toLowerCase();
+    const term = (searchTerm || "").toLowerCase().trim();
+    if (!term) return matchesStatus && matchesPayment;
+
+    const protocol = (a.protocol || "").toLowerCase();
+    const plate = (a.plate || "").toLowerCase();
+    const aitNumber = (a.aitNumber || "").toLowerCase();
+    const userName = (a.user?.name || "").toLowerCase();
+    const authority = (a.authority || "").toLowerCase();
+
     const matchesSearch =
-      a.protocol.toLowerCase().includes(term) ||
-      a.plate.toLowerCase().includes(term) ||
-      a.aitNumber.toLowerCase().includes(term) ||
-      a.user.name.toLowerCase().includes(term) ||
-      a.authority.toLowerCase().includes(term);
+      protocol.includes(term) ||
+      plate.includes(term) ||
+      aitNumber.includes(term) ||
+      userName.includes(term) ||
+      authority.includes(term);
 
     return matchesStatus && matchesPayment && matchesSearch;
   });
